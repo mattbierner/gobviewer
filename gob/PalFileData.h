@@ -1,5 +1,5 @@
 /**
-    Structures for reading a PAL from binary data.
+    Structures for reading a PAL (color palette definition) from binary data.
 */
 #pragma once
 
@@ -15,12 +15,11 @@ struct __attribute__((packed)) PalFileColor
 };
 
 /**
-    PAL file.
+    Complete PAL file.
 */
-struct __attribute__((packed)) PalFile
+struct __attribute__((packed)) PalFileData
 {
     PalFileColor colors[256];
 };
-
 
 } // DF

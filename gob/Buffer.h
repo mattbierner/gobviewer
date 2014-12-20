@@ -2,11 +2,14 @@
 
 #include "DataProvider.h"
 
+#include <stdint.h>
+#include <vector>
+
 namespace DF
 {
 
 /**
-    Manages a block of memory.
+    Managed block of memory.
 */
 class Buffer : public std::vector<uint8_t>,
     public IDataProvider
@@ -19,12 +22,20 @@ public:
         
         Note that this always copies the data held by the Data provider.
     */
-    static Buffer FromDataProvider(const IDataProvider& provider)
+    static Buffer CreateFromDataProvider(const IDataProvider& provider)
     {
         size_t size = provider.GetDataSize();
         Buffer buf(size);
         provider.Read(buf.Get(0), 0, size);
         return buf;
+    }
+    
+    /**
+        Create a new buffer of `size`.
+    */
+    static Buffer Create(size_t size)
+    {
+        return Buffer(size);
     }
     
     Buffer() : Buffer(0) { }
@@ -52,10 +63,22 @@ public:
         destroyed.
     */
     template <typename T = uint8_t>
-    T* Get(size_t offset) { return reinterpret_cast<T*>(&((*this)[offset])); }
+    T* Get(size_t offset = 0)
+    {
+        if (CanRead<T>(offset))
+            return reinterpret_cast<T*>(&((*this)[offset]));
+        else
+            return nullptr;
+    }
 
     template <typename T = uint8_t>
-    const T* Get(size_t offset) const { return reinterpret_cast<const T*>(&((*this)[offset])); }
+    const T* Get(size_t offset = 0) const
+    {
+        if (CanRead<T>(offset))
+            return reinterpret_cast<const T*>(&((*this)[offset]));
+        else
+            return nullptr;
+    }
 
     /**
         Read an object of type `T` from the buffer.
@@ -66,14 +89,17 @@ public:
     template <typename T>
     size_t ReadObj(T* output, size_t offset) const
     {
-        return Read(reinterpret_cast<uint8_t*>(output), offset, sizeof(T));
+        if (CanRead<T>(offset))
+            return Read(reinterpret_cast<uint8_t*>(output), offset, sizeof(T));
+        else
+            return 0;
     }
     
     virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
     {
         if (!IsValid()) return 0;
         size_t read = std::min(GetDataSize() - offset, max);
-        auto start = Get(offset);
+        const auto* start = Get(offset);
         std::copy(start, start + read, output);
         return read;
     }

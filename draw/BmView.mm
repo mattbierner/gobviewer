@@ -18,7 +18,8 @@
 #include "GobFileData.h"
 #include "GobFile.h"
 #include "BmFile.h"
-#include "Pal.h"
+#include "PalFile.h"
+#include "Buffer.h"
 
 DF::GobFile open(const char* file)
 {
@@ -42,10 +43,10 @@ DF::BmFile parse(const char* file, const char* filename)
         
         std::string file(filename);
         size_t size = gob.GetFileSize(file);
-        uint8_t* buffer = new uint8_t[size];
-        gob.ReadFile(file, buffer, 0, size);
+        DF::Buffer buffer = DF::Buffer::Create(size);
+        gob.ReadFile(file, buffer.Get(), 0, size);
         
-        return DF::BmFile::CreateFromBuffer(buffer, size);
+        return DF::BmFile(std::move(buffer));
     }
     return { };
 }
@@ -59,7 +60,7 @@ struct __attribute__((packed)) RGB { uint8_t r, g, b; };
 {
     [super drawRect:dirtyRect];
     
-    DF::PalFile pal;
+    DF::PalFileData pal;
     {
         DF::GobFile gob = open("DARK.GOB");
           for (auto a : gob.GetFilenames())
@@ -68,22 +69,21 @@ struct __attribute__((packed)) RGB { uint8_t r, g, b; };
         
         std::string file("BUYIT.PAL");
         size_t size = gob.GetFileSize(file);
-        
-        uint8_t* data = new uint8_t[size];
-        gob.ReadFile(file, data, 0, size);
-        DF::Pal p= DF::Pal::CreateFromBuffer(data, size);
+        DF::Buffer buffer = DF::Buffer::Create(size);
+        gob.ReadFile(file, buffer.Get(0), 0, size);
+        DF::PalFile p(std::move(buffer));
 
-        p.GetData(reinterpret_cast<uint8_t*>(&pal), sizeof(DF::PalFile));
+        p.GetData(reinterpret_cast<uint8_t*>(&pal), sizeof(DF::PalFileData));
     }
     
     DF::BmFile bm = parse("DEMO.GOB", "BUYIT.BM");
     
     size_t size = bm.GetDataSize();
-    uint8_t* data = new uint8_t[size];
-    bm.GetData(data, size);
+    DF::Buffer data = DF::Buffer::Create(size);
+    bm.GetData(data.Get(), size);
     
-    size_t width = bm.GetSizeX();
-    size_t height = bm.GetSizeY();
+    size_t width = bm.GetWidth();
+    size_t height = bm.GetHeight();
     size_t imgDataSize = bm.GetDataSize() * 24;
     
     RGB* imgData = new RGB[bm.GetDataSize()];

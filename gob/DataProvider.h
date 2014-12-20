@@ -8,8 +8,9 @@ namespace DF
 /**
     Provides read access to memory.
 */
-struct IDataProvider
+class IDataProvider
 {
+public:
     /**
         Can a read be performed?
     */
@@ -28,12 +29,44 @@ struct IDataProvider
         Does nothing if not valid.
      
         @param output Byte buffer output of at least `max`.
-        @param offset Place to start read.
-        @param max Maximum number of bytes to read.
+        @param offset Offset from start of memory to read at.
+        @param max Maximum number of bytes to copy.
         
-        @returns Size of data actually written.
+        @returns Size of data actually written to `output`.
     */
     virtual size_t Read(uint8_t* output, size_t offset, size_t max) const = 0;
+    
+    /**
+        Read a single object of type `T` from the BM.
+        
+        Does nothing and returns zero if there is not enough space to read from.
+    */
+    template <typename T>
+    size_t ReadObj(T* output, size_t offset) const
+    {
+        if (CanRead<T>(offset))
+            return Read(reinterpret_cast<uint8_t*>(output), offset, sizeof(T));
+        else
+            return 0;
+    }
+    
+protected:
+    /**
+        Can `size` bytes at `offset` be read?
+    */
+    bool CanRead(size_t offset, size_t size) const
+    {
+        return (size <= GetDataSize() - offset);
+    }
+
+    /**
+        Can `sizeof(T)` byes at `offset` be read?
+    */
+    template <typename T>
+    bool CanRead(size_t offset) const
+    {
+        return CanRead(offset, sizeof(T));
+    }
 };
 
 /**
