@@ -34,7 +34,14 @@ public:
     Buffer(Buffer&& other) : Super(std::move(other)) { }
     
     Buffer& operator=(const Buffer& other) = delete;
-    Buffer& operator=(Buffer&& other) = delete;
+    
+    Buffer& operator=(Buffer&& other)
+    {
+        Super::operator=(std::move(other));
+        return *this;
+    }
+
+    virtual bool IsValid() const { return (this->size() > 0);}
 
     virtual size_t GetDataSize() const override { return this->size(); }
 
@@ -45,10 +52,10 @@ public:
         destroyed.
     */
     template <typename T = uint8_t>
-    T* Get(size_t offset) { return &((*this)[offset]); }
+    T* Get(size_t offset) { return reinterpret_cast<T*>(&((*this)[offset])); }
 
     template <typename T = uint8_t>
-    const T* Get(size_t offset) const { return &((*this)[offset]); }
+    const T* Get(size_t offset) const { return reinterpret_cast<const T*>(&((*this)[offset])); }
 
     /**
         Read an object of type `T` from the buffer.
@@ -64,9 +71,10 @@ public:
     
     virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
     {
+        if (!IsValid()) return 0;
         size_t read = std::min(GetDataSize() - offset, max);
         auto start = Get(offset);
-        std::copy(start, start + max, output);
+        std::copy(start, start + read, output);
         return read;
     }
     

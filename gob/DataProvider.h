@@ -1,7 +1,6 @@
 #pragma once
 
 #include <fstream>
-#include <cassert>
 
 namespace DF
 {
@@ -12,13 +11,22 @@ namespace DF
 struct IDataProvider
 {
     /**
+        Can a read be performed?
+    */
+    virtual bool IsValid() const = 0;
+
+    /**
         Get total data size.
+        
+        Returns `0` if not valid.
     */
     virtual size_t GetDataSize() const = 0;
     
     /**
         Copy some data.
         
+        Does nothing if not valid.
+     
         @param output Byte buffer output of at least `max`.
         @param offset Place to start read.
         @param max Maximum number of bytes to read.
@@ -41,10 +49,13 @@ public:
         m_size(size)
     { }
     
+    virtual bool IsValid() const { return (m_buffer != nullptr && m_size > 0);}
+    
     virtual size_t GetDataSize() const override { return m_size; }
 
     virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
     {
+        if (!IsValid()) return 0;
         size_t read = std::min(GetDataSize() - offset, max);
         std::copy(m_buffer, m_buffer + read, output);
         return read;
@@ -61,21 +72,28 @@ private:
 class FileDataProvider : public IDataProvider
 {
 public:
-    FileDataProvider(std::ifstream&& x) :
-        m_stream(std::move(x))
+    FileDataProvider(std::ifstream&& s) :
+        m_stream(std::move(s)),
+        m_size(0)
     {
-        m_stream.seekg(0, std::ifstream::end);
-        m_size = m_stream.tellg();
+        if (m_stream.is_open())
+        {
+            m_stream.seekg(0, std::ifstream::end);
+            m_size = m_stream.tellg();
+        }
     }
+    
+    virtual bool IsValid() const { return (m_size > 0);}
 
     virtual size_t GetDataSize() const override { return m_size; }
 
-    virtual size_t Read(uint8_t* output, size_t offset, size_t count) const override
+    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
     {
-        assert(offset + count <= m_size);
+        if (!IsValid()) return 0;
+        size_t read = std::min(GetDataSize() - offset, max);
         m_stream.seekg(offset, std::ifstream::beg);
-        m_stream.read(reinterpret_cast<char*>(output), count);
-        return count;
+        m_stream.read(reinterpret_cast<char*>(output), read);
+        return read;
     }
     
 private:

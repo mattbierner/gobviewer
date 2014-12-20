@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		89A3BC831A454B8F00B26F8F /* DEMO.GOB in CopyFiles */ = {isa = PBXBuildFile; fileRef = 89A3BC821A454B8200B26F8F /* DEMO.GOB */; };
 		89F4524C1A42A24000A20C49 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89F4524B1A42A24000A20C49 /* main.cpp */; };
 		89F452531A42A5F100A20C49 /* DARK.GOB in CopyFiles */ = {isa = PBXBuildFile; fileRef = 89F452521A42A4AB00A20C49 /* DARK.GOB */; };
 		89F452591A43E5DC00A20C49 /* TEXTURES.GOB in CopyFiles */ = {isa = PBXBuildFile; fileRef = 89F452581A43E5C300A20C49 /* TEXTURES.GOB */; };
@@ -35,6 +36,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				89A3BC831A454B8F00B26F8F /* DEMO.GOB in CopyFiles */,
 				89F452591A43E5DC00A20C49 /* TEXTURES.GOB in CopyFiles */,
 				89F452531A42A5F100A20C49 /* DARK.GOB in CopyFiles */,
 			);
@@ -43,6 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		89A3BC821A454B8200B26F8F /* DEMO.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = DEMO.GOB; sourceTree = "<group>"; };
 		89F452481A42A24000A20C49 /* gob */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gob; sourceTree = BUILT_PRODUCTS_DIR; };
 		89F4524B1A42A24000A20C49 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		89F452521A42A4AB00A20C49 /* DARK.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = DARK.GOB; sourceTree = "<group>"; };
@@ -97,6 +100,7 @@
 		89F4523F1A42A24000A20C49 = {
 			isa = PBXGroup;
 			children = (
+				89A3BC821A454B8200B26F8F /* DEMO.GOB */,
 				89F452581A43E5C300A20C49 /* TEXTURES.GOB */,
 				89F452521A42A4AB00A20C49 /* DARK.GOB */,
 				89F4524A1A42A24000A20C49 /* gob */,
@@ -515,6 +519,7 @@
 				89F452511A42A24000A20C49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		89F4527A1A43F49B00A20C49 /* Build configuration list for PBXNativeTarget "draw" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +528,7 @@
 				89F4527C1A43F49B00A20C49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		89F4527D1A43F49B00A20C49 /* Build configuration list for PBXNativeTarget "drawTests" */ = {
 			isa = XCConfigurationList;
@@ -531,6 +537,7 @@
 				89F4527F1A43F49B00A20C49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

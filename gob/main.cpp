@@ -6,8 +6,8 @@
 #include <iomanip>
 
 #include "GobFileData.h"
-#include "Gob.h"
-#include "Bm.h"
+#include "GobFile.h"
+#include "BmFile.h"
 
 
 DF::GobFileHeader parse(const char* file)
@@ -16,7 +16,7 @@ DF::GobFileHeader parse(const char* file)
     fs.open(file, std::ifstream::binary | std::ifstream::in);
     if (fs.is_open())
     {
-        auto x = DF::Gob::CreateFromFile(std::move(fs));
+        auto x = DF::GobFile::CreateFromFile(std::move(fs));
         
         //for (auto a : x.GetFilenames())
         //    std::cout << a <<" " << x.GetFileSize(a) << std::endl;
@@ -26,8 +26,7 @@ DF::GobFileHeader parse(const char* file)
         uint8_t* buffer = new uint8_t[size];
         x.ReadFile(file, buffer, 0, size);
         
-        auto bm = DF::Bm::CreateFromBuffer(buffer, size);
-        auto head = bm.GetHeader();
+        auto bm = DF::BmFile::CreateFromBuffer(buffer, size);
         return {};
     }
     return {};

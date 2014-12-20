@@ -38,13 +38,12 @@ DF::BmFile parse(const char* file, const char* filename)
     fs.open(file, std::ifstream::binary | std::ifstream::in);
     if (fs.is_open())
     {
-        auto x = DF::GobFile::CreateFromFile(std::move(fs));
-        
+        auto gob = DF::GobFile::CreateFromFile(std::move(fs));
         
         std::string file(filename);
-        size_t size = x.GetFileSize(file);
+        size_t size = gob.GetFileSize(file);
         uint8_t* buffer = new uint8_t[size];
-        x.ReadFile(file, buffer, 0, size);
+        gob.ReadFile(file, buffer, 0, size);
         
         return DF::BmFile::CreateFromBuffer(buffer, size);
     }
@@ -67,7 +66,7 @@ struct __attribute__((packed)) RGB { uint8_t r, g, b; };
             std::cout << a  << std::endl;
 
         
-        std::string file("SEWERS.PAL");
+        std::string file("BUYIT.PAL");
         size_t size = gob.GetFileSize(file);
         
         uint8_t* data = new uint8_t[size];
@@ -77,37 +76,39 @@ struct __attribute__((packed)) RGB { uint8_t r, g, b; };
         p.GetData(reinterpret_cast<uint8_t*>(&pal), sizeof(DF::PalFile));
     }
     
-    DF::BmFile bm = parse("TEXTURES.GOB", "GPZIGZ1X.BM");
+    DF::BmFile bm = parse("DEMO.GOB", "BUYIT.BM");
+    
     size_t size = bm.GetDataSize();
     uint8_t* data = new uint8_t[size];
     bm.GetData(data, size);
     
-    size_t sizeX = bm.GetSizeX();
-    size_t sizeY = bm.GetSizeY();
+    size_t width = bm.GetSizeX();
+    size_t height = bm.GetSizeY();
     size_t imgDataSize = bm.GetDataSize() * 24;
     
-    RGB* imgData = new RGB[sizeX * sizeY];
+    RGB* imgData = new RGB[bm.GetDataSize()];
     std::cout << static_cast<int>(bm.GetTransparency());
 
-    for (unsigned x = 0; x < sizeX; ++x)
+    
+    for (unsigned row = 0; row < height; ++row)
     {
-        for (unsigned y = 0; y < sizeY; ++y)
+        for (unsigned col = 0; col < width; ++col)
         {
-            uint8_t entry = data[x * sizeX + y];
+            uint8_t entry = data[col * height + row];
             auto palColors = pal.colors[entry];
-            imgData[x * sizeX + y] = {palColors.r, palColors.g, palColors.b};
+            imgData[(height - 1 - row) * width + col] = {palColors.r, palColors.g, palColors.b};
         }
     }
     
     CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, imgDataSize, NULL);
     CGImageRef img = CGImageCreate(
-        sizeX,
-        sizeY,
+        width,
+        height,
         8,
         8 * 3,
-        3 * sizeX,
+        3 * width,
         CGColorSpaceCreateDeviceRGB(),
-        kCGBitmapByteOrder32Big,
+        kCGBitmapByteOrderDefault,
         imageData,
         NULL,
         NO,
@@ -117,7 +118,7 @@ struct __attribute__((packed)) RGB { uint8_t r, g, b; };
     
         CGContextDrawImage(
             ctx,
-            CGRectMake(0, 0, sizeX * 4, sizeY * 4),
+            CGRectMake(0, 0, width * 2, height * 2),
             img);
 }
 
