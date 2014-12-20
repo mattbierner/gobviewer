@@ -3,21 +3,22 @@
 namespace DF
 {
 
-size_t BmFile::ReadUncompressedBmData(uint8_t* output, size_t max)
+size_t BmFile::ReadUncompressedBmData(size_t index, uint8_t* output, size_t max) const
 {
     auto size = GetDataSize();
     size_t read = std::min(size, max);
-    Read(output, sizeof(BmFileHeader), read);
+    size_t offset = (GetColumnStart(index, 0) - m_data.Get());
+    Read(output, offset, read);
     return read;
 }
 
-size_t BmFile::ReadRleCompressedBmData(uint8_t* output, size_t max)
+size_t BmFile::ReadRleCompressedBmData(uint8_t* output, size_t max) const
 {
     size_t read = 0;
-    uint8_t* start = GetColumnStart(0);
+    const uint8_t* start = GetColumnStart(0, 0);
     for (unsigned col = 0; col < GetWidth() && read < max; ++col)
     {
-        uint8_t* end = GetColumnEnd(col);
+        const uint8_t* end = GetColumnEnd(0, col);
         while (start < end && read < max)
         {
             uint8_t n = *(start++);
@@ -43,13 +44,13 @@ size_t BmFile::ReadRleCompressedBmData(uint8_t* output, size_t max)
     return read;
 }
 
-size_t BmFile::ReadRle0CompressedBmData(uint8_t* output, size_t max)
+size_t BmFile::ReadRle0CompressedBmData(uint8_t* output, size_t max) const
 {
     size_t read = 0;
-    uint8_t* start = GetColumnStart(0);
+    const uint8_t* start = GetColumnStart(0, 0);
     for (unsigned col = 0; col < GetWidth() && read < max; ++col)
     {
-        uint8_t* end = GetColumnEnd(col);
+        const uint8_t* end = GetColumnEnd(0, col);
         while (start < end && read < max)
         {
             uint8_t n = *(start++);
@@ -74,33 +75,34 @@ size_t BmFile::ReadRle0CompressedBmData(uint8_t* output, size_t max)
     return read;
 }
 
-uint8_t* BmFile::GetColumnStart(size_t col)
+const uint8_t* BmFile::GetColumnStart(size_t index, size_t col) const
 {
     if (IsCompressed())
     {
         size_t tableOffset = sizeof(BmFileHeader) + GetHeader().dataSize + (col * sizeof(int32_t));
-        int32_t* tableEntry = m_data.Get<int32_t>(tableOffset);
+        const int32_t* tableEntry = m_data.Get<int32_t>(tableOffset);
         if (tableEntry)
             return m_data.Get(sizeof(BmFileHeader) + *tableEntry);
         else
-                return nullptr;
+            return nullptr;
     }
     else
     {
-        size_t colOffset = col * GetWidth();
-        return m_data.Get(sizeof(BmFileHeader) + colOffset);
+        size_t dataOffset = (IsMultipleBm() ? GetSubOffset(index) + sizeof(BmFileSubHeader) : sizeof(BmFileHeader));
+        size_t colOffset = col * GetWidth(index);
+        return m_data.Get(dataOffset + colOffset);
     }
 }
 
-uint8_t* BmFile::GetColumnEnd(size_t col)
+const uint8_t* BmFile::GetColumnEnd(size_t index, size_t col) const
 {
     if (col == GetWidth() - 1) // end
     {
-        return m_data.Get(sizeof(BmFileHeader) + (IsCompressed() ? GetHeader().dataSize : GetDataSize()));
+        return m_data.Get(sizeof(BmFileHeader) + (IsCompressed() ? GetHeader().dataSize : GetDataSize(index)));
     }
     else
     {
-        return GetColumnStart(col + 1);
+        return GetColumnStart(index, col + 1);
     }
 }
 

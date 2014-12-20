@@ -41,6 +41,10 @@ DF::BmFile parse(const char* file, const char* filename)
     {
         auto gob = DF::GobFile::CreateFromFile(std::move(fs));
         
+            
+    for (auto a : gob.GetFilenames())
+        std::cout << a  << std::endl;
+        
         std::string file(filename);
         size_t size = gob.GetFileSize(file);
         DF::Buffer buffer = DF::Buffer::Create(size);
@@ -54,42 +58,19 @@ DF::BmFile parse(const char* file, const char* filename)
 struct __attribute__((packed)) RGB { uint8_t r, g, b; };
 
 
-@implementation BmView
-
-- (void)drawRect:(NSRect)dirtyRect
+RGB* BmToRgb(const DF::BmFile& bm, const DF::PalFileData& pal)
 {
-    [super drawRect:dirtyRect];
-    
-    DF::PalFileData pal;
-    {
-        DF::GobFile gob = open("DARK.GOB");
-          for (auto a : gob.GetFilenames())
-            std::cout << a  << std::endl;
+    size_t index = 0;
 
-        
-        std::string file("BUYIT.PAL");
-        size_t size = gob.GetFileSize(file);
-        DF::Buffer buffer = DF::Buffer::Create(size);
-        gob.ReadFile(file, buffer.Get(0), 0, size);
-        DF::PalFile p(std::move(buffer));
+    size_t width = bm.GetWidth(index);
+    size_t height = bm.GetHeight(index);
+    size_t size = bm.GetDataSize(index);
 
-        p.GetData(reinterpret_cast<uint8_t*>(&pal), sizeof(DF::PalFileData));
-    }
-    
-    DF::BmFile bm = parse("DEMO.GOB", "BUYIT.BM");
-    
-    size_t size = bm.GetDataSize();
+    RGB* imgData = new RGB[size];
+
     DF::Buffer data = DF::Buffer::Create(size);
-    bm.GetData(data.Get(), size);
-    
-    size_t width = bm.GetWidth();
-    size_t height = bm.GetHeight();
-    size_t imgDataSize = bm.GetDataSize() * 24;
-    
-    RGB* imgData = new RGB[bm.GetDataSize()];
-    std::cout << static_cast<int>(bm.GetTransparency());
+    bm.GetData(0, data.Get(), size);
 
-    
     for (unsigned row = 0; row < height; ++row)
     {
         for (unsigned col = 0; col < width; ++col)
@@ -99,6 +80,40 @@ struct __attribute__((packed)) RGB { uint8_t r, g, b; };
             imgData[(height - 1 - row) * width + col] = {palColors.r, palColors.g, palColors.b};
         }
     }
+    return imgData;
+}
+
+@implementation BmView
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+    [super drawRect:dirtyRect];
+    
+    DF::PalFileData pal;
+    {
+        DF::GobFile gob = open("DARK.GOB");
+        
+        for (auto a : gob.GetFilenames())
+        std::cout << a  << std::endl;
+
+        
+        std::string file("SECBASE.PAL");
+        size_t size = gob.GetFileSize(file);
+        DF::Buffer buffer = DF::Buffer::Create(size);
+        gob.ReadFile(file, buffer.Get(0), 0, size);
+        DF::PalFile p(std::move(buffer));
+
+        p.GetData(reinterpret_cast<uint8_t*>(&pal), sizeof(DF::PalFileData));
+    }
+    
+    DF::BmFile bm = parse("TEXTURES.GOB", "ZANAV.BM");
+
+    
+    size_t width = bm.GetWidth();
+    size_t height = bm.GetHeight();
+    size_t imgDataSize = bm.GetDataSize() * 24;
+    
+    RGB* imgData = BmToRgb(bm, pal);
     
     CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, imgDataSize, NULL);
     CGImageRef img = CGImageCreate(
@@ -116,10 +131,20 @@ struct __attribute__((packed)) RGB { uint8_t r, g, b; };
     
         CGContextRef ctx = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
     
+   // const CGFloat maskingColors[6] = { 0, 0, 0, 0, 0, 0 };
+    ///CGImageRef trans = CGImageCreateWithMaskingColors(img, maskingColors);
+    
+    //CGContextFillRect(ctx,  CGRectMake(0, 0, width * 2, height * 2));
+    
         CGContextDrawImage(
             ctx,
-            CGRectMake(0, 0, width * 2, height * 2),
+            CGRectMake(0, 0, width * 6, height * 6),
             img);
+    
+    //    CGImageRelease(trans);
+            CGImageRelease(img);
+
+
 }
 
 @end

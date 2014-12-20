@@ -4,6 +4,8 @@
 #include "DataProvider.h"
 #include "Buffer.h"
 
+#include <cassert>
+
 namespace DF
 {
 
@@ -27,42 +29,71 @@ public:
         m_data(std::move(data))
     { }
     
-    unsigned GetWidth() { return GetHeader().sizeX; }
-    unsigned GetHeight() { return GetHeader().sizeY; }
-    
-    unsigned GetCountSubBms() { return GetHeader().idemY; }
-    
-    BmFileTransparency GetTransparency() { return GetHeader().transparency; }
+    /**
+        Get the width of the image.
+        
+        @param index Sub BM to get width of. Only valid for multiple BMs.
+    */
+    unsigned GetWidth(size_t index = 0) const
+    {
+        return (IsMultipleBm() ? GetSubHeader(index).sizeX : GetHeader().sizeX);
+    }
     
     /**
-        Is the file compressed?
+        Get the height of the image.
+        
+        @param index Sub BM to get height of. Only valid for multiple BMs.
     */
-    bool IsCompressed() { return (GetHeader().compression != BmFileCompression::None); }
+    unsigned GetHeight(size_t index = 0) const
+    {
+        return (IsMultipleBm() ? GetSubHeader(index).sizeY : GetHeader().sizeY);
+    }
     
+    /**
+        Get the type of transparency of the image.
+        
+        @param index Sub BM to get ransparency of. Only valid for multiple BMs.
+    */
+    BmFileTransparency GetTransparency(size_t index = 0) const
+    {
+        return (IsMultipleBm() ? GetSubHeader(index).transparency : GetHeader().transparency);
+    }
+
     /**
         Size of the uncompressed BM.
-        
-        Returns the size of all BMs, including sub headers, for multiple BM.
     */
-    size_t GetDataSize() { return GetWidth() * GetHeight(); }
+    size_t GetDataSize(size_t index = 0) const { return GetWidth(index) * GetHeight(index); }
 
     /**
         Does this file contain sub BMs?
     */
-    bool IsMultipleBm()
+    bool IsMultipleBm() const
     {
         auto header = GetHeader();
-        return (header.idemX == 1 && header.idemY != 1);
+        return (header.sizeX == 1 && header.sizeY != 1);
+    }
+    
+    /**
+        Get the number of sub BM stored in this file.
+        
+        Returns 1 for non-multiple BMs.
+    */
+    unsigned GetCountSubBms() const
+    {
+        return (IsMultipleBm() ? GetHeader().idemY : 1);
     }
     
     /**
         Read at most `max` bytes of bitmap data into output.
         
         This reads uncompressed bitmap data.
+        
+        @param index Sub BM to read from.
+        @param
     */
-    size_t GetData(uint8_t* output, size_t max)
+    size_t GetData(size_t index, uint8_t* output, size_t max) const
     {
-        switch (GetHeader().compression)
+        switch (GetCompression(index))
         {
         case BmFileCompression::Rle:
             return ReadRleCompressedBmData(output, max);
@@ -72,17 +103,35 @@ public:
 
         case BmFileCompression::None:
         default:
-            return ReadUncompressedBmData(output, max);
+            return ReadUncompressedBmData(index, output, max);
         }
     }
 
 private:
     Buffer m_data;
     
+    /**
+        Get the main file header.
+    */
     BmFileHeader GetHeader() const
     {
         BmFileHeader header;
         (void)m_data.ReadObj<BmFileHeader>(&header, 0);
+        return header;
+    }
+    
+    /**
+        Get the sub header for a multiple BM.
+     
+        Only valid for multiple BM.
+    */
+    BmFileSubHeader GetSubHeader(size_t index) const
+    {
+        assert(IsMultipleBm() && index < GetCountSubBms());
+        
+        int32_t offset = GetSubOffset(index);
+        BmFileSubHeader header;
+        (void)m_data.ReadObj<BmFileSubHeader>(&header, offset);
         return header;
     }
     
@@ -94,24 +143,53 @@ private:
         return m_data.Read(output, offset, max);
     }
     
+    BmFileCompression GetCompression(size_t index = 0) const
+    {
+        return (IsMultipleBm() ? BmFileCompression::None : GetHeader().compression);
+    }
+    
+    /**
+        Is the file compressed?
+    */
+    bool IsCompressed(size_t index = 0) const { return (GetCompression(index) != BmFileCompression::None); }
+
+    /**
+        For a multiple BM, get the absolute offset to the start of the sub file.
+    */
+    int32_t GetSubOffset(size_t index) const
+    {
+        assert(IsMultipleBm() && index < GetCountSubBms());
+    
+        const int32_t* startTable = m_data.Get<int32_t>(sizeof(BmFileHeader) + 2);
+        return startTable[index] + sizeof(BmFileHeader) + 2;
+    }
+    
     /**
     
     */
-    size_t ReadUncompressedBmData(uint8_t* output, size_t max);
+    size_t ReadUncompressedBmData(size_t index, uint8_t* output, size_t max) const;
     
     /**
         Decompress a RLE compressed image.
+        
+        Compression of multiple BMs is not supported.
     */
-    size_t ReadRleCompressedBmData(uint8_t* output, size_t max);
+    size_t ReadRleCompressedBmData(uint8_t* output, size_t max) const;
     
     /**
         Decompress a RLE0 compressed image.
+        
+        Compression of multiple BMs is not supported.
     */
-    size_t ReadRle0CompressedBmData(uint8_t* output, size_t max);
+    size_t ReadRle0CompressedBmData(uint8_t* output, size_t max) const;
     
-    uint8_t* GetColumnStart(size_t col);
+    /**
+    */
+    const uint8_t* GetColumnStart(size_t index, size_t col) const;
     
-    uint8_t* GetColumnEnd(size_t col);
+    /**
+    */
+    const uint8_t* GetColumnEnd(size_t index, size_t col) const;
 };
 
 } // DF
