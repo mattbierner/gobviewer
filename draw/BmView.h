@@ -17,7 +17,6 @@
     unsigned imageIndex;
     
     DF::PalFileData pal;
-    DF::BmFile bm;
 }
 
 @property (nonatomic, strong) NSImage* image;
@@ -27,6 +26,7 @@
 - (id) initWithFrame:(NSRect)frame;
 
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename;
+- (void) loadFme:(DF::GobFile*) gob named:(const char*)filename;
 
 - (void) update;
 

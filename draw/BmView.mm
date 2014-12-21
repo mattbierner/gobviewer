@@ -18,6 +18,7 @@
 #include "GobFileData.h"
 #include "GobFile.h"
 #include "BmFile.h"
+#include "FmeFile.h"
 #include "PalFile.h"
 #include "Buffer.h"
 
@@ -33,7 +34,7 @@ DF::GobFile open(const char* file)
 }
 
 
-DF::BmFile parse(DF::GobFile* gob, const char* filename)
+DF::BmFile loadBm(DF::GobFile* gob, const char* filename)
 {
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
@@ -41,6 +42,16 @@ DF::BmFile parse(DF::GobFile* gob, const char* filename)
     gob->ReadFile(file, buffer.Get(), 0, size);
     
     return DF::BmFile(std::move(buffer));
+}
+
+DF::FmeFile loadFme(DF::GobFile* gob, const char* filename)
+{
+    std::string file(filename);
+    size_t size = gob->GetFileSize(file);
+    DF::Buffer buffer = DF::Buffer::Create(size);
+    gob->ReadFile(file, buffer.Get(), 0, size);
+    
+    return DF::FmeFile(std::move(buffer));
 }
 
 struct __attribute__((packed)) RGB { uint8_t r, g, b; };
@@ -69,7 +80,31 @@ RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
     return imgData;
 }
 
-void f(void *info, const void *data, size_t size) {
+RGB* FmeToRgb(const DF::FmeFile& bm, const DF::PalFileData& pal)
+{
+    size_t width = bm.GetWidth();
+    size_t height = bm.GetHeight();
+    size_t size = bm.GetDataSize();
+
+    RGB* imgData = new RGB[size];
+
+    DF::Buffer data = DF::Buffer::Create(size);
+    bm.GetData(data.Get(), size);
+
+    for (unsigned row = 0; row < height; ++row)
+    {
+        for (unsigned col = 0; col < width; ++col)
+        {
+            uint8_t entry = data[col * height + row];
+            auto palColors = pal.colors[entry];
+            imgData[(height - 1 - row) * width + col] = {palColors.r, palColors.g, palColors.b};
+        }
+    }
+    return imgData;
+}
+
+void f(void *info, const void *data, size_t size)
+{
    delete[] ((RGB*)data);
 }
 
@@ -94,9 +129,8 @@ void f(void *info, const void *data, size_t size) {
             p.GetData(reinterpret_cast<uint8_t*>(&pal), sizeof(DF::PalFileData));
         }
         
-    
         [self update];
-        [NSTimer scheduledTimerWithTimeInterval:1.0f / bm.GetFrameRate()
+        [NSTimer scheduledTimerWithTimeInterval:0.2//1.0f / bm.GetFrameRate()
                                  target:self
                                selector:@selector(update)
                                userInfo:nil
@@ -113,7 +147,7 @@ void f(void *info, const void *data, size_t size) {
 
 - (void) loadBM:(DF::GobFile*)gob named:(const char*)filename
 {
-    bm = parse(gob, filename);
+    DF::BmFile bm = loadBm(gob, filename);
 
     unsigned subCount = bm.GetCountSubBms();
 
@@ -145,6 +179,45 @@ void f(void *info, const void *data, size_t size) {
         [self.images addObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
         CGImageRelease(img);
     }
+    imageIndex = 0;
+    [self update];
+}
+
+- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename
+{
+    DF::FmeFile bm = loadFme(gob, filename);
+
+    size_t width = bm.GetWidth();
+    size_t height = bm.GetHeight();
+    size_t imgDataSize = bm.GetDataSize() * 24;
+    
+    RGB* imgData = FmeToRgb(bm, pal);
+    
+    CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, imgDataSize, f);
+    CGImageRef img = CGImageCreate(
+        width,
+        height,
+        8,
+        8 * 3,
+        3 * width,
+        CGColorSpaceCreateDeviceRGB(),
+        kCGBitmapByteOrderDefault,
+        imageData,
+        NULL,
+        NO,
+        kCGRenderingIntentDefault);
+    
+    CGDataProviderRelease(imageData);
+    
+    const CGFloat maskValues[6] = { 0, 0, 0, 0, 0, 0 };
+    
+    CGImageRef trans = CGImageCreateWithMaskingColors(img, maskValues);
+
+    CGImageRelease(img);
+
+    self.images = [NSMutableArray arrayWithObject:[[NSImage alloc] initWithCGImage:trans size:NSZeroSize]];
+    CGImageRelease(trans);
+    
     imageIndex = 0;
     [self update];
 }

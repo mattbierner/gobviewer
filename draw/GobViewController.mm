@@ -1,6 +1,7 @@
 #import "GobViewController.h"
 
 #include "BmView.h"
+#include "FmeFile.h"
 
 #include <fstream>
 
@@ -12,6 +13,18 @@
     fs.open([file UTF8String], std::ifstream::binary | std::ifstream::in);
     
     gob = DF::GobFile::CreateFromFile(std::move(fs));
+    
+    {
+        std::string file("IST-GUNI.FME");
+        size_t size = gob.GetFileSize(file);
+        DF::Buffer buffer = DF::Buffer::Create(size);
+        gob.ReadFile(file, buffer.Get(), 0, size);
+    
+        DF::FmeFile fme = DF::FmeFile(std::move(buffer));
+        size_t width = fme.GetWidth();
+        size_t height = fme.GetHeight();
+        
+    }
 }
 
 - (void) viewDidLoad
@@ -53,10 +66,14 @@
     NSInteger selectedRow = [self.table selectedRow];
     std::string filename = gob.GetFilename(selectedRow);
     
-    DF::FileType type = gob.GetFileType(filename);
-    if (type == DF::FileType::Bm)
+    switch (gob.GetFileType(filename))
     {
+    case DF::FileType::Bm:
         [self.preview loadBM:&gob named:filename.c_str()];
+        break;
+    case DF::FileType::Fme:
+        [self.preview loadFme:&gob named:filename.c_str()];
+        break;
     }
 }
 

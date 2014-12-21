@@ -12,6 +12,8 @@
 		89A3BCA71A4624A800B26F8F /* GobViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCA51A4624A800B26F8F /* GobViewController.mm */; };
 		89A3BCA81A4624A800B26F8F /* GobViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89A3BCA61A4624A800B26F8F /* GobViewController.xib */; };
 		89A3BCAB1A4638E700B26F8F /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCAA1A4638E700B26F8F /* PreviewView.m */; };
+		89A3BCAF1A46752500B26F8F /* GobFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCAE1A46752500B26F8F /* GobFile.cpp */; };
+		89A3BCB31A467B3800B26F8F /* FmeFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCB21A467B3800B26F8F /* FmeFile.cpp */; };
 		89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89F452651A43F49B00A20C49 /* AppDelegate.mm */; };
 		89F452681A43F49B00A20C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452671A43F49B00A20C49 /* main.m */; };
 		89F4526A1A43F49B00A20C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89F452691A43F49B00A20C49 /* Images.xcassets */; };
@@ -47,6 +49,11 @@
 		89A3BCA61A4624A800B26F8F /* GobViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GobViewController.xib; sourceTree = "<group>"; };
 		89A3BCA91A4638E700B26F8F /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
 		89A3BCAA1A4638E700B26F8F /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
+		89A3BCAC1A46708200B26F8F /* WaxFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaxFileData.h; sourceTree = "<group>"; };
+		89A3BCAD1A46744600B26F8F /* FmeFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FmeFileData.h; sourceTree = "<group>"; };
+		89A3BCAE1A46752500B26F8F /* GobFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GobFile.cpp; sourceTree = "<group>"; };
+		89A3BCB01A46770C00B26F8F /* FmeFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FmeFile.h; sourceTree = "<group>"; };
+		89A3BCB21A467B3800B26F8F /* FmeFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FmeFile.cpp; sourceTree = "<group>"; };
 		89F452521A42A4AB00A20C49 /* DARK.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = DARK.GOB; sourceTree = "<group>"; };
 		89F452541A42ADC000A20C49 /* GobFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFileData.h; sourceTree = "<group>"; };
 		89F452551A42B25E00A20C49 /* GobFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFile.h; sourceTree = "<group>"; };
@@ -142,6 +149,7 @@
 			children = (
 				89F452541A42ADC000A20C49 /* GobFileData.h */,
 				89F452551A42B25E00A20C49 /* GobFile.h */,
+				89A3BCAE1A46752500B26F8F /* GobFile.cpp */,
 				89F452571A43DDDA00A20C49 /* DataProvider.h */,
 				89F4525A1A43ED4000A20C49 /* BmFileData.h */,
 				89F4525B1A43F22500A20C49 /* BmFile.h */,
@@ -149,6 +157,10 @@
 				89F452861A44041900A20C49 /* PalFileData.h */,
 				89F452871A44046C00A20C49 /* PalFile.h */,
 				89F452881A453F3A00A20C49 /* Buffer.h */,
+				89A3BCAC1A46708200B26F8F /* WaxFileData.h */,
+				89A3BCAD1A46744600B26F8F /* FmeFileData.h */,
+				89A3BCB01A46770C00B26F8F /* FmeFile.h */,
+				89A3BCB21A467B3800B26F8F /* FmeFile.cpp */,
 			);
 			name = df;
 			path = gob;
@@ -331,7 +343,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89A3BCAF1A46752500B26F8F /* GobFile.cpp in Sources */,
 				89A3BCA01A4571AD00B26F8F /* BmFile.cpp in Sources */,
+				89A3BCB31A467B3800B26F8F /* FmeFile.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

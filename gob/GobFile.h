@@ -15,13 +15,15 @@ namespace DF
 enum class FileType
 {
     Unknown,
-    Bm
+    Bm,
+    Fme
 };
 
 /**
 */
 static const std::map<std::string, FileType> fileTypeMap = {
-    {"BM", FileType::Bm}
+    {"BM", FileType::Bm},
+    {"FME", FileType::Fme}
 };
 
 /**
@@ -156,17 +158,7 @@ private:
     /**
         Initilize the internal data structures using the data provider.
     */
-    void Init()
-    {
-        auto index = GetIndex();
-        for (unsigned i = 0; i < index.count; ++i)
-        {
-            auto entry = GetEntry(i);
-            std::string filename(entry.filename);
-            m_files.push_back(filename);
-            m_entries[filename] = {TypeForFileName(filename), entry.offset, entry.size};
-        }
-    }
+    void Init();
     
     Entry GetFile(const std::string& filename)
     {
@@ -186,27 +178,12 @@ private:
     /**
         Read the file index.
     */
-    GobFileIndex GetIndex()
-    {
-        auto header = GetHeader();
-        GobFileIndex index;
-        Read<GobFileIndex>(&index, header.indexOffset);
-        return index;
-    }
+    GobFileIndex GetIndex();
     
     /**
         Read an entry in the file index.
     */
-    GobFileEntry GetEntry(size_t i)
-    {
-        auto header = GetHeader();
-        size_t startOffset = header.indexOffset + offsetof(GobFileIndex, entries);
-        size_t offset = startOffset + i * sizeof(GobFileEntry);
-
-        GobFileEntry entry;
-        Read<GobFileEntry>(&entry, offset);
-        return entry;
-    }
+    GobFileEntry GetEntry(size_t i);
     
     /**
         Read an object of type `T` from the Gob.
@@ -220,10 +197,7 @@ private:
     /**
         Read `max` bytes at absolute position `offset` from the gob.
     */
-    void Read(uint8_t* output, size_t offset, size_t max)
-    {
-        m_dataProvider->Read(output, offset, max);
-    }
+    void Read(uint8_t* output, size_t offset, size_t max);
 };
 
 } // DF
