@@ -25,7 +25,7 @@ public:
     static Buffer CreateFromDataProvider(const IDataProvider& provider)
     {
         size_t size = provider.GetDataSize();
-        Buffer buf(size);
+        Buffer buf = Create(size);
         provider.Read(buf.Get(0), 0, size);
         return buf;
     }
@@ -35,14 +35,17 @@ public:
     */
     static Buffer Create(size_t size)
     {
-        return Buffer(size);
+        return Buffer(size, 0);
     }
     
-    Buffer() : Buffer(0) { }
+    Buffer() : Buffer(0, 0) { }
     
     Buffer(const Buffer& other) = delete;
     
-    Buffer(Buffer&& other) : Super(std::move(other)) { }
+    Buffer(Buffer&& other, size_t baseOffset = 0) :
+        Super(std::move(other)),
+        m_baseOffset(other.m_baseOffset + baseOffset)
+    { }
     
     Buffer& operator=(const Buffer& other) = delete;
     
@@ -52,9 +55,9 @@ public:
         return *this;
     }
 
-    virtual bool IsValid() const { return (this->size() > 0);}
+    virtual bool IsValid() const { return (GetDataSize() > 0);}
 
-    virtual size_t GetDataSize() const override { return this->size(); }
+    virtual size_t GetDataSize() const override { return (this->size() - m_baseOffset); }
 
     /**
         Get direct access to memory in the buffer.
@@ -65,8 +68,8 @@ public:
     template <typename T = uint8_t>
     T* Get(size_t offset = 0)
     {
-        if (CanRead<T>(offset))
-            return reinterpret_cast<T*>(&((*this)[offset]));
+        if (CanRead<T>(m_baseOffset + offset))
+            return reinterpret_cast<T*>(&((*this)[m_baseOffset + offset]));
         else
             return nullptr;
     }
@@ -74,8 +77,8 @@ public:
     template <typename T = uint8_t>
     const T* Get(size_t offset = 0) const
     {
-        if (CanRead<T>(offset))
-            return reinterpret_cast<const T*>(&((*this)[offset]));
+        if (CanRead<T>(m_baseOffset + offset))
+            return reinterpret_cast<const T*>(&((*this)[m_baseOffset + offset]));
         else
             return nullptr;
     }
@@ -89,7 +92,7 @@ public:
     template <typename T>
     size_t ReadObj(T* output, size_t offset) const
     {
-        if (CanRead<T>(offset))
+        if (CanRead<T>(m_baseOffset + offset))
             return Read(reinterpret_cast<uint8_t*>(output), offset, sizeof(T));
         else
             return 0;
@@ -98,14 +101,19 @@ public:
     virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
     {
         if (!IsValid()) return 0;
-        size_t read = std::min(GetDataSize() - offset, max);
+        size_t read = std::min(GetDataSize() - (m_baseOffset + offset), max);
         const auto* start = Get(offset);
         std::copy(start, start + read, output);
         return read;
     }
     
 private:
-    Buffer(size_t size) : Super(size) { }
+    size_t m_baseOffset;
+
+    Buffer(size_t size, size_t baseOffset) :
+        Super(size),
+        m_baseOffset(baseOffset)
+    { }
 };
 
 } // DF

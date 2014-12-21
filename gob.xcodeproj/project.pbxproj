@@ -14,6 +14,8 @@
 		89A3BCAB1A4638E700B26F8F /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCAA1A4638E700B26F8F /* PreviewView.m */; };
 		89A3BCAF1A46752500B26F8F /* GobFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCAE1A46752500B26F8F /* GobFile.cpp */; };
 		89A3BCB31A467B3800B26F8F /* FmeFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCB21A467B3800B26F8F /* FmeFile.cpp */; };
+		89A3BCB51A467FEF00B26F8F /* BitmapFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 89A3BCB41A467FEF00B26F8F /* BitmapFile.h */; };
+		89A3BCB71A46842700B26F8F /* BitmapFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCB61A46842700B26F8F /* BitmapFile.cpp */; };
 		89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89F452651A43F49B00A20C49 /* AppDelegate.mm */; };
 		89F452681A43F49B00A20C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452671A43F49B00A20C49 /* main.m */; };
 		89F4526A1A43F49B00A20C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89F452691A43F49B00A20C49 /* Images.xcassets */; };
@@ -54,6 +56,8 @@
 		89A3BCAE1A46752500B26F8F /* GobFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GobFile.cpp; sourceTree = "<group>"; };
 		89A3BCB01A46770C00B26F8F /* FmeFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FmeFile.h; sourceTree = "<group>"; };
 		89A3BCB21A467B3800B26F8F /* FmeFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FmeFile.cpp; sourceTree = "<group>"; };
+		89A3BCB41A467FEF00B26F8F /* BitmapFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapFile.h; sourceTree = "<group>"; };
+		89A3BCB61A46842700B26F8F /* BitmapFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapFile.cpp; sourceTree = "<group>"; };
 		89F452521A42A4AB00A20C49 /* DARK.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = DARK.GOB; sourceTree = "<group>"; };
 		89F452541A42ADC000A20C49 /* GobFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFileData.h; sourceTree = "<group>"; };
 		89F452551A42B25E00A20C49 /* GobFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFile.h; sourceTree = "<group>"; };
@@ -161,6 +165,8 @@
 				89A3BCAD1A46744600B26F8F /* FmeFileData.h */,
 				89A3BCB01A46770C00B26F8F /* FmeFile.h */,
 				89A3BCB21A467B3800B26F8F /* FmeFile.cpp */,
+				89A3BCB41A467FEF00B26F8F /* BitmapFile.h */,
+				89A3BCB61A46842700B26F8F /* BitmapFile.cpp */,
 			);
 			name = df;
 			path = gob;
@@ -218,6 +224,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89A3BCB51A467FEF00B26F8F /* BitmapFile.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +350,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89A3BCB71A46842700B26F8F /* BitmapFile.cpp in Sources */,
 				89A3BCAF1A46752500B26F8F /* GobFile.cpp in Sources */,
 				89A3BCA01A4571AD00B26F8F /* BmFile.cpp in Sources */,
 				89A3BCB31A467B3800B26F8F /* FmeFile.cpp in Sources */,

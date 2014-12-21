@@ -64,16 +64,19 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
     NSInteger selectedRow = [self.table selectedRow];
-    std::string filename = gob.GetFilename(selectedRow);
-    
-    switch (gob.GetFileType(filename))
+    if (selectedRow >= 0)
     {
-    case DF::FileType::Bm:
-        [self.preview loadBM:&gob named:filename.c_str()];
-        break;
-    case DF::FileType::Fme:
-        [self.preview loadFme:&gob named:filename.c_str()];
-        break;
+        std::string filename = gob.GetFilename(selectedRow);
+        
+        switch (gob.GetFileType(filename))
+        {
+        case DF::FileType::Bm:
+            [self.preview loadBM:&gob named:filename.c_str()];
+            break;
+        case DF::FileType::Fme:
+            [self.preview loadFme:&gob named:filename.c_str()];
+            break;
+        }
     }
 }
 

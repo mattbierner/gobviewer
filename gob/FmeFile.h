@@ -3,7 +3,7 @@
 #include "FmeFileData.h"
 #include "DataProvider.h"
 #include "Buffer.h"
-
+#include "BitmapFile.h"
 #include <cassert>
 
 namespace DF
@@ -12,7 +12,7 @@ namespace DF
 /**
     Fme file view.
 */
-class FmeFile
+class FmeFile : public BitmapFileData
 {
 public:
     /**
@@ -29,15 +29,15 @@ public:
         m_data(std::move(data))
     { }
     
-    /**
+  /**
         Get the width of the image.
     */
-    unsigned GetWidth() const { return GetHeader2().sizeX; }
+    virtual unsigned GetWidth() const override { return GetHeader2().sizeX; }
     
     /**
         Get the height of the image.
     */
-    unsigned GetHeight() const { return GetHeader2().sizeY; }
+    virtual unsigned GetHeight() const override { return GetHeader2().sizeY; }
  
     /**
         Size of the uncompressed image data.
@@ -58,7 +58,7 @@ public:
             return ReadUncompressedBmData(output, max);
     }
 
-private:
+protected:
     Buffer m_data;
     
     /**
@@ -90,19 +90,19 @@ private:
         return m_data.Read(output, offset, max);
     }
     
-    size_t ReadUncompressedBmData(uint8_t* output, size_t max) const;
-    
-    /**
-        Decompress a RLE0 compressed image.
-        
-        Compression of multiple BMs is not supported.
-    */
-    size_t ReadRle0CompressedBmData(uint8_t* output, size_t max) const;
-
-    
     bool IsCompressed() const
     {
         return GetHeader2().compressed;
+    }
+    
+    virtual BmFileCompression GetCompression() const override
+    {
+        return GetHeader2().compressed ? BmFileCompression::Rle0 : BmFileCompression::None;
+    }
+
+    virtual size_t ReadFrom(uint8_t* output, const uint8_t* ptr, size_t max) const override
+    {
+        return m_data.Read(output, (ptr - m_data.Get()), max);
     }
     
      /**

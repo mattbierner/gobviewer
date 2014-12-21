@@ -3,6 +3,7 @@
 #include "BmFileData.h"
 #include "DataProvider.h"
 #include "Buffer.h"
+#include "BitmapFile.h"
 
 #include <cassert>
 
@@ -12,7 +13,7 @@ namespace DF
 /**
     Bitmap file view.
 */
-class BmFile
+class BmFile : public BitmapFileData
 {
 public:
     /**
@@ -34,7 +35,9 @@ public:
         
         @param index Sub BM to get width of. Only valid for multiple BMs.
     */
-    unsigned GetWidth(size_t index = 0) const
+    virtual unsigned GetWidth() const override { return GetWidth(0); }
+    
+    unsigned GetWidth(size_t index) const
     {
         return (IsMultipleBm() ? GetSubHeader(index).sizeX : GetHeader().sizeX);
     }
@@ -44,7 +47,9 @@ public:
         
         @param index Sub BM to get height of. Only valid for multiple BMs.
     */
-    unsigned GetHeight(size_t index = 0) const
+    virtual unsigned GetHeight() const override { return GetHeight(0); }
+    
+    unsigned GetHeight(size_t index) const
     {
         return (IsMultipleBm() ? GetSubHeader(index).sizeY : GetHeader().sizeY);
     }
@@ -62,7 +67,8 @@ public:
     /**
         Size of the uncompressed BM.
     */
-    size_t GetDataSize(size_t index = 0) const { return GetWidth(index) * GetHeight(index); }
+    using BitmapFileData::GetDataSize;
+    size_t GetDataSize(size_t index) const { return GetWidth(index) * GetHeight(index); }
 
     /**
         Does this file contain sub BMs?
@@ -110,7 +116,7 @@ public:
     */
     size_t GetData(size_t index, uint8_t* output, size_t max) const
     {
-        switch (GetCompression(index))
+        switch (GetCompression())
         {
         case BmFileCompression::Rle:
             return ReadRleCompressedBmData(output, max);
@@ -160,16 +166,18 @@ private:
         return m_data.Read(output, offset, max);
     }
     
-    BmFileCompression GetCompression(size_t index = 0) const
+    virtual size_t ReadFrom(uint8_t* output, const uint8_t* ptr, size_t max) const override
+    {
+        return m_data.Read(output, (ptr - m_data.Get()), max);
+    }
+    
+    size_t ReadUncompressedBmData(size_t index, uint8_t* output, size_t max) const;
+    
+    virtual BmFileCompression GetCompression() const override
     {
         return (IsMultipleBm() ? BmFileCompression::None : GetHeader().compression);
     }
     
-    /**
-        Is the file compressed?
-    */
-    bool IsCompressed(size_t index = 0) const { return (GetCompression(index) != BmFileCompression::None); }
-
     /**
         For a multiple BM, get the absolute offset to the start of the sub file.
     */
@@ -182,31 +190,12 @@ private:
     }
     
     /**
-    
     */
-    size_t ReadUncompressedBmData(size_t index, uint8_t* output, size_t max) const;
-    
-    /**
-        Decompress a RLE compressed image.
-        
-        Compression of multiple BMs is not supported.
-    */
-    size_t ReadRleCompressedBmData(uint8_t* output, size_t max) const;
-    
-    /**
-        Decompress a RLE0 compressed image.
-        
-        Compression of multiple BMs is not supported.
-    */
-    size_t ReadRle0CompressedBmData(uint8_t* output, size_t max) const;
+    virtual const uint8_t* GetColumnStart(size_t col) const override;
     
     /**
     */
-    const uint8_t* GetColumnStart(size_t index, size_t col) const;
-    
-    /**
-    */
-    const uint8_t* GetColumnEnd(size_t index, size_t col) const;
+    virtual const uint8_t* GetColumnEnd(size_t col) const override;
 };
 
 } // DF
