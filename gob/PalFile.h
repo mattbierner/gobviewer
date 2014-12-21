@@ -2,7 +2,7 @@
 
 #include "PalFileData.h"
 #include "DataProvider.h"
-
+#include "Buffer.h"
 
 namespace DF
 {

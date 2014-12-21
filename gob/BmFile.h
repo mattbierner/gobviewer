@@ -84,6 +84,23 @@ public:
     }
     
     /**
+        Get th frame rate setting of a multiple BM.
+        
+        Returns 0 for non-multiple BMs.
+    */
+    uint8_t GetFrameRate() const
+    {
+        if (IsMultipleBm())
+        {
+            const uint8_t* frameRate = m_data.Get(sizeof(BmFileHeader));
+            if (frameRate)
+                return *frameRate;
+        }
+        
+        return 0;
+    }
+    
+    /**
         Read at most `max` bytes of bitmap data into output.
         
         This reads uncompressed bitmap data.
@@ -123,7 +140,7 @@ private:
     /**
         Get the sub header for a multiple BM.
      
-        Only valid for multiple BM.
+        Only validx4 for multiple BM.
     */
     BmFileSubHeader GetSubHeader(size_t index) const
     {

@@ -11,6 +11,8 @@ namespace DF
 class IDataProvider
 {
 public:
+    virtual ~IDataProvider() { }
+
     /**
         Can a read be performed?
     */
@@ -115,6 +117,8 @@ public:
             m_size = m_stream.tellg();
         }
     }
+    
+    virtual ~FileDataProvider() { m_stream.close(); }
     
     virtual bool IsValid() const { return (m_size > 0);}
 

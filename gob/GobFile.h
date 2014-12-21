@@ -5,9 +5,24 @@
 
 #include <cassert>
 #include <map>
+#include <vector>
 
 namespace DF
 {
+
+/**
+*/
+enum class FileType
+{
+    Unknown,
+    Bm
+};
+
+/**
+*/
+static const std::map<std::string, FileType> fileTypeMap = {
+    {"BM", FileType::Bm}
+};
 
 /**
     Gob file view.
@@ -18,6 +33,7 @@ class GobFile
 {
     struct Entry
     {
+        FileType type;
         int32_t offset;
         int32_t size;
     };
@@ -40,13 +56,32 @@ public:
     */
     std::vector<std::string> GetFilenames() const
     {
-        std::vector<std::string> names;
-        std::transform(
-            std::begin(m_entries),
-            std::end(m_entries),
-            std::back_inserter(names),
-            [](const auto& entry) { return entry.first; });
-        return names;
+        return m_files;
+    }
+    
+    /**
+        Get a list of all filenames in the Gob.
+    */
+    std::vector<std::string> GetFilenamesOfType(FileType type) const
+    {
+        std::vector<std::string> list;
+        for (const auto& mapping : m_entries)
+            if (mapping.second.type == type)
+                list.push_back(mapping.first);
+        return m_files;
+    }
+    
+    /**
+       Does an entry for `filename` exist?
+    */
+    std::string GetFilename(size_t index) const
+    {
+        return m_files[index];
+    }
+    
+    FileType GetFileType(const std::string& filename) const
+    {
+        return m_entries.at(filename).type;
     }
     
     /**
@@ -92,29 +127,45 @@ public:
     }
     
 private:
+    static FileType TypeForFileName(const std::string& filename)
+    {
+        auto extPos = filename.find(".");
+        if (extPos != std::string::npos)
+        {
+            std::string ext = filename.substr(extPos + 1);
+            auto type = fileTypeMap.find(ext);
+            if (type != std::end(fileTypeMap))
+            {
+                return type->second;
+            }
+        }
+        return FileType::Unknown;
+    }
+
     std::unique_ptr<IDataProvider> m_dataProvider;
 
+    std::vector<std::string> m_files;
     FileMap m_entries;
     
     GobFile(std::unique_ptr<IDataProvider>&& dataProvider) :
         m_dataProvider(std::move(dataProvider))
     {
-        m_entries = Init();
+        Init();
     }
 
     /**
         Initilize the internal data structures using the data provider.
     */
-    FileMap Init()
+    void Init()
     {
-        FileMap fileMap;
         auto index = GetIndex();
         for (unsigned i = 0; i < index.count; ++i)
         {
             auto entry = GetEntry(i);
-            fileMap[std::string(entry.filename)] = { entry.offset, entry.size };
+            std::string filename(entry.filename);
+            m_files.push_back(filename);
+            m_entries[filename] = {TypeForFileName(filename), entry.offset, entry.size};
         }
-        return fileMap;
     }
     
     Entry GetFile(const std::string& filename)

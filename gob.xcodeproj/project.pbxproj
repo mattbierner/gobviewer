@@ -9,7 +9,10 @@
 /* Begin PBXBuildFile section */
 		89A3BCA01A4571AD00B26F8F /* BmFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BC841A4570A700B26F8F /* BmFile.cpp */; };
 		89A3BCA11A4571B900B26F8F /* libDF.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A3BC891A45718100B26F8F /* libDF.dylib */; };
-		89F452661A43F49B00A20C49 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452651A43F49B00A20C49 /* AppDelegate.m */; };
+		89A3BCA71A4624A800B26F8F /* GobViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCA51A4624A800B26F8F /* GobViewController.mm */; };
+		89A3BCA81A4624A800B26F8F /* GobViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89A3BCA61A4624A800B26F8F /* GobViewController.xib */; };
+		89A3BCAB1A4638E700B26F8F /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCAA1A4638E700B26F8F /* PreviewView.m */; };
+		89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89F452651A43F49B00A20C49 /* AppDelegate.mm */; };
 		89F452681A43F49B00A20C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452671A43F49B00A20C49 /* main.m */; };
 		89F4526A1A43F49B00A20C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89F452691A43F49B00A20C49 /* Images.xcassets */; };
 		89F4526D1A43F49B00A20C49 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89F4526B1A43F49B00A20C49 /* MainMenu.xib */; };
@@ -39,7 +42,11 @@
 		89A3BC841A4570A700B26F8F /* BmFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BmFile.cpp; sourceTree = "<group>"; };
 		89A3BC891A45718100B26F8F /* libDF.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libDF.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		89A3BC991A45718200B26F8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		89F4524B1A42A24000A20C49 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		89A3BCA41A4624A800B26F8F /* GobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobViewController.h; sourceTree = "<group>"; };
+		89A3BCA51A4624A800B26F8F /* GobViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GobViewController.mm; sourceTree = "<group>"; };
+		89A3BCA61A4624A800B26F8F /* GobViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GobViewController.xib; sourceTree = "<group>"; };
+		89A3BCA91A4638E700B26F8F /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
+		89A3BCAA1A4638E700B26F8F /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		89F452521A42A4AB00A20C49 /* DARK.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = DARK.GOB; sourceTree = "<group>"; };
 		89F452541A42ADC000A20C49 /* GobFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFileData.h; sourceTree = "<group>"; };
 		89F452551A42B25E00A20C49 /* GobFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFile.h; sourceTree = "<group>"; };
@@ -50,7 +57,7 @@
 		89F452601A43F49B00A20C49 /* draw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = draw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89F452631A43F49B00A20C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89F452641A43F49B00A20C49 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		89F452651A43F49B00A20C49 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		89F452651A43F49B00A20C49 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		89F452671A43F49B00A20C49 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		89F452691A43F49B00A20C49 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		89F4526C1A43F49B00A20C49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -133,7 +140,6 @@
 		89F4524A1A42A24000A20C49 /* df */ = {
 			isa = PBXGroup;
 			children = (
-				89F4524B1A42A24000A20C49 /* main.cpp */,
 				89F452541A42ADC000A20C49 /* GobFileData.h */,
 				89F452551A42B25E00A20C49 /* GobFile.h */,
 				89F452571A43DDDA00A20C49 /* DataProvider.h */,
@@ -152,12 +158,17 @@
 			isa = PBXGroup;
 			children = (
 				89F452641A43F49B00A20C49 /* AppDelegate.h */,
-				89F452651A43F49B00A20C49 /* AppDelegate.m */,
+				89F452651A43F49B00A20C49 /* AppDelegate.mm */,
 				89F452691A43F49B00A20C49 /* Images.xcassets */,
 				89F4526B1A43F49B00A20C49 /* MainMenu.xib */,
 				89F452621A43F49B00A20C49 /* Supporting Files */,
 				89F452831A43F57E00A20C49 /* BmView.h */,
 				89F452841A43F57E00A20C49 /* BmView.mm */,
+				89A3BCA41A4624A800B26F8F /* GobViewController.h */,
+				89A3BCA51A4624A800B26F8F /* GobViewController.mm */,
+				89A3BCA61A4624A800B26F8F /* GobViewController.xib */,
+				89A3BCA91A4638E700B26F8F /* PreviewView.h */,
+				89A3BCAA1A4638E700B26F8F /* PreviewView.m */,
 			);
 			path = draw;
 			sourceTree = "<group>";
@@ -301,6 +312,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89F4526A1A43F49B00A20C49 /* Images.xcassets in Resources */,
+				89A3BCA81A4624A800B26F8F /* GobViewController.xib in Resources */,
 				89F4526D1A43F49B00A20C49 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,7 +340,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				89F452681A43F49B00A20C49 /* main.m in Sources */,
-				89F452661A43F49B00A20C49 /* AppDelegate.m in Sources */,
+				89A3BCAB1A4638E700B26F8F /* PreviewView.m in Sources */,
+				89A3BCA71A4624A800B26F8F /* GobViewController.mm in Sources */,
+				89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */,
 				89F452851A43F57E00A20C49 /* BmView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
