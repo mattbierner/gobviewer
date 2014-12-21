@@ -1,27 +1,40 @@
-#include "BitmapFile.h"
+#include "CompressedBuffer.h"
 
 namespace DF
 {
 
-size_t BitmapFileData::ReadUncompressedBmData(uint8_t* output, size_t max) const
+/*static*/ size_t CompressedBufferReader::ReadCompressedData(
+    const Buffer& buffer,
+    BmFileCompression compression,
+    uint8_t* output,
+    size_t offset,
+    size_t max)
 {
-    auto size = GetDataSize();
-    size_t read = std::min(size, max);
-    ReadFrom(output, GetColumnStart(0), read);
-    return read;
+    switch (compression)
+    {
+    case BmFileCompression::Rle:
+        return ReadRleCompressedData(buffer, output, offset, max);
+
+    case BmFileCompression::Rle0:
+        return ReadRle0CompressedData(buffer, output, offset, max);
+
+    case BmFileCompression::None:
+    default:
+        return buffer.Read(output, offset, max);
+    }
 }
 
-size_t BitmapFileData::ReadRleCompressedBmData(uint8_t* output, size_t max) const
+/*static*/ size_t CompressedBufferReader::ReadRleCompressedData(const Buffer& buffer, uint8_t* output, size_t offset, size_t max)
 {
     size_t read = 0;
-    const uint8_t* start = GetColumnStart(0);
+    const uint8_t* start = buffer.Get(offset);
     while (read < max)
     {
         uint8_t n = *(start++);
         if (n <= 128)
         {
             // copy `n` direct values
-            size_t numRead = ReadFrom(output + read, start, n);
+            size_t numRead = buffer.ReadFrom(output + read, start, n);
             start += n;
             read += numRead;
         }
@@ -38,17 +51,17 @@ size_t BitmapFileData::ReadRleCompressedBmData(uint8_t* output, size_t max) cons
     return read;
 }
 
-size_t BitmapFileData::ReadRle0CompressedBmData(uint8_t* output, size_t max) const
+/*static*/ size_t CompressedBufferReader::ReadRle0CompressedData(const Buffer& buffer, uint8_t* output,  size_t offset, size_t max)
 {
     size_t read = 0;
-    const uint8_t* start = GetColumnStart(0);
+    const uint8_t* start = buffer.Get(offset);
     while (read < max)
     {
         uint8_t n = *(start++);
         if (n <= 128)
         {
             // copy `n` direct values
-            size_t numRead = ReadFrom(output + read, start, n);
+            size_t numRead = buffer.ReadFrom(output + read, start, n);
             start += n;
             read += numRead;
         }
@@ -63,5 +76,6 @@ size_t BitmapFileData::ReadRle0CompressedBmData(uint8_t* output, size_t max) con
     }
     return read;
 }
+
 
 } // DF

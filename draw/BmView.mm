@@ -54,7 +54,7 @@ DF::FmeFile loadFme(DF::GobFile* gob, const char* filename)
     return DF::FmeFile(std::move(buffer));
 }
 
-struct __attribute__((packed)) RGB { uint8_t r, g, b; };
+struct __attribute__((packed)) RGB { uint8_t r, g, b, a; };
 
 
 RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
@@ -67,14 +67,21 @@ RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
 
     DF::Buffer data = DF::Buffer::Create(size);
     bm.GetData(index, data.Get(), size);
-
+    bool trans = bm.GetTransparency() != DF::BmFileTransparency::Normal;
     for (unsigned row = 0; row < height; ++row)
     {
         for (unsigned col = 0; col < width; ++col)
         {
             uint8_t entry = data[col * height + row];
-            auto palColors = pal.colors[entry];
-            imgData[(height - 1 - row) * width + col] = {palColors.r, palColors.g, palColors.b};
+            if (trans && entry == 0)
+            {
+                imgData[(height - 1 - row) * width + col].a = 0;
+            }
+            else
+            {
+                auto palColors = pal.colors[entry];
+                imgData[(height - 1 - row) * width + col] = {palColors.r, palColors.g, palColors.b, 255};
+            }
         }
     }
     return imgData;
@@ -96,8 +103,15 @@ RGB* FmeToRgb(const DF::FmeFile& bm, const DF::PalFileData& pal)
         for (unsigned col = 0; col < width; ++col)
         {
             uint8_t entry = data[col * height + row];
-            auto palColors = pal.colors[entry];
-            imgData[(height - 1 - row) * width + col] = {palColors.r, palColors.g, palColors.b};
+            if (entry == 0)
+            {
+                imgData[(height - 1 - row) * width + col].a = 0;
+            }
+            else
+            {
+                auto palColors = pal.colors[entry];
+                imgData[(height - 1 - row) * width + col] = {palColors.r, palColors.g, palColors.b, 255};
+            }
         }
     }
     return imgData;
@@ -157,7 +171,7 @@ void f(void *info, const void *data, size_t size)
     {
         size_t width = bm.GetWidth(i);
         size_t height = bm.GetHeight(i);
-        size_t imgDataSize = bm.GetDataSize(i) * 24;
+        size_t imgDataSize = bm.GetDataSize(i) * 32;
         
         RGB* imgData = BmToRgb(bm, i, pal);
         
@@ -166,16 +180,17 @@ void f(void *info, const void *data, size_t size)
             width,
             height,
             8,
-            8 * 3,
-            3 * width,
+            8 * 4,
+            4 * width,
             CGColorSpaceCreateDeviceRGB(),
-            kCGBitmapByteOrderDefault,
+            kCGBitmapByteOrderDefault | kCGImageAlphaLast,
             imageData,
             NULL,
             NO,
             kCGRenderingIntentDefault);
         
         CGDataProviderRelease(imageData);
+        
         [self.images addObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
         CGImageRelease(img);
     }
@@ -189,7 +204,7 @@ void f(void *info, const void *data, size_t size)
 
     size_t width = bm.GetWidth();
     size_t height = bm.GetHeight();
-    size_t imgDataSize = bm.GetDataSize() * 24;
+    size_t imgDataSize = bm.GetDataSize() * 32;
     
     RGB* imgData = FmeToRgb(bm, pal);
     
@@ -198,25 +213,19 @@ void f(void *info, const void *data, size_t size)
         width,
         height,
         8,
-        8 * 3,
-        3 * width,
+        8 * 4,
+        4 * width,
         CGColorSpaceCreateDeviceRGB(),
-        kCGBitmapByteOrderDefault,
+        kCGBitmapByteOrderDefault | kCGImageAlphaLast,
         imageData,
         NULL,
         NO,
         kCGRenderingIntentDefault);
     
     CGDataProviderRelease(imageData);
-    
-    const CGFloat maskValues[6] = { 0, 0, 0, 0, 0, 0 };
-    
-    CGImageRef trans = CGImageCreateWithMaskingColors(img, maskValues);
 
+    self.images = [NSMutableArray arrayWithObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
     CGImageRelease(img);
-
-    self.images = [NSMutableArray arrayWithObject:[[NSImage alloc] initWithCGImage:trans size:NSZeroSize]];
-    CGImageRelease(trans);
     
     imageIndex = 0;
     [self update];

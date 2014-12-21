@@ -106,7 +106,12 @@ public:
         std::copy(start, start + read, output);
         return read;
     }
-    
+
+    size_t ReadFrom(uint8_t* output, const uint8_t* ptr, size_t max) const
+    {
+        return Read(output, (ptr - Get()), max);
+    }
+
 private:
     size_t m_baseOffset;
 
