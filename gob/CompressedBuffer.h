@@ -3,6 +3,7 @@
 #include "Buffer.h"
 
 #include "BmFileData.h"
+#include "BufferWriter.h"
 
 namespace DF
 {
@@ -18,9 +19,9 @@ public:
         size_t max);
 
 private:
-    static size_t ReadRleCompressedData(const Buffer& buffer, uint8_t* output, size_t offset, size_t max);
+    static BufferWriter ReadRleCompressedData(const Buffer& buffer, size_t offset, BufferWriter writer);
     
-    static size_t ReadRle0CompressedData(const Buffer& buffer, uint8_t* output, size_t offset, size_t max);
+    static BufferWriter ReadRle0CompressedData(const Buffer& buffer, size_t offset, BufferWriter writer);
 };
 
 } // DF

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DataProvider.h"
+#include "BufferWriter.h"
 
 #include <stdint.h>
 #include <vector>
@@ -105,11 +106,6 @@ public:
         const auto* start = Get(offset);
         std::copy(start, start + read, output);
         return read;
-    }
-
-    size_t ReadFrom(uint8_t* output, const uint8_t* ptr, size_t max) const
-    {
-        return Read(output, (ptr - Get()), max);
     }
 
 private:

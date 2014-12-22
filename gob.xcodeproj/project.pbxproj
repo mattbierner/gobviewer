@@ -16,6 +16,7 @@
 		89A3BCB31A467B3800B26F8F /* FmeFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCB21A467B3800B26F8F /* FmeFile.cpp */; };
 		89A3BCB91A46914400B26F8F /* CompressedBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 89A3BCB81A46914400B26F8F /* CompressedBuffer.h */; };
 		89A3BCBB1A4691D000B26F8F /* CompressedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCBA1A4691D000B26F8F /* CompressedBuffer.cpp */; };
+		89A3BCBD1A47998800B26F8F /* BufferWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 89A3BCBC1A47998800B26F8F /* BufferWriter.h */; };
 		89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89F452651A43F49B00A20C49 /* AppDelegate.mm */; };
 		89F452681A43F49B00A20C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452671A43F49B00A20C49 /* main.m */; };
 		89F4526A1A43F49B00A20C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89F452691A43F49B00A20C49 /* Images.xcassets */; };
@@ -58,6 +59,7 @@
 		89A3BCB21A467B3800B26F8F /* FmeFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FmeFile.cpp; sourceTree = "<group>"; };
 		89A3BCB81A46914400B26F8F /* CompressedBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompressedBuffer.h; sourceTree = "<group>"; };
 		89A3BCBA1A4691D000B26F8F /* CompressedBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompressedBuffer.cpp; sourceTree = "<group>"; };
+		89A3BCBC1A47998800B26F8F /* BufferWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferWriter.h; sourceTree = "<group>"; };
 		89F452521A42A4AB00A20C49 /* DARK.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = DARK.GOB; sourceTree = "<group>"; };
 		89F452541A42ADC000A20C49 /* GobFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFileData.h; sourceTree = "<group>"; };
 		89F452551A42B25E00A20C49 /* GobFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFile.h; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				89A3BCB21A467B3800B26F8F /* FmeFile.cpp */,
 				89A3BCB81A46914400B26F8F /* CompressedBuffer.h */,
 				89A3BCBA1A4691D000B26F8F /* CompressedBuffer.cpp */,
+				89A3BCBC1A47998800B26F8F /* BufferWriter.h */,
 			);
 			name = df;
 			path = gob;
@@ -225,6 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89A3BCB91A46914400B26F8F /* CompressedBuffer.h in Headers */,
+				89A3BCBD1A47998800B26F8F /* BufferWriter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

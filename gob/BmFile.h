@@ -85,7 +85,7 @@ public:
     }
     
     /**
-        Get th frame rate setting of a multiple BM.
+        Get the frame rate setting of a multiple BM.
         
         Returns 0 for non-multiple BMs.
     */
@@ -102,6 +102,18 @@ public:
     }
     
     /**
+        Is a multiple BM a switch?
+        
+        Returns false for non-multiple BMs.
+    */
+    bool IsSwitch() const
+    {
+        if (IsMultipleBm())
+            return (GetFrameRate() == 0);
+        return false;
+    }
+    
+    /**
         Read at most `max` bytes of bitmap data into output.
         
         This reads uncompressed bitmap data.
@@ -115,7 +127,7 @@ public:
             m_data,
             GetCompression(),
             output,
-            GetColumnStart(0) - m_data.Get(),
+            GetColumnStart(index, 0) - m_data.Get(),
             max);
     }
 
@@ -178,7 +190,7 @@ private:
     
     /**
     */
-    const uint8_t* GetColumnStart(size_t col) const;
+    const uint8_t* GetColumnStart(size_t index, size_t col) const;
 };
 
 } // DF

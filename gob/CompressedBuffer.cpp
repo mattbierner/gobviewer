@@ -3,6 +3,8 @@
 namespace DF
 {
 
+
+
 /*static*/ size_t CompressedBufferReader::ReadCompressedData(
     const Buffer& buffer,
     BmFileCompression compression,
@@ -13,10 +15,10 @@ namespace DF
     switch (compression)
     {
     case BmFileCompression::Rle:
-        return ReadRleCompressedData(buffer, output, offset, max);
+        return ReadRleCompressedData(buffer, offset, BufferWriter(output, max)) - output;
 
     case BmFileCompression::Rle0:
-        return ReadRle0CompressedData(buffer, output, offset, max);
+        return ReadRle0CompressedData(buffer, offset, BufferWriter(output, max)) - output;
 
     case BmFileCompression::None:
     default:
@@ -24,57 +26,62 @@ namespace DF
     }
 }
 
-/*static*/ size_t CompressedBufferReader::ReadRleCompressedData(const Buffer& buffer, uint8_t* output, size_t offset, size_t max)
+/*static*/ BufferWriter CompressedBufferReader::ReadRleCompressedData(const Buffer& buffer, size_t offset, BufferWriter writer)
 {
-    size_t read = 0;
     const uint8_t* start = buffer.Get(offset);
-    while (read < max)
+    while (writer.IsValid())
     {
         uint8_t n = *(start++);
         if (n <= 128)
         {
             // copy `n` direct values
-            size_t numRead = buffer.ReadFrom(output + read, start, n);
+            writer = writer.Write(start, n);
             start += n;
-            read += numRead;
         }
         else
         {
             // Repeat next byte `n - 128` times
             auto next = *(start++);
             uint8_t reps = n - 128;
-            size_t toRead = std::min(static_cast<size_t>(reps), max - read);
-            std::fill_n(output + read, toRead, next);
-            read += toRead;
+            writer = writer.Write([next, reps](uint8_t* data, size_t max)
+            {
+                size_t toRead = std::min(static_cast<size_t>(reps), max);
+                std::fill_n(data, toRead, next);
+                return toRead;
+            });
         }
     }
-    return read;
+    return writer;
 }
 
-/*static*/ size_t CompressedBufferReader::ReadRle0CompressedData(const Buffer& buffer, uint8_t* output,  size_t offset, size_t max)
+/*static*/ BufferWriter CompressedBufferReader::ReadRle0CompressedData(
+    const Buffer& buffer,
+    size_t offset,
+    BufferWriter writer)
 {
-    size_t read = 0;
     const uint8_t* start = buffer.Get(offset);
-    while (read < max)
+    while (writer.IsValid())
     {
         uint8_t n = *(start++);
         if (n <= 128)
         {
             // copy `n` direct values
-            size_t numRead = buffer.ReadFrom(output + read, start, n);
+            writer = writer.Write(start, n);
             start += n;
-            read += numRead;
         }
         else
         {
             // Create `n - 128` transparent pixels
             uint8_t reps = n - 128;
-            size_t toRead = std::min(static_cast<size_t>(reps), max - read);
-            std::fill_n(output + read, toRead, 0);
-            read += toRead;
+            writer = writer.Write([reps](uint8_t* data, size_t max)
+            {
+                size_t toRead = std::min(static_cast<size_t>(reps), max);
+                std::fill_n(data, toRead, 0);
+                return toRead;
+            });
         }
     }
-    return read;
+    return writer;
 }
 
 
