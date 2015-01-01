@@ -208,6 +208,8 @@ xcuserdata
 #
 #*.xccheckout
 
-
 ### Other
+*~
+
+### DF Data
 *.GOB
