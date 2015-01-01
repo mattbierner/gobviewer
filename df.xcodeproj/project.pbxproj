@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		89ABBD701A54D93F00B72E36 /* libgober.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 89ABBD6C1A54D8E000B72E36 /* libgober.a */; };
 		89ABBD731A54D98900B72E36 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89ABBD711A54D98900B72E36 /* LICENSE */; };
-		89ABBD741A54D98900B72E36 /* README.MD in Sources */ = {isa = PBXBuildFile; fileRef = 89ABBD721A54D98900B72E36 /* README.MD */; };
 		89ABBD771A54F11C00B72E36 /* GobViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89ABBD761A54F11C00B72E36 /* GobViewController.mm */; };
 		89C4CE901A55C1E5002F95FF /* GobContentsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE8E1A55C1E5002F95FF /* GobContentsViewController.mm */; };
 		89C4CE911A55C1E5002F95FF /* GobContentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89C4CE8F1A55C1E5002F95FF /* GobContentsViewController.xib */; };
 		89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE931A55DE61002F95FF /* PreviewViewController.mm */; };
 		89C4CE961A55DE62002F95FF /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89C4CE941A55DE61002F95FF /* PreviewViewController.xib */; };
+		89C4CE981A55FD2C002F95FF /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE971A55FD2C002F95FF /* README.md */; };
 		89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89F452651A43F49B00A20C49 /* AppDelegate.mm */; };
 		89F452681A43F49B00A20C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452671A43F49B00A20C49 /* main.m */; };
 		89F4526A1A43F49B00A20C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89F452691A43F49B00A20C49 /* Images.xcassets */; };
@@ -58,7 +58,6 @@
 		8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libgober.xcodeproj; path = libgober/libgober.xcodeproj; sourceTree = "<group>"; };
 		89A3BC991A45718200B26F8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89ABBD711A54D98900B72E36 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		89ABBD721A54D98900B72E36 /* README.MD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.MD; sourceTree = "<group>"; };
 		89ABBD751A54F11C00B72E36 /* GobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobViewController.h; sourceTree = "<group>"; };
 		89ABBD761A54F11C00B72E36 /* GobViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GobViewController.mm; sourceTree = "<group>"; };
 		89C4CE8D1A55C1E5002F95FF /* GobContentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobContentsViewController.h; sourceTree = "<group>"; };
@@ -67,6 +66,7 @@
 		89C4CE921A55DE61002F95FF /* PreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewViewController.h; sourceTree = "<group>"; };
 		89C4CE931A55DE61002F95FF /* PreviewViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewViewController.mm; sourceTree = "<group>"; };
 		89C4CE941A55DE61002F95FF /* PreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreviewViewController.xib; sourceTree = "<group>"; };
+		89C4CE971A55FD2C002F95FF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		89F452601A43F49B00A20C49 /* draw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = draw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89F452631A43F49B00A20C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89F452641A43F49B00A20C49 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -128,8 +128,8 @@
 		89F4523F1A42A24000A20C49 = {
 			isa = PBXGroup;
 			children = (
+				89C4CE971A55FD2C002F95FF /* README.md */,
 				89ABBD711A54D98900B72E36 /* LICENSE */,
-				89ABBD721A54D98900B72E36 /* README.MD */,
 				8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */,
 				89F452611A43F49B00A20C49 /* draw */,
 				89F452751A43F49B00A20C49 /* drawTests */,
@@ -321,10 +321,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89ABBD741A54D98900B72E36 /* README.MD in Sources */,
 				89F452681A43F49B00A20C49 /* main.m in Sources */,
 				89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */,
 				89C4CE901A55C1E5002F95FF /* GobContentsViewController.mm in Sources */,
+				89C4CE981A55FD2C002F95FF /* README.md in Sources */,
 				89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */,
 				89ABBD771A54F11C00B72E36 /* GobViewController.mm in Sources */,
 				89F452851A43F57E00A20C49 /* BmView.mm in Sources */,
