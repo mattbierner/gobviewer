@@ -1,11 +1,10 @@
 #pragma once
 
-#include "BmFileData.h"
-#include "DataReader.h"
-#include "Buffer.h"
-#include "CompressedBuffer.h"
-
 #include <cassert>
+
+#include <gober/BmFileData.h>
+#include <gober/DataReader.h>
+#include <gober/Buffer.h>
 
 namespace DF
 {
@@ -121,15 +120,7 @@ public:
         @param index Sub BM to read from.
         @param
     */
-    size_t GetData(size_t index, uint8_t* output, size_t max) const
-    {
-         return CompressedBufferReader::ReadCompressedData(
-            m_data,
-            GetCompression(),
-            output,
-            GetImageDataStart(index, 0) - m_data.Get(0),
-            max);
-    }
+    size_t GetData(size_t index, uint8_t* output, size_t max) const;
 
 private:
     Buffer m_data;

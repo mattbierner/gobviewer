@@ -1,8 +1,8 @@
 #pragma once
 
-#include "PalFileData.h"
-#include "DataReader.h"
-#include "Buffer.h"
+#include <gober/Buffer.h>
+#include <gober/DataReader.h>
+#include <gober/PalFileData.h>
 
 namespace DF
 {

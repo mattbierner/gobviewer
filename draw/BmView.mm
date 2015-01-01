@@ -7,13 +7,13 @@
 #include <vector>
 #include <iomanip>
 
-#include "GobFileData.h"
-#include "GobFile.h"
-#include "BmFile.h"
-#include "FmeFile.h"
-#include "PalFile.h"
-#include "WaxFile.h"
-#include "Buffer.h"
+#include <gober/GobFileData.h>
+#include <gober/GobFile.h>
+#include <gober/BmFile.h>
+#include <gober/FmeFile.h>
+#include <gober/PalFile.h>
+#include <gober/WaxFile.h>
+#include <gober/Buffer.h>
 
 DF::GobFile open(const char* file)
 {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "GobFileData.h"
-#include "DataReader.h"
-
 #include <cassert>
 #include <map>
 #include <vector>
+
+#include <gober/GobFileData.h>
+#include <gober/DataReader.h>
 
 namespace DF
 {
@@ -50,10 +50,7 @@ public:
     /**
         Create a Gob file from data in a file stream.
     */
-    static GobFile CreateFromFile(std::ifstream&& fs)
-    {
-        return GobFile(std::make_unique<FileDataProvider>(std::move(fs)));
-    }
+    static GobFile CreateFromFile(std::ifstream&& fs);
 
     GobFile() { };
 

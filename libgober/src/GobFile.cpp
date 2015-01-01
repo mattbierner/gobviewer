@@ -3,6 +3,11 @@
 namespace DF
 {
 
+/*static*/ GobFile GobFile::CreateFromFile(std::ifstream&& fs)
+{
+    return GobFile(std::make_unique<FileDataProvider>(std::move(fs)));
+}
+
 void GobFile::Init()
 {
     auto index = GetIndex();

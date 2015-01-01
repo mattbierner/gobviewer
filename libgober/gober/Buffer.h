@@ -3,8 +3,7 @@
 #include <stdint.h>
 #include <vector>
 
-#include "DataReader.h"
-#include "BufferWriter.h"
+#include <gober/DataReader.h>
 
 namespace DF
 {

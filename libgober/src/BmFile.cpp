@@ -1,7 +1,19 @@
 #include "BmFile.h"
 
+#include "CompressedBuffer.h"
+
 namespace DF
 {
+
+size_t BmFile::GetData(size_t index, uint8_t* output, size_t max) const
+{
+     return CompressedBufferReader::ReadCompressedData(
+        m_data,
+        GetCompression(),
+        output,
+        GetImageDataStart(index, 0) - m_data.Get(0),
+        max);
+}
 
 const uint8_t* BmFile::GetImageDataStart(size_t index, size_t col) const
 {

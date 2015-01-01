@@ -1,7 +1,7 @@
 #import "GobViewController.h"
 
 #include "BmView.h"
-#include "FmeFile.h"
+#include <gober/FmeFile.h>
 
 #include <fstream>
 
@@ -68,6 +68,8 @@
         case DF::FileType::Wax:
             [self.preview loadWax:&gob named:filename.c_str()];
             break;
+            
+        default: break;
         }
     }
 }

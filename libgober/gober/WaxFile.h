@@ -1,8 +1,8 @@
 #pragma once
 
-#include "WaxFileData.h"
-#include "DataReader.h"
-#include "Buffer.h"
+#include <gober/WaxFileData.h>
+#include <gober/DataReader.h>
+#include <gober/Buffer.h>
 
 namespace DF
 {

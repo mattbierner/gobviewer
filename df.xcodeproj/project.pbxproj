@@ -7,16 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		89A3BCA01A4571AD00B26F8F /* BmFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BC841A4570A700B26F8F /* BmFile.cpp */; };
-		89A3BCA11A4571B900B26F8F /* libDF.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A3BC891A45718100B26F8F /* libDF.dylib */; };
 		89A3BCA71A4624A800B26F8F /* GobViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCA51A4624A800B26F8F /* GobViewController.mm */; };
 		89A3BCA81A4624A800B26F8F /* GobViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89A3BCA61A4624A800B26F8F /* GobViewController.xib */; };
 		89A3BCAB1A4638E700B26F8F /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCAA1A4638E700B26F8F /* PreviewView.m */; };
-		89A3BCAF1A46752500B26F8F /* GobFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCAE1A46752500B26F8F /* GobFile.cpp */; };
-		89A3BCB31A467B3800B26F8F /* FmeFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCB21A467B3800B26F8F /* FmeFile.cpp */; };
-		89A3BCB91A46914400B26F8F /* CompressedBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 89A3BCB81A46914400B26F8F /* CompressedBuffer.h */; };
-		89A3BCBB1A4691D000B26F8F /* CompressedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A3BCBA1A4691D000B26F8F /* CompressedBuffer.cpp */; };
-		89A3BCBD1A47998800B26F8F /* BufferWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 89A3BCBC1A47998800B26F8F /* BufferWriter.h */; };
+		89ABBD701A54D93F00B72E36 /* liblibgober.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 89ABBD6C1A54D8E000B72E36 /* liblibgober.a */; };
 		89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89F452651A43F49B00A20C49 /* AppDelegate.mm */; };
 		89F452681A43F49B00A20C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452671A43F49B00A20C49 /* main.m */; };
 		89F4526A1A43F49B00A20C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89F452691A43F49B00A20C49 /* Images.xcassets */; };
@@ -26,12 +20,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		89A3BCA21A4571BD00B26F8F /* PBXContainerItemProxy */ = {
+		8976F5F71A54D59600F7C1EE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 89F452401A42A24000A20C49 /* Project object */;
+			containerPortal = 8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8918A65A1A54D1810033DDFE;
+			remoteInfo = gober;
+		};
+		89ABBD6B1A54D8E000B72E36 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 89ABBD5B1A54D8BC00B72E36;
+			remoteInfo = libgober;
+		};
+		89ABBD6E1A54D93A00B72E36 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 89A3BC881A45718100B26F8F;
-			remoteInfo = DF;
+			remoteGlobalIDString = 89ABBD5A1A54D8BC00B72E36;
+			remoteInfo = gober.a;
 		};
 		89F452731A43F49B00A20C49 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -43,31 +51,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		89A3BC821A454B8200B26F8F /* DEMO.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = DEMO.GOB; sourceTree = "<group>"; };
-		89A3BC841A4570A700B26F8F /* BmFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BmFile.cpp; sourceTree = "<group>"; };
-		89A3BC891A45718100B26F8F /* libDF.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libDF.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libgober.xcodeproj; path = libgober/libgober.xcodeproj; sourceTree = "<group>"; };
 		89A3BC991A45718200B26F8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89A3BCA41A4624A800B26F8F /* GobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobViewController.h; sourceTree = "<group>"; };
 		89A3BCA51A4624A800B26F8F /* GobViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GobViewController.mm; sourceTree = "<group>"; };
 		89A3BCA61A4624A800B26F8F /* GobViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GobViewController.xib; sourceTree = "<group>"; };
 		89A3BCA91A4638E700B26F8F /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
 		89A3BCAA1A4638E700B26F8F /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
-		89A3BCAC1A46708200B26F8F /* WaxFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaxFileData.h; sourceTree = "<group>"; };
-		89A3BCAD1A46744600B26F8F /* FmeFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FmeFileData.h; sourceTree = "<group>"; };
-		89A3BCAE1A46752500B26F8F /* GobFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GobFile.cpp; sourceTree = "<group>"; };
-		89A3BCB01A46770C00B26F8F /* FmeFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FmeFile.h; sourceTree = "<group>"; };
-		89A3BCB21A467B3800B26F8F /* FmeFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FmeFile.cpp; sourceTree = "<group>"; };
-		89A3BCB81A46914400B26F8F /* CompressedBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompressedBuffer.h; sourceTree = "<group>"; };
-		89A3BCBA1A4691D000B26F8F /* CompressedBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompressedBuffer.cpp; sourceTree = "<group>"; };
-		89A3BCBC1A47998800B26F8F /* BufferWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferWriter.h; sourceTree = "<group>"; };
-		89A3BCBF1A547F3C00B26F8F /* WaxFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaxFile.h; sourceTree = "<group>"; };
-		89F452521A42A4AB00A20C49 /* DARK.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = DARK.GOB; sourceTree = "<group>"; };
-		89F452541A42ADC000A20C49 /* GobFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFileData.h; sourceTree = "<group>"; };
-		89F452551A42B25E00A20C49 /* GobFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFile.h; sourceTree = "<group>"; };
-		89F452571A43DDDA00A20C49 /* DataReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataReader.h; sourceTree = "<group>"; };
-		89F452581A43E5C300A20C49 /* TEXTURES.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = TEXTURES.GOB; sourceTree = "<group>"; };
-		89F4525A1A43ED4000A20C49 /* BmFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BmFileData.h; sourceTree = "<group>"; };
-		89F4525B1A43F22500A20C49 /* BmFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BmFile.h; sourceTree = "<group>"; };
 		89F452601A43F49B00A20C49 /* draw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = draw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89F452631A43F49B00A20C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89F452641A43F49B00A20C49 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -80,24 +70,14 @@
 		89F452781A43F49B00A20C49 /* drawTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = drawTests.m; sourceTree = "<group>"; };
 		89F452831A43F57E00A20C49 /* BmView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BmView.h; sourceTree = "<group>"; };
 		89F452841A43F57E00A20C49 /* BmView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BmView.mm; sourceTree = "<group>"; };
-		89F452861A44041900A20C49 /* PalFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PalFileData.h; sourceTree = "<group>"; };
-		89F452871A44046C00A20C49 /* PalFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PalFile.h; sourceTree = "<group>"; };
-		89F452881A453F3A00A20C49 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		89A3BC861A45718100B26F8F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		89F4525D1A43F49B00A20C49 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89A3BCA11A4571B900B26F8F /* libDF.dylib in Frameworks */,
+				89ABBD701A54D93F00B72E36 /* liblibgober.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +91,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8976F5F41A54D59500F7C1EE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8976F5F81A54D59600F7C1EE /* libgober.dylib */,
+				89ABBD6C1A54D8E000B72E36 /* liblibgober.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		89A3BC971A45718200B26F8F /* DFTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,10 +119,7 @@
 		89F4523F1A42A24000A20C49 = {
 			isa = PBXGroup;
 			children = (
-				89A3BC821A454B8200B26F8F /* DEMO.GOB */,
-				89F452581A43E5C300A20C49 /* TEXTURES.GOB */,
-				89F452521A42A4AB00A20C49 /* DARK.GOB */,
-				89F4524A1A42A24000A20C49 /* df */,
+				8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */,
 				89F452611A43F49B00A20C49 /* draw */,
 				89F452751A43F49B00A20C49 /* drawTests */,
 				89A3BC971A45718200B26F8F /* DFTests */,
@@ -146,35 +132,8 @@
 			children = (
 				89F452601A43F49B00A20C49 /* draw.app */,
 				89F452721A43F49B00A20C49 /* drawTests.xctest */,
-				89A3BC891A45718100B26F8F /* libDF.dylib */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		89F4524A1A42A24000A20C49 /* df */ = {
-			isa = PBXGroup;
-			children = (
-				89F452541A42ADC000A20C49 /* GobFileData.h */,
-				89F452551A42B25E00A20C49 /* GobFile.h */,
-				89A3BCAE1A46752500B26F8F /* GobFile.cpp */,
-				89F452571A43DDDA00A20C49 /* DataReader.h */,
-				89F4525A1A43ED4000A20C49 /* BmFileData.h */,
-				89F4525B1A43F22500A20C49 /* BmFile.h */,
-				89A3BC841A4570A700B26F8F /* BmFile.cpp */,
-				89F452861A44041900A20C49 /* PalFileData.h */,
-				89F452871A44046C00A20C49 /* PalFile.h */,
-				89F452881A453F3A00A20C49 /* Buffer.h */,
-				89A3BCAC1A46708200B26F8F /* WaxFileData.h */,
-				89A3BCBF1A547F3C00B26F8F /* WaxFile.h */,
-				89A3BCAD1A46744600B26F8F /* FmeFileData.h */,
-				89A3BCB01A46770C00B26F8F /* FmeFile.h */,
-				89A3BCB21A467B3800B26F8F /* FmeFile.cpp */,
-				89A3BCB81A46914400B26F8F /* CompressedBuffer.h */,
-				89A3BCBA1A4691D000B26F8F /* CompressedBuffer.cpp */,
-				89A3BCBC1A47998800B26F8F /* BufferWriter.h */,
-			);
-			name = df;
-			path = gob;
 			sourceTree = "<group>";
 		};
 		89F452611A43F49B00A20C49 /* draw */ = {
@@ -224,36 +183,7 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		89A3BC871A45718100B26F8F /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				89A3BCB91A46914400B26F8F /* CompressedBuffer.h in Headers */,
-				89A3BCBD1A47998800B26F8F /* BufferWriter.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
-		89A3BC881A45718100B26F8F /* DF */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 89A3BC9A1A45718200B26F8F /* Build configuration list for PBXNativeTarget "DF" */;
-			buildPhases = (
-				89A3BC851A45718100B26F8F /* Sources */,
-				89A3BC861A45718100B26F8F /* Frameworks */,
-				89A3BC871A45718100B26F8F /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = DF;
-			productName = DF;
-			productReference = 89A3BC891A45718100B26F8F /* libDF.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
-		};
 		89F4525F1A43F49B00A20C49 /* draw */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 89F4527A1A43F49B00A20C49 /* Build configuration list for PBXNativeTarget "draw" */;
@@ -265,7 +195,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				89A3BCA31A4571BD00B26F8F /* PBXTargetDependency */,
+				89ABBD6F1A54D93A00B72E36 /* PBXTargetDependency */,
 			);
 			name = draw;
 			productName = draw;
@@ -299,9 +229,6 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Matt Bierner";
 				TargetAttributes = {
-					89A3BC881A45718100B26F8F = {
-						CreatedOnToolsVersion = 6.1.1;
-					};
 					89F4525F1A43F49B00A20C49 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
@@ -311,7 +238,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 89F452431A42A24000A20C49 /* Build configuration list for PBXProject "gob" */;
+			buildConfigurationList = 89F452431A42A24000A20C49 /* Build configuration list for PBXProject "df" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -322,14 +249,36 @@
 			mainGroup = 89F4523F1A42A24000A20C49;
 			productRefGroup = 89F452491A42A24000A20C49 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 8976F5F41A54D59500F7C1EE /* Products */;
+					ProjectRef = 8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				89F4525F1A43F49B00A20C49 /* draw */,
 				89F452711A43F49B00A20C49 /* drawTests */,
-				89A3BC881A45718100B26F8F /* DF */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		8976F5F81A54D59600F7C1EE /* libgober.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libgober.dylib;
+			remoteRef = 8976F5F71A54D59600F7C1EE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		89ABBD6C1A54D8E000B72E36 /* liblibgober.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblibgober.a;
+			remoteRef = 89ABBD6B1A54D8E000B72E36 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		89F4525E1A43F49B00A20C49 /* Resources */ = {
@@ -352,17 +301,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		89A3BC851A45718100B26F8F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				89A3BCBB1A4691D000B26F8F /* CompressedBuffer.cpp in Sources */,
-				89A3BCAF1A46752500B26F8F /* GobFile.cpp in Sources */,
-				89A3BCA01A4571AD00B26F8F /* BmFile.cpp in Sources */,
-				89A3BCB31A467B3800B26F8F /* FmeFile.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		89F4525C1A43F49B00A20C49 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -386,10 +324,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		89A3BCA31A4571BD00B26F8F /* PBXTargetDependency */ = {
+		89ABBD6F1A54D93A00B72E36 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 89A3BC881A45718100B26F8F /* DF */;
-			targetProxy = 89A3BCA21A4571BD00B26F8F /* PBXContainerItemProxy */;
+			name = gober.a;
+			targetProxy = 89ABBD6E1A54D93A00B72E36 /* PBXContainerItemProxy */;
 		};
 		89F452741A43F49B00A20C49 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -410,30 +348,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		89A3BC9B1A45718200B26F8F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		89A3BC9C1A45718200B26F8F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		89F4524D1A42A24000A20C49 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -467,6 +381,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/libgober",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -506,6 +425,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/libgober",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -583,16 +507,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		89A3BC9A1A45718200B26F8F /* Build configuration list for PBXNativeTarget "DF" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				89A3BC9B1A45718200B26F8F /* Debug */,
-				89A3BC9C1A45718200B26F8F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		89F452431A42A24000A20C49 /* Build configuration list for PBXProject "gob" */ = {
+		89F452431A42A24000A20C49 /* Build configuration list for PBXProject "df" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89F4524D1A42A24000A20C49 /* Debug */,

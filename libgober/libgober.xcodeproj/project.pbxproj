@@ -1,0 +1,412 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		897518511A54D3930050B2B2 /* BmFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518451A54D3930050B2B2 /* BmFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		897518521A54D3930050B2B2 /* BmFileData.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518461A54D3930050B2B2 /* BmFileData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		897518531A54D3930050B2B2 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518471A54D3930050B2B2 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		897518541A54D3930050B2B2 /* DataReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518481A54D3930050B2B2 /* DataReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		897518551A54D3930050B2B2 /* FmeFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518491A54D3930050B2B2 /* FmeFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		897518561A54D3930050B2B2 /* FmeFileData.h in Headers */ = {isa = PBXBuildFile; fileRef = 8975184A1A54D3930050B2B2 /* FmeFileData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		897518571A54D3930050B2B2 /* GobFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8975184B1A54D3930050B2B2 /* GobFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		897518581A54D3930050B2B2 /* GobFileData.h in Headers */ = {isa = PBXBuildFile; fileRef = 8975184C1A54D3930050B2B2 /* GobFileData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		897518591A54D3930050B2B2 /* PalFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8975184D1A54D3930050B2B2 /* PalFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8975185A1A54D3930050B2B2 /* PalFileData.h in Headers */ = {isa = PBXBuildFile; fileRef = 8975184E1A54D3930050B2B2 /* PalFileData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8975185B1A54D3930050B2B2 /* WaxFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8975184F1A54D3930050B2B2 /* WaxFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8975185C1A54D3930050B2B2 /* WaxFileData.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518501A54D3930050B2B2 /* WaxFileData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		89ABBD661A54D8D400B72E36 /* BmFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DDE1A54D22600B71D68 /* BmFile.cpp */; };
+		89ABBD671A54D8D400B72E36 /* CompressedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DE01A54D22600B71D68 /* CompressedBuffer.cpp */; };
+		89ABBD681A54D8D400B72E36 /* FmeFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DE21A54D22600B71D68 /* FmeFile.cpp */; };
+		89ABBD691A54D8D400B72E36 /* GobFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DE31A54D22600B71D68 /* GobFile.cpp */; };
+		89D40DE41A54D22600B71D68 /* BmFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DDE1A54D22600B71D68 /* BmFile.cpp */; };
+		89D40DE51A54D22600B71D68 /* BufferWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D40DDF1A54D22600B71D68 /* BufferWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		89D40DE61A54D22600B71D68 /* CompressedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DE01A54D22600B71D68 /* CompressedBuffer.cpp */; };
+		89D40DE81A54D22600B71D68 /* FmeFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DE21A54D22600B71D68 /* FmeFile.cpp */; };
+		89D40DE91A54D22600B71D68 /* GobFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DE31A54D22600B71D68 /* GobFile.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		8918A65A1A54D1810033DDFE /* libgober.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libgober.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		897518451A54D3930050B2B2 /* BmFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BmFile.h; path = gober/BmFile.h; sourceTree = "<group>"; };
+		897518461A54D3930050B2B2 /* BmFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BmFileData.h; path = gober/BmFileData.h; sourceTree = "<group>"; };
+		897518471A54D3930050B2B2 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = gober/Buffer.h; sourceTree = "<group>"; };
+		897518481A54D3930050B2B2 /* DataReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataReader.h; path = gober/DataReader.h; sourceTree = "<group>"; };
+		897518491A54D3930050B2B2 /* FmeFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FmeFile.h; path = gober/FmeFile.h; sourceTree = "<group>"; };
+		8975184A1A54D3930050B2B2 /* FmeFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FmeFileData.h; path = gober/FmeFileData.h; sourceTree = "<group>"; };
+		8975184B1A54D3930050B2B2 /* GobFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GobFile.h; path = gober/GobFile.h; sourceTree = "<group>"; };
+		8975184C1A54D3930050B2B2 /* GobFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GobFileData.h; path = gober/GobFileData.h; sourceTree = "<group>"; };
+		8975184D1A54D3930050B2B2 /* PalFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PalFile.h; path = gober/PalFile.h; sourceTree = "<group>"; };
+		8975184E1A54D3930050B2B2 /* PalFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PalFileData.h; path = gober/PalFileData.h; sourceTree = "<group>"; };
+		8975184F1A54D3930050B2B2 /* WaxFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaxFile.h; path = gober/WaxFile.h; sourceTree = "<group>"; };
+		897518501A54D3930050B2B2 /* WaxFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaxFileData.h; path = gober/WaxFileData.h; sourceTree = "<group>"; };
+		89ABBD5B1A54D8BC00B72E36 /* libgober.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgober.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		89D40DDE1A54D22600B71D68 /* BmFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BmFile.cpp; path = src/BmFile.cpp; sourceTree = "<group>"; };
+		89D40DDF1A54D22600B71D68 /* BufferWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BufferWriter.h; path = src/BufferWriter.h; sourceTree = "<group>"; };
+		89D40DE01A54D22600B71D68 /* CompressedBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompressedBuffer.cpp; path = src/CompressedBuffer.cpp; sourceTree = "<group>"; };
+		89D40DE11A54D22600B71D68 /* CompressedBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompressedBuffer.h; path = src/CompressedBuffer.h; sourceTree = "<group>"; };
+		89D40DE21A54D22600B71D68 /* FmeFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FmeFile.cpp; path = src/FmeFile.cpp; sourceTree = "<group>"; };
+		89D40DE31A54D22600B71D68 /* GobFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GobFile.cpp; path = src/GobFile.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8918A6571A54D1810033DDFE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89ABBD581A54D8BC00B72E36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8918A6511A54D1810033DDFE = {
+			isa = PBXGroup;
+			children = (
+				89D40DB71A54D1F100B71D68 /* src */,
+				8918A65B1A54D1810033DDFE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8918A65B1A54D1810033DDFE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8918A65A1A54D1810033DDFE /* libgober.dylib */,
+				89ABBD5B1A54D8BC00B72E36 /* libgober.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		89D40DB71A54D1F100B71D68 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				897518451A54D3930050B2B2 /* BmFile.h */,
+				897518461A54D3930050B2B2 /* BmFileData.h */,
+				897518471A54D3930050B2B2 /* Buffer.h */,
+				897518481A54D3930050B2B2 /* DataReader.h */,
+				897518491A54D3930050B2B2 /* FmeFile.h */,
+				8975184A1A54D3930050B2B2 /* FmeFileData.h */,
+				8975184B1A54D3930050B2B2 /* GobFile.h */,
+				8975184C1A54D3930050B2B2 /* GobFileData.h */,
+				8975184D1A54D3930050B2B2 /* PalFile.h */,
+				8975184E1A54D3930050B2B2 /* PalFileData.h */,
+				8975184F1A54D3930050B2B2 /* WaxFile.h */,
+				897518501A54D3930050B2B2 /* WaxFileData.h */,
+				89D40DDE1A54D22600B71D68 /* BmFile.cpp */,
+				89D40DDF1A54D22600B71D68 /* BufferWriter.h */,
+				89D40DE01A54D22600B71D68 /* CompressedBuffer.cpp */,
+				89D40DE11A54D22600B71D68 /* CompressedBuffer.h */,
+				89D40DE21A54D22600B71D68 /* FmeFile.cpp */,
+				89D40DE31A54D22600B71D68 /* GobFile.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8918A6581A54D1810033DDFE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				897518531A54D3930050B2B2 /* Buffer.h in Headers */,
+				897518581A54D3930050B2B2 /* GobFileData.h in Headers */,
+				897518561A54D3930050B2B2 /* FmeFileData.h in Headers */,
+				8975185B1A54D3930050B2B2 /* WaxFile.h in Headers */,
+				897518551A54D3930050B2B2 /* FmeFile.h in Headers */,
+				897518521A54D3930050B2B2 /* BmFileData.h in Headers */,
+				8975185A1A54D3930050B2B2 /* PalFileData.h in Headers */,
+				89D40DE51A54D22600B71D68 /* BufferWriter.h in Headers */,
+				897518591A54D3930050B2B2 /* PalFile.h in Headers */,
+				8975185C1A54D3930050B2B2 /* WaxFileData.h in Headers */,
+				897518541A54D3930050B2B2 /* DataReader.h in Headers */,
+				897518511A54D3930050B2B2 /* BmFile.h in Headers */,
+				897518571A54D3930050B2B2 /* GobFile.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89ABBD591A54D8BC00B72E36 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8918A6591A54D1810033DDFE /* gober */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8918A6651A54D1810033DDFE /* Build configuration list for PBXNativeTarget "gober" */;
+			buildPhases = (
+				8918A6561A54D1810033DDFE /* Sources */,
+				8918A6571A54D1810033DDFE /* Frameworks */,
+				8918A6581A54D1810033DDFE /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = gober;
+			productName = gober;
+			productReference = 8918A65A1A54D1810033DDFE /* libgober.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		89ABBD5A1A54D8BC00B72E36 /* gober.a */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89ABBD631A54D8BC00B72E36 /* Build configuration list for PBXNativeTarget "gober.a" */;
+			buildPhases = (
+				89ABBD571A54D8BC00B72E36 /* Sources */,
+				89ABBD581A54D8BC00B72E36 /* Frameworks */,
+				89ABBD591A54D8BC00B72E36 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = gober.a;
+			productName = libgober;
+			productReference = 89ABBD5B1A54D8BC00B72E36 /* libgober.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8918A6521A54D1810033DDFE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Matt Bierner";
+				TargetAttributes = {
+					8918A6591A54D1810033DDFE = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					89ABBD5A1A54D8BC00B72E36 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 8918A6551A54D1810033DDFE /* Build configuration list for PBXProject "libgober" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 8918A6511A54D1810033DDFE;
+			productRefGroup = 8918A65B1A54D1810033DDFE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8918A6591A54D1810033DDFE /* gober */,
+				89ABBD5A1A54D8BC00B72E36 /* gober.a */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8918A6561A54D1810033DDFE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89D40DE91A54D22600B71D68 /* GobFile.cpp in Sources */,
+				89D40DE61A54D22600B71D68 /* CompressedBuffer.cpp in Sources */,
+				89D40DE41A54D22600B71D68 /* BmFile.cpp in Sources */,
+				89D40DE81A54D22600B71D68 /* FmeFile.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89ABBD571A54D8BC00B72E36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89ABBD661A54D8D400B72E36 /* BmFile.cpp in Sources */,
+				89ABBD671A54D8D400B72E36 /* CompressedBuffer.cpp in Sources */,
+				89ABBD681A54D8D400B72E36 /* FmeFile.cpp in Sources */,
+				89ABBD691A54D8D400B72E36 /* GobFile.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8918A6631A54D1810033DDFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-std=c++1y",
+				);
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		8918A6641A54D1810033DDFE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-std=c++1y",
+				);
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		8918A6661A54D1810033DDFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8918A6671A54D1810033DDFE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		89ABBD641A54D8BC00B72E36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				PRODUCT_NAME = gober;
+			};
+			name = Debug;
+		};
+		89ABBD651A54D8BC00B72E36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				PRODUCT_NAME = gober;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8918A6551A54D1810033DDFE /* Build configuration list for PBXProject "libgober" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8918A6631A54D1810033DDFE /* Debug */,
+				8918A6641A54D1810033DDFE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8918A6651A54D1810033DDFE /* Build configuration list for PBXNativeTarget "gober" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8918A6661A54D1810033DDFE /* Debug */,
+				8918A6671A54D1810033DDFE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89ABBD631A54D8BC00B72E36 /* Build configuration list for PBXNativeTarget "gober.a" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89ABBD641A54D8BC00B72E36 /* Debug */,
+				89ABBD651A54D8BC00B72E36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8918A6521A54D1810033DDFE /* Project object */;
+}

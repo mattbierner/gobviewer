@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-#include "GobFile.h"
+#include <gober/GobFile.h>
 
 @class BmView;
 

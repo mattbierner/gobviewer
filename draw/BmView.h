@@ -1,8 +1,9 @@
 #import <Cocoa/Cocoa.h>
 
-#include "PalFile.h"
-#include "BmFile.h"
-#include "GobFile.h"
+#include <gober/PalFile.h>
+#include <gober/BmFile.h>
+#include <gober/GobFile.h>
+
 
 struct __attribute__((packed)) RGB { uint8_t r, g, b, a; };
 
