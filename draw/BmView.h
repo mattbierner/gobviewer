@@ -1,16 +1,11 @@
-//
-//  BmView.h
-//  gob
-//
-//  Created by Matt Bierner on 12/18/14.
-//  Copyright (c) 2014 Matt Bierner. All rights reserved.
-//
-
 #import <Cocoa/Cocoa.h>
 
 #include "PalFile.h"
 #include "BmFile.h"
 #include "GobFile.h"
+
+struct __attribute__((packed)) RGB { uint8_t r, g, b, a; };
+
 
 @interface BmView : NSView
 {
@@ -24,6 +19,11 @@
 @property (nonatomic, strong) NSImageView* imageView;
 
 - (id) initWithFrame:(NSRect)frame;
+
+- (void) addImage:(RGB*) data
+    size:(size_t) dataSize
+    width:(unsigned) width
+    height:(unsigned) height;
 
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename;
 - (void) loadFme:(DF::GobFile*) gob named:(const char*)filename;

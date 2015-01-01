@@ -57,8 +57,6 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     return DF::WaxFile(std::move(buffer));
 }
 
-struct __attribute__((packed)) RGB { uint8_t r, g, b, a; };
-
 
 RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
 {
@@ -143,7 +141,7 @@ void f(void *info, const void *data, size_t size)
             gob.ReadFile(file, buffer.Get(0), 0, size);
             DF::PalFile p(std::move(buffer));
 
-            p.GetData(reinterpret_cast<uint8_t*>(&pal), sizeof(DF::PalFileData));
+            p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
         }
         
         [self update];
@@ -162,55 +160,12 @@ void f(void *info, const void *data, size_t size)
     return self;
 }
 
-- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename
+
+- (void) addImage:(RGB*) imgData
+    size:(size_t) imgDataSize
+    width:(unsigned) width
+    height:(unsigned) height
 {
-    DF::BmFile bm = loadBm(gob, filename);
-
-    unsigned subCount = bm.GetCountSubBms();
-
-    self.images = [NSMutableArray arrayWithCapacity:subCount];
-
-    for (unsigned i = 0; i < subCount; ++i)
-    {
-        size_t width = bm.GetWidth(i);
-        size_t height = bm.GetHeight(i);
-        size_t imgDataSize = bm.GetDataSize(i) * 32;
-        
-        RGB* imgData = BmToRgb(bm, i, pal);
-        
-        CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, imgDataSize, f);
-        CGImageRef img = CGImageCreate(
-            width,
-            height,
-            8,
-            8 * 4,
-            4 * width,
-            CGColorSpaceCreateDeviceRGB(),
-            kCGBitmapByteOrderDefault | kCGImageAlphaLast,
-            imageData,
-            NULL,
-            NO,
-            kCGRenderingIntentDefault);
-        
-        CGDataProviderRelease(imageData);
-        
-        [self.images addObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
-        CGImageRelease(img);
-    }
-    imageIndex = 0;
-    [self update];
-}
-
-- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename
-{
-    DF::FmeFile bm = loadFme(gob, filename);
-
-    size_t width = bm.GetWidth();
-    size_t height = bm.GetHeight();
-    size_t imgDataSize = bm.GetDataSize() * 32;
-    
-    RGB* imgData = FmeToRgb(bm, pal);
-    
     CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, imgDataSize, f);
     CGImageRef img = CGImageCreate(
         width,
@@ -226,9 +181,43 @@ void f(void *info, const void *data, size_t size)
         kCGRenderingIntentDefault);
     
     CGDataProviderRelease(imageData);
-
-    self.images = [NSMutableArray arrayWithObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
+    
+    [self.images addObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
     CGImageRelease(img);
+}
+
+- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename
+{
+    DF::BmFile bm = loadBm(gob, filename);
+
+    unsigned subCount = bm.GetCountSubBms();
+
+    self.images = [NSMutableArray arrayWithCapacity:subCount];
+
+    for (unsigned i = 0; i < subCount; ++i)
+    {
+        unsigned width = bm.GetWidth(i);
+        unsigned height = bm.GetHeight(i);
+        size_t imgDataSize = bm.GetDataSize(i) * 32;
+        
+        RGB* imgData = BmToRgb(bm, i, pal);
+        [self addImage:imgData size: imgDataSize width:width height:height];
+    }
+    imageIndex = 0;
+    [self update];
+}
+
+- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename
+{
+    DF::FmeFile bm = loadFme(gob, filename);
+
+    unsigned width = bm.GetWidth();
+    unsigned height = bm.GetHeight();
+    size_t imgDataSize = bm.GetDataSize() * 32;
+    
+    RGB* imgData = FmeToRgb(bm, pal);
+    self.images = [NSMutableArray arrayWithCapacity:1];
+    [self addImage:imgData size: imgDataSize width:width height:height];
     
     imageIndex = 0;
     [self update];
@@ -239,46 +228,32 @@ void f(void *info, const void *data, size_t size)
 {
     DF::WaxFile w = loadWax(gob, filename);
 
-    DF::WaxFileWax wax = w.GetWax(0);
-    
   
     self.images = [NSMutableArray arrayWithCapacity:0];
 
-    unsigned numSeqs = wax.GetSequencesCount();
-    for (unsigned sequenceIndex = 0; sequenceIndex < numSeqs; ++sequenceIndex)
+    unsigned waxesCount = w.GetWaxesCount();
+    for (unsigned waxIndex = 0; waxIndex < waxesCount; ++waxIndex)
     {
-        DF::WaxFileSequence seq = wax.GetSequence(sequenceIndex);
-    
-        unsigned numFrames = seq.GetFramesCount();
+        DF::WaxFileWax wax = w.GetWax(waxIndex);
 
-        for (unsigned frame = 0; frame < numFrames; ++frame)
+        unsigned numSeqs = wax.GetSequencesCount();
+        for (unsigned sequenceIndex = 0; sequenceIndex < numSeqs; ++sequenceIndex)
         {
-            DF::FmeFile bm = seq.GetFrame(frame);
+            DF::WaxFileSequence seq = wax.GetSequence(sequenceIndex);
+        
+            unsigned numFrames = seq.GetFramesCount();
 
-            size_t width = bm.GetWidth();
-            size_t height = bm.GetHeight();
-            size_t imgDataSize = bm.GetDataSize() * 32;
+            for (unsigned frame = 0; frame < numFrames; ++frame)
+            {
+                DF::FmeFile bm = seq.GetFrame(frame);
 
-            RGB* imgData = FmeToRgb(bm, pal);
-            
-            CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, imgDataSize, f);
-            CGImageRef img = CGImageCreate(
-                width,
-                height,
-                8,
-                8 * 4,
-                4 * width,
-                CGColorSpaceCreateDeviceRGB(),
-                kCGBitmapByteOrderDefault | kCGImageAlphaLast,
-                imageData,
-                NULL,
-                NO,
-                kCGRenderingIntentDefault);
-            
-            CGDataProviderRelease(imageData);
+                unsigned width = bm.GetWidth();
+                unsigned height = bm.GetHeight();
+                size_t imgDataSize = bm.GetDataSize() * 32;
 
-            [self.images addObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
-            CGImageRelease(img);
+                RGB* imgData = FmeToRgb(bm, pal);
+                [self addImage:imgData size: imgDataSize width:width height:height];
+            }
         }
     }
     

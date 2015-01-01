@@ -1,10 +1,8 @@
 #pragma once
 
-#include "FmeFileData.h"
-#include "DataReader.h"
+#include "BmFileData.h"
 #include "Buffer.h"
-#include "CompressedBuffer.h"
-#include <cassert>
+#include "FmeFileData.h"
 
 namespace DF
 {

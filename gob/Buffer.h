@@ -10,7 +10,7 @@ namespace DF
 {
 
 /**
-
+    Provides basic read and write access to a block of memory.
 */
 class IBuffer :
     public IDataReader
@@ -57,6 +57,9 @@ public:
     }
     
     /**
+        Turn an absolute offset into a relative offset.
+        
+        This is useful for working with pointer like data members.
     */
     virtual size_t ResolveOffset(size_t offset) const
     {
@@ -126,14 +129,6 @@ public:
         std::copy(start, start + read, output);
         return read;
     }
-
-    /*virtual uint8_t* Write(size_t offset, size_t max) override
-    {
-        if (CanRead(offset, max))
-            return Get(offset);
-        else
-            return nullptr;
-    }*/
 
 private:
     Buffer(size_t size) :

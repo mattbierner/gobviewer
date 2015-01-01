@@ -1,5 +1,7 @@
 #include "FmeFile.h"
 
+#include "CompressedBuffer.h"
+
 namespace DF
 {
 

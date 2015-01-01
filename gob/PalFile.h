@@ -10,7 +10,7 @@ namespace DF
 /**
     Color palete defintion file.
 */
-class PalFile
+class PalFile : public IDataReader
 {
 public:
     /**
@@ -27,39 +27,23 @@ public:
         m_data(std::move(buffer))
     { }
     
-    size_t GetDataSize()
+    virtual size_t GetDataSize() const override
     {
         return sizeof(PalFileData);
     }
     
-    size_t GetData(uint8_t* output, size_t max)
+    virtual bool IsReadable() const override
     {
-        auto size = GetDataSize();
-        
-        size_t read = std::min(size, max);
-        Read(output, 0, read);
-        return read;
+        return m_data.IsReadable();
+    }
+    
+    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
+    {
+        return m_data.Read(output, offset, max);
     }
 
 private:
     Buffer m_data;
-    
-    /**
-        Read an object of type `T` from the Pal.
-    */
-    template <typename T>
-    size_t Read(T* output, size_t offset)
-    {
-        return Read(reinterpret_cast<uint8_t*>(output), offset, sizeof(T));
-    }
-    
-    /**
-        Read `max` bytes at absolute position `offset` from the gob.
-    */
-    size_t Read(uint8_t* output, size_t offset, size_t max)
-    {
-        return m_data.Read(output, offset, max);
-    }
 };
 
 } // DF
