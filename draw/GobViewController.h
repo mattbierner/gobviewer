@@ -1,30 +1,21 @@
 #import <Cocoa/Cocoa.h>
 
 #include <gober/GobFile.h>
+#include "GobContentsViewController.h"
 
-@class BmView;
+@class PreviewViewController;
 
-@interface GobViewController : NSViewController <
-    NSTableViewDataSource,
-    NSTableViewDelegate>
+@interface GobViewController : NSSplitViewController <
+    GobContentsDelegate>
 {
-    DF::GobFile gob;
+    std::shared_ptr<DF::GobFile> gob;
 }
 
-@property (nonatomic, strong) IBOutlet NSTableView* table;
-@property (nonatomic, strong) IBOutlet BmView* preview;
+@property (nonatomic, strong) GobContentsViewController* gobContentsViewController;
+@property (nonatomic, strong) PreviewViewController* previewViewController;
 
 - (void) loadFile:(NSString*)file;
 
-- (NSInteger) numberOfRowsInTableView:(NSTableView*)tableView;
-
-- (id) tableView:(NSTableView*)tableView
-    objectValueForTableColumn:(NSTableColumn*)tableColumn
-    row:(NSInteger)rowIndex;
-
-- (id) tableView:(NSTableView*)tableView
-    rowViewForRow:(NSInteger)rowIndex;
-
-- (void) tableViewSelectionDidChange:(NSNotification *)notification;
+- (void) gob:(std::shared_ptr<DF::GobFile>)gob selectedFileDidChange:(NSString*)file;
 
 @end

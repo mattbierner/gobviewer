@@ -152,10 +152,9 @@ void f(void *info, const void *data, size_t size)
                                 repeats:YES];
         
         self.imageView = [[NSImageView alloc] initWithFrame:self.bounds];
-
+        [self.imageView setAutoresizingMask:(NSViewWidthSizable | NSViewHeightSizable)];
         [self.imageView setImageScaling:NSImageScaleProportionallyUpOrDown];
         [self addSubview:self.imageView];
-
     }
     return self;
 }
