@@ -1,11 +1,3 @@
-//
-//  BmView.m
-//  gob
-//
-//  Created by Matt Bierner on 12/18/14.
-//  Copyright (c) 2014 Matt Bierner. All rights reserved.
-//
-
 #import "BmView.h"
 
 #include <iostream>
@@ -20,6 +12,7 @@
 #include "BmFile.h"
 #include "FmeFile.h"
 #include "PalFile.h"
+#include "WaxFile.h"
 #include "Buffer.h"
 
 DF::GobFile open(const char* file)
@@ -39,7 +32,7 @@ DF::BmFile loadBm(DF::GobFile* gob, const char* filename)
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
     DF::Buffer buffer = DF::Buffer::Create(size);
-    gob->ReadFile(file, buffer.Get(), 0, size);
+    gob->ReadFile(file, buffer.Get(0), 0, size);
     
     return DF::BmFile(std::move(buffer));
 }
@@ -49,9 +42,19 @@ DF::FmeFile loadFme(DF::GobFile* gob, const char* filename)
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
     DF::Buffer buffer = DF::Buffer::Create(size);
-    gob->ReadFile(file, buffer.Get(), 0, size);
+    gob->ReadFile(file, buffer.Get(0), 0, size);
     
     return DF::FmeFile(std::move(buffer));
+}
+
+DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
+{
+    std::string file(filename);
+    size_t size = gob->GetFileSize(file);
+    DF::Buffer buffer = DF::Buffer::Create(size);
+    gob->ReadFile(file, buffer.Get(0), 0, size);
+    
+    return DF::WaxFile(std::move(buffer));
 }
 
 struct __attribute__((packed)) RGB { uint8_t r, g, b, a; };
@@ -66,7 +69,7 @@ RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
     RGB* imgData = new RGB[size];
 
     DF::Buffer data = DF::Buffer::Create(size);
-    bm.GetData(index, data.Get(), size);
+    bm.GetData(index, data.Get(0), size);
     bool trans = bm.GetTransparency() != DF::BmFileTransparency::Normal;
     for (unsigned row = 0; row < height; ++row)
     {
@@ -96,7 +99,7 @@ RGB* FmeToRgb(const DF::FmeFile& bm, const DF::PalFileData& pal)
     RGB* imgData = new RGB[size];
 
     DF::Buffer data = DF::Buffer::Create(size);
-    bm.GetData(data.Get(), size);
+    bm.Read(data.Get(0), 0, size);
 
     for (unsigned row = 0; row < height; ++row)
     {
@@ -144,7 +147,7 @@ void f(void *info, const void *data, size_t size)
         }
         
         [self update];
-        [NSTimer scheduledTimerWithTimeInterval:0.2//1.0f / bm.GetFrameRate()
+        [NSTimer scheduledTimerWithTimeInterval:0.05//1.0f / bm.GetFrameRate()
                                  target:self
                                selector:@selector(update)
                                userInfo:nil
@@ -230,6 +233,59 @@ void f(void *info, const void *data, size_t size)
     imageIndex = 0;
     [self update];
 }
+
+
+- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename
+{
+    DF::WaxFile w = loadWax(gob, filename);
+
+    DF::WaxFileWax wax = w.GetWax(0);
+    
+  
+    self.images = [NSMutableArray arrayWithCapacity:0];
+
+    unsigned numSeqs = wax.GetSequencesCount();
+    for (unsigned sequenceIndex = 0; sequenceIndex < numSeqs; ++sequenceIndex)
+    {
+        DF::WaxFileSequence seq = wax.GetSequence(sequenceIndex);
+    
+        unsigned numFrames = seq.GetFramesCount();
+
+        for (unsigned frame = 0; frame < numFrames; ++frame)
+        {
+            DF::FmeFile bm = seq.GetFrame(frame);
+
+            size_t width = bm.GetWidth();
+            size_t height = bm.GetHeight();
+            size_t imgDataSize = bm.GetDataSize() * 32;
+
+            RGB* imgData = FmeToRgb(bm, pal);
+            
+            CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, imgDataSize, f);
+            CGImageRef img = CGImageCreate(
+                width,
+                height,
+                8,
+                8 * 4,
+                4 * width,
+                CGColorSpaceCreateDeviceRGB(),
+                kCGBitmapByteOrderDefault | kCGImageAlphaLast,
+                imageData,
+                NULL,
+                NO,
+                kCGRenderingIntentDefault);
+            
+            CGDataProviderRelease(imageData);
+
+            [self.images addObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
+            CGImageRelease(img);
+        }
+    }
+    
+    imageIndex = 0;
+    [self update];
+}
+
 
 
 - (void)drawRect:(NSRect)dirtyRect

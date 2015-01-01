@@ -127,12 +127,16 @@ public:
             m_data,
             GetCompression(),
             output,
-            GetImageDataStart(index, 0) - m_data.Get(0),
+            GetColumnStart(index, 0) - m_data.Get(0),
             max);
     }
 
 private:
-    Buffer m_data;
+    std::map<unsigned, Buffer> m_data;
+    
+    unsigned width;
+    unsigned height;
+    unsigned frameRate;
     
     /**
         Get the main file header.
@@ -190,7 +194,7 @@ private:
     
     /**
     */
-    const uint8_t* GetImageDataStart(size_t index, size_t col) const;
+    const uint8_t* GetColumnStart(size_t index, size_t col) const;
 };
 
 } // DF

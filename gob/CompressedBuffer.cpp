@@ -6,7 +6,7 @@ namespace DF
 
 
 /*static*/ size_t CompressedBufferReader::ReadCompressedData(
-    const Buffer& buffer,
+    const IBuffer& buffer,
     BmFileCompression compression,
     uint8_t* output,
     size_t offset,
@@ -26,10 +26,13 @@ namespace DF
     }
 }
 
-/*static*/ BufferWriter CompressedBufferReader::ReadRleCompressedData(const Buffer& buffer, size_t offset, BufferWriter writer)
+/*static*/ BufferWriter CompressedBufferReader::ReadRleCompressedData(
+    const IBuffer& buffer,
+    size_t offset,
+    BufferWriter writer)
 {
     const uint8_t* start = buffer.Get(offset);
-    while (writer.IsValid())
+    while (writer.IsWritable())
     {
         uint8_t n = *(start++);
         if (n <= 128)
@@ -55,12 +58,12 @@ namespace DF
 }
 
 /*static*/ BufferWriter CompressedBufferReader::ReadRle0CompressedData(
-    const Buffer& buffer,
+    const IBuffer& buffer,
     size_t offset,
     BufferWriter writer)
 {
     const uint8_t* start = buffer.Get(offset);
-    while (writer.IsValid())
+    while (writer.IsWritable())
     {
         uint8_t n = *(start++);
         if (n <= 128)

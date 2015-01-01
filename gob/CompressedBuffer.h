@@ -12,16 +12,16 @@ class CompressedBufferReader
 {
 public:
     static size_t ReadCompressedData(
-        const Buffer& buffer,
+        const IBuffer& buffer,
         BmFileCompression compression,
         uint8_t* output,
         size_t offset,
         size_t max);
 
 private:
-    static BufferWriter ReadRleCompressedData(const Buffer& buffer, size_t offset, BufferWriter writer);
+    static BufferWriter ReadRleCompressedData(const IBuffer& buffer, size_t offset, BufferWriter writer);
     
-    static BufferWriter ReadRle0CompressedData(const Buffer& buffer, size_t offset, BufferWriter writer);
+    static BufferWriter ReadRle0CompressedData(const IBuffer& buffer, size_t offset, BufferWriter writer);
 };
 
 } // DF

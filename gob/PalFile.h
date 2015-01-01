@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PalFileData.h"
-#include "DataProvider.h"
+#include "DataReader.h"
 #include "Buffer.h"
 
 namespace DF
@@ -16,7 +16,7 @@ public:
     /**
         Create a Pal file from data in a file stream.
     */
-    static PalFile CreateFromDataProvider(const IDataProvider& dataProvider)
+    static PalFile CreateFromDataProvider(const IDataReader& dataProvider)
     {
         return PalFile(Buffer::CreateFromDataProvider(dataProvider));
     }

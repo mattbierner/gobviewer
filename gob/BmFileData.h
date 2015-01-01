@@ -21,7 +21,7 @@ enum class BmFileTransparency : uint8_t
 /**
     Type of compression used in a BM file.
 */
-enum class BmFileCompression : int16_t
+enum class BmFileCompression : uint16_t
 {
     None = 0,
     Rle = 1,

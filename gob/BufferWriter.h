@@ -15,7 +15,7 @@ public:
 
     size_t operator-(const uint8_t* ptr) const { return (m_buffer - ptr); }
 
-    virtual bool IsValid() const
+    virtual bool IsWritable() const
     {
         return (m_buffer != nullptr && m_size > 0);
     }
@@ -27,7 +27,7 @@ public:
     */
     size_t GetDataSize() const
     {
-        return (IsValid() ? m_size : 0);
+        return (IsWritable() ? m_size : 0);
     }
     
     /**
@@ -47,7 +47,7 @@ public:
     template <typename F>
     BufferWriter Write(const F& f)
     {
-        if (!IsValid()) return *this;
+        if (!IsWritable()) return *this;
         size_t written = f(Get(), GetDataSize());
         return BufferWriter(m_buffer + written, m_size - written);
     }

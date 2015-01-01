@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FmeFileData.h"
-#include "DataProvider.h"
+#include "DataReader.h"
 #include "Buffer.h"
 #include "CompressedBuffer.h"
 #include <cassert>
@@ -12,22 +12,26 @@ namespace DF
 /**
     Fme file view.
 */
-class FmeFile
+class FmeFile :
+    public IDataReader
 {
 public:
-    /**
-        Create a BM file from data in a file stream.
-    */
-    static FmeFile CreateFromDataProvider(const IDataProvider& dataProvider)
+    static FmeFile CreateFromDataProvider(const IDataReader& dataProvider)
     {
         return FmeFile(Buffer::CreateFromDataProvider(dataProvider));
     }
     
     FmeFile() { }
     
-    FmeFile(Buffer&& data) :
-        m_data(std::move(data))
+    FmeFile(const std::shared_ptr<IBuffer>& data) :
+        m_data(data)
     { }
+
+    FmeFile(Buffer&& data) :
+        FmeFile(std::make_shared<Buffer>(std::move(data)))
+    { }
+    
+    virtual bool IsReadable() const override { return m_data->IsReadable(); }
     
     /**
         Get the width of the image.
@@ -49,39 +53,20 @@ public:
         
         This reads uncompressed bitmap data.
     */
-    size_t GetData(uint8_t* output, size_t max) const
-    {
-        return CompressedBufferReader::ReadCompressedData(
-            m_data,
-            GetCompression(),
-            output,
-            GetColumnStart(0) - m_data.Get(),
-            max);
-    }
+    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override;
 
 protected:
-    Buffer m_data;
+    std::shared_ptr<IBuffer> m_data;
     
     /**
         Get the main file header.
     */
-    FmeFileHeader GetHeader() const
-    {
-        FmeFileHeader header;
-        (void)m_data.ReadObj<FmeFileHeader>(&header, 0);
-        return header;
-    }
+    FmeFileHeader GetHeader() const;
     
     /**
         Get the second file header.
     */
-    FmeFileHeader2 GetHeader2() const
-    {
-        auto header = GetHeader();
-        FmeFileHeader2 header2;
-        (void)m_data.ReadObj<FmeFileHeader2>(&header2, header.header2);
-        return header2;
-    }
+    FmeFileHeader2 GetHeader2() const;
     
     bool IsCompressed() const
     {
@@ -93,7 +78,7 @@ protected:
         return GetHeader2().compressed ? BmFileCompression::Rle0 : BmFileCompression::None;
     }
     
-    const uint8_t* GetColumnStart(size_t col) const;
+    const uint8_t* GetImageDataStart() const;
 };
 
 } // DF

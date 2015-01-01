@@ -16,52 +16,49 @@ namespace DF
 struct __attribute__((packed)) FmeFileHeader
 {
     /** Inerstion point, x coordinate. */
-    int32_t insertX;
+    uint32_t insertX;
     
     /** Insertion point, y coordinate. */
-    int32_t insertY;
+    uint32_t insertY;
     
     /** 0 = not flipped, 1 = flipped horizontally. */
-    int32_t flipped;
+    uint32_t flipped;
     
     /** Pointer to a header2. */
-    int32_t header2;
+    uint32_t header2;
     
     /** Unused. */
-    int32_t unitWidth;
+    uint32_t unitWidth;
     
     /** Unused. */
-    int32_t unitHeight;
+    uint32_t unitHeight;
     
      /** Unused. */
-    int32_t pad3;
-    
-    /** Unused. */
-    int32_t pad4;
+    uint32_t padding[2];
 };
 
 /**
-    Second  FME header entry.
+    Second FME header entry.
 */
 struct __attribute__((packed)) FmeFileHeader2
 {
      /** Size of cell, x value. */
-    int32_t sizeX;
+    uint32_t sizeX;
     
     /** Size of cell, y value. */
-    int32_t sizeY;
+    uint32_t sizeY;
     
     /** 0 = not compressed, 1 = compressed. */
-    int32_t compressed;
+    uint32_t compressed;
     
     /** Size of a compressed cell. */
-    int32_t dataSize;
+    uint32_t dataSize;
+    
+    /** Unused. Always 0 */
+    uint32_t colOffset;
     
     /** Unused. */
-    int32_t colOffset;
-    
-    /** Unused. */
-    int32_t pad1;
+    uint32_t padding;
 };
 
 } // DF

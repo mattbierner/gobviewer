@@ -1,19 +1,74 @@
 #pragma once
 
-#include "DataProvider.h"
-#include "BufferWriter.h"
-
 #include <stdint.h>
 #include <vector>
+
+#include "DataReader.h"
+#include "BufferWriter.h"
 
 namespace DF
 {
 
 /**
+
+*/
+class IBuffer :
+    public IDataReader
+{
+public:
+    /**
+        Get direct access to memory in the buffer.
+        
+        No ownership of the memory is implied. Ptr is invalid once Buffer is 
+        destroyed.
+        
+        @param offset Absolute byte offset in buffer.
+        
+        Returns nullptr if invalid offset.
+    */
+    virtual uint8_t* Get(size_t offset) = 0;
+    
+    virtual const uint8_t* Get(size_t offset) const = 0;
+    
+    /**
+        Get direct access to an object of type `T` in the buffer.
+        
+        @param offset Absolute byte offset in buffer.
+        
+        Returns nullptr if invalid offset or there is not enough space to read
+        an object of type `T`.
+    */
+    template <typename T = uint8_t>
+    T* GetObj(size_t offset = 0)
+    {
+        if (CanRead<T>(offset))
+            return reinterpret_cast<T*>(Get(offset));
+        else
+            return nullptr;
+    }
+
+    template <typename T = uint8_t>
+    const T* GetObj(size_t offset = 0) const
+    {
+        if (CanRead<T>(offset))
+            return reinterpret_cast<const T*>(Get(offset));
+        else
+            return nullptr;
+    }
+    
+    /**
+    */
+    virtual size_t ResolveOffset(size_t offset) const
+    {
+        return offset;
+    }
+};
+
+/**
     Managed block of memory.
 */
 class Buffer : public std::vector<uint8_t>,
-    public IDataProvider
+    public IBuffer
 {
     using Super = std::vector<uint8_t>;
     
@@ -23,7 +78,7 @@ public:
         
         Note that this always copies the data held by the Data provider.
     */
-    static Buffer CreateFromDataProvider(const IDataProvider& provider)
+    static Buffer CreateFromDataProvider(const IDataReader& provider)
     {
         size_t size = provider.GetDataSize();
         Buffer buf = Create(size);
@@ -36,16 +91,15 @@ public:
     */
     static Buffer Create(size_t size)
     {
-        return Buffer(size, 0);
+        return Buffer(size);
     }
     
-    Buffer() : Buffer(0, 0) { }
+    Buffer() : Buffer(0) { }
     
     Buffer(const Buffer& other) = delete;
     
-    Buffer(Buffer&& other, size_t baseOffset = 0) :
-        Super(std::move(other)),
-        m_baseOffset(other.m_baseOffset + baseOffset)
+    Buffer(Buffer&& other) :
+        Super(std::move(other))
     { }
     
     Buffer& operator=(const Buffer& other) = delete;
@@ -56,65 +110,76 @@ public:
         return *this;
     }
 
-    virtual bool IsValid() const { return (GetDataSize() > 0);}
+    virtual bool IsReadable() const override { return (GetDataSize() > 0); }
 
-    virtual size_t GetDataSize() const override { return (this->size() - m_baseOffset); }
+    virtual size_t GetDataSize() const override { return this->size(); }
 
-    /**
-        Get direct access to memory in the buffer.
-        
-        No ownership of the memory is implied. Ptr is invalid once Buffer is 
-        destroyed.
-    */
-    template <typename T = uint8_t>
-    T* Get(size_t offset = 0)
-    {
-        if (CanRead<T>(m_baseOffset + offset))
-            return reinterpret_cast<T*>(&((*this)[m_baseOffset + offset]));
-        else
-            return nullptr;
-    }
+    virtual uint8_t* Get(size_t offset) override { return &((*this)[offset]); }
 
-    template <typename T = uint8_t>
-    const T* Get(size_t offset = 0) const
-    {
-        if (CanRead<T>(m_baseOffset + offset))
-            return reinterpret_cast<const T*>(&((*this)[m_baseOffset + offset]));
-        else
-            return nullptr;
-    }
+    virtual const uint8_t* Get(size_t offset) const override { return &((*this)[offset]); }
 
-    /**
-        Read an object of type `T` from the buffer.
-
-        @param output Data to read to. Should be at least `sizeof(T)` bytes.
-        @param offset Offset to read from in bytes.
-    */
-    template <typename T>
-    size_t ReadObj(T* output, size_t offset) const
-    {
-        if (CanRead<T>(m_baseOffset + offset))
-            return Read(reinterpret_cast<uint8_t*>(output), offset, sizeof(T));
-        else
-            return 0;
-    }
-    
     virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
     {
-        if (!IsValid()) return 0;
-        size_t read = std::min(GetDataSize() - (m_baseOffset + offset), max);
+        if (!IsReadable()) return 0;
+        size_t read = std::min(GetDataSize() - (offset), max);
         const auto* start = Get(offset);
         std::copy(start, start + read, output);
         return read;
     }
 
-private:
-    size_t m_baseOffset;
+    /*virtual uint8_t* Write(size_t offset, size_t max) override
+    {
+        if (CanRead(offset, max))
+            return Get(offset);
+        else
+            return nullptr;
+    }*/
 
-    Buffer(size_t size, size_t baseOffset) :
-        Super(size),
-        m_baseOffset(baseOffset)
+private:
+    Buffer(size_t size) :
+        Super(size)
     { }
 };
+
+/**
+*/
+class RelativeOffsetBuffer : public IBuffer
+{
+public:
+    RelativeOffsetBuffer(const std::shared_ptr<IBuffer>& data, size_t offset) :
+        m_data(data),
+        m_offset(offset)
+    { }
+
+    virtual bool IsReadable() const override { return (m_data && m_offset < m_data->GetDataSize()); }
+   
+    virtual size_t GetDataSize() const override
+    {
+        if (IsReadable())
+            return (m_data->GetDataSize() - m_offset);
+        return 0;
+    }
+    
+    virtual uint8_t* Get(size_t offset) override { return m_data->Get(m_offset + offset); }
+
+    virtual const uint8_t* Get(size_t offset) const override { return m_data->Get(m_offset + offset); }
+
+    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
+    {
+        if (IsReadable())
+            return m_data->Read(output, m_offset + offset, max);
+        return 0;
+    }
+    
+    virtual size_t ResolveOffset(size_t offset) const override
+    {
+        return m_data->ResolveOffset(offset - m_offset);
+    }
+
+private:
+    std::shared_ptr<IBuffer> m_data;
+    size_t m_offset;
+};
+
 
 } // DF

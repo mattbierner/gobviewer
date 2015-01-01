@@ -27,6 +27,7 @@
 
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename;
 - (void) loadFme:(DF::GobFile*) gob named:(const char*)filename;
+- (void) loadWax:(DF::GobFile*) gob named:(const char*)filename;
 
 - (void) update;
 

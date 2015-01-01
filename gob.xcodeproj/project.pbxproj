@@ -60,10 +60,11 @@
 		89A3BCB81A46914400B26F8F /* CompressedBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompressedBuffer.h; sourceTree = "<group>"; };
 		89A3BCBA1A4691D000B26F8F /* CompressedBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompressedBuffer.cpp; sourceTree = "<group>"; };
 		89A3BCBC1A47998800B26F8F /* BufferWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferWriter.h; sourceTree = "<group>"; };
+		89A3BCBF1A547F3C00B26F8F /* WaxFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaxFile.h; sourceTree = "<group>"; };
 		89F452521A42A4AB00A20C49 /* DARK.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = DARK.GOB; sourceTree = "<group>"; };
 		89F452541A42ADC000A20C49 /* GobFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFileData.h; sourceTree = "<group>"; };
 		89F452551A42B25E00A20C49 /* GobFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GobFile.h; sourceTree = "<group>"; };
-		89F452571A43DDDA00A20C49 /* DataProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataProvider.h; sourceTree = "<group>"; };
+		89F452571A43DDDA00A20C49 /* DataReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataReader.h; sourceTree = "<group>"; };
 		89F452581A43E5C300A20C49 /* TEXTURES.GOB */ = {isa = PBXFileReference; lastKnownFileType = file; path = TEXTURES.GOB; sourceTree = "<group>"; };
 		89F4525A1A43ED4000A20C49 /* BmFileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BmFileData.h; sourceTree = "<group>"; };
 		89F4525B1A43F22500A20C49 /* BmFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BmFile.h; sourceTree = "<group>"; };
@@ -156,7 +157,7 @@
 				89F452541A42ADC000A20C49 /* GobFileData.h */,
 				89F452551A42B25E00A20C49 /* GobFile.h */,
 				89A3BCAE1A46752500B26F8F /* GobFile.cpp */,
-				89F452571A43DDDA00A20C49 /* DataProvider.h */,
+				89F452571A43DDDA00A20C49 /* DataReader.h */,
 				89F4525A1A43ED4000A20C49 /* BmFileData.h */,
 				89F4525B1A43F22500A20C49 /* BmFile.h */,
 				89A3BC841A4570A700B26F8F /* BmFile.cpp */,
@@ -164,6 +165,7 @@
 				89F452871A44046C00A20C49 /* PalFile.h */,
 				89F452881A453F3A00A20C49 /* Buffer.h */,
 				89A3BCAC1A46708200B26F8F /* WaxFileData.h */,
+				89A3BCBF1A547F3C00B26F8F /* WaxFile.h */,
 				89A3BCAD1A46744600B26F8F /* FmeFileData.h */,
 				89A3BCB01A46770C00B26F8F /* FmeFile.h */,
 				89A3BCB21A467B3800B26F8F /* FmeFile.cpp */,
@@ -588,6 +590,7 @@
 				89A3BC9C1A45718200B26F8F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		89F452431A42A24000A20C49 /* Build configuration list for PBXProject "gob" */ = {
 			isa = XCConfigurationList;

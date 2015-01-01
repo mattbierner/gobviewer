@@ -13,18 +13,6 @@
     fs.open([file UTF8String], std::ifstream::binary | std::ifstream::in);
     
     gob = DF::GobFile::CreateFromFile(std::move(fs));
-    
-    {
-        std::string file("IST-GUNI.FME");
-        size_t size = gob.GetFileSize(file);
-        DF::Buffer buffer = DF::Buffer::Create(size);
-        gob.ReadFile(file, buffer.Get(), 0, size);
-    
-        DF::FmeFile fme = DF::FmeFile(std::move(buffer));
-        size_t width = fme.GetWidth();
-        size_t height = fme.GetHeight();
-        
-    }
 }
 
 - (void) viewDidLoad
@@ -75,6 +63,10 @@
             break;
         case DF::FileType::Fme:
             [self.preview loadFme:&gob named:filename.c_str()];
+            break;
+        
+        case DF::FileType::Wax:
+            [self.preview loadWax:&gob named:filename.c_str()];
             break;
         }
     }

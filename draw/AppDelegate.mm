@@ -12,7 +12,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     self.gobViewController = [[GobViewController alloc] initWithNibName:@"GobViewController" bundle:nil];
-    [self.gobViewController loadFile:@"DEMOTEX.GOB"];
+    [self.gobViewController loadFile:@"SPRITES.GOB"];
 
     [self.window.contentView addSubview:self.gobViewController.view];
     self.gobViewController.view.frame = ((NSView*)self.window.contentView).bounds;

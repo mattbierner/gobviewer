@@ -8,15 +8,15 @@ namespace DF
 /**
     Provides read access to memory.
 */
-class IDataProvider
+class IDataReader
 {
 public:
-    virtual ~IDataProvider() { }
+    virtual ~IDataReader() { }
 
     /**
-        Can a read be performed?
+        Can any reads be performed?
     */
-    virtual bool IsValid() const = 0;
+    virtual bool IsReadable() const = 0;
 
     /**
         Get total data size.
@@ -72,39 +72,9 @@ protected:
 };
 
 /**
-    Provides read access to a block of memory.
-    
-    Does not take ownership of memory.
-*/
-class MemoryDataProvider : public IDataProvider
-{
-public:
-    MemoryDataProvider(uint8_t* buffer, size_t size) :
-        m_buffer(buffer),
-        m_size(size)
-    { }
-    
-    virtual bool IsValid() const { return (m_buffer != nullptr && m_size > 0);}
-    
-    virtual size_t GetDataSize() const override { return m_size; }
-
-    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
-    {
-        if (!IsValid()) return 0;
-        size_t read = std::min(GetDataSize() - offset, max);
-        std::copy(m_buffer, m_buffer + read, output);
-        return read;
-    }
-    
-private:
-    uint8_t* m_buffer;
-    size_t m_size;
-};
-
-/**
     Provides read access to a file stream.
 */
-class FileDataProvider : public IDataProvider
+class FileDataProvider : public IDataReader
 {
 public:
     FileDataProvider(std::ifstream&& s) :
@@ -120,13 +90,13 @@ public:
     
     virtual ~FileDataProvider() { m_stream.close(); }
     
-    virtual bool IsValid() const { return (m_size > 0);}
+    virtual bool IsReadable() const { return (m_size > 0);}
 
     virtual size_t GetDataSize() const override { return m_size; }
 
     virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
     {
-        if (!IsValid()) return 0;
+        if (!IsReadable()) return 0;
         size_t read = std::min(GetDataSize() - offset, max);
         m_stream.seekg(offset, std::ifstream::beg);
         m_stream.read(reinterpret_cast<char*>(output), read);

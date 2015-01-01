@@ -3,13 +3,13 @@
 namespace DF
 {
 
-const uint8_t* BmFile::GetColumnStart(size_t index, size_t col) const
+const uint8_t* BmFile::GetImageDataStart(size_t index, size_t col) const
 {
     if (IsCompressed())
     {
         size_t dataOffset = sizeof(BmFileHeader);
         size_t tableOffset = dataOffset + GetHeader().dataSize + (col * sizeof(int32_t));
-        const int32_t* tableEntry = m_data.Get<int32_t>(tableOffset);
+        const int32_t* tableEntry = m_data.GetObj<int32_t>(tableOffset);
         if (tableEntry)
             return m_data.Get(dataOffset + *tableEntry);
         else

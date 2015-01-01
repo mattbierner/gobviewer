@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GobFileData.h"
-#include "DataProvider.h"
+#include "DataReader.h"
 
 #include <cassert>
 #include <map>
@@ -11,19 +11,23 @@ namespace DF
 {
 
 /**
+    Type of a file stored in a Gob.
 */
 enum class FileType
 {
     Unknown,
     Bm,
-    Fme
+    Fme,
+    Wax
 };
 
 /**
+    Maps file extensions used in dark forces to file types.
 */
 static const std::map<std::string, FileType> fileTypeMap = {
     {"BM", FileType::Bm},
-    {"FME", FileType::Fme}
+    {"FME", FileType::Fme},
+    {"WAX", FileType::Wax}
 };
 
 /**
@@ -144,12 +148,12 @@ private:
         return FileType::Unknown;
     }
 
-    std::unique_ptr<IDataProvider> m_dataProvider;
+    std::unique_ptr<IDataReader> m_dataProvider;
 
     std::vector<std::string> m_files;
     FileMap m_entries;
     
-    GobFile(std::unique_ptr<IDataProvider>&& dataProvider) :
+    GobFile(std::unique_ptr<IDataReader>&& dataProvider) :
         m_dataProvider(std::move(dataProvider))
     {
         Init();
