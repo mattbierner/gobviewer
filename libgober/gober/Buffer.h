@@ -56,6 +56,13 @@ public:
     }
     
     /**
+        Get reference to element at `offset`.
+    */
+    uint8_t& At(size_t offset) { return *Get(offset); }
+
+    const uint8_t& At(size_t offset) const { return *Get(offset); }
+    
+    /**
         Turn an absolute offset into a relative offset.
         
         This is useful for working with pointer like data members.
@@ -69,7 +76,7 @@ public:
 /**
     Managed block of memory.
 */
-class Buffer : public std::vector<uint8_t>,
+class Buffer : private std::vector<uint8_t>,
     public IBuffer
 {
     using Super = std::vector<uint8_t>;
@@ -116,9 +123,9 @@ public:
 
     virtual size_t GetDataSize() const override { return this->size(); }
 
-    virtual uint8_t* Get(size_t offset) override { return &((*this)[offset]); }
+    virtual uint8_t* Get(size_t offset) override { return &(Super::operator[](offset)); }
 
-    virtual const uint8_t* Get(size_t offset) const override { return &((*this)[offset]); }
+    virtual const uint8_t* Get(size_t offset) const override { return &(Super::operator[](offset)); }
 
     virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
     {

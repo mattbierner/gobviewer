@@ -60,8 +60,8 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
 
 RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
 {
-    size_t width = bm.GetWidth(index);
-    size_t height = bm.GetHeight(index);
+    unsigned width = bm.GetWidth(index);
+    unsigned height = bm.GetHeight(index);
     size_t size = bm.GetDataSize(index);
 
     RGB* imgData = new RGB[size];
@@ -73,7 +73,7 @@ RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
     {
         for (unsigned col = 0; col < width; ++col)
         {
-            uint8_t entry = data[col * height + row];
+            uint8_t entry = data.At(col * height + row);
             if (trans && entry == 0)
             {
                 imgData[(height - 1 - row) * width + col].a = 0;
@@ -90,8 +90,8 @@ RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
 
 RGB* FmeToRgb(const DF::FmeFile& bm, const DF::PalFileData& pal)
 {
-    size_t width = bm.GetWidth();
-    size_t height = bm.GetHeight();
+    unsigned width = bm.GetWidth();
+    unsigned height = bm.GetHeight();
     size_t size = bm.GetDataSize();
 
     RGB* imgData = new RGB[size];
@@ -103,7 +103,7 @@ RGB* FmeToRgb(const DF::FmeFile& bm, const DF::PalFileData& pal)
     {
         for (unsigned col = 0; col < width; ++col)
         {
-            uint8_t entry = data[col * height + row];
+            uint8_t entry = data.At(col * height + row);
             if (entry == 0)
             {
                 imgData[(height - 1 - row) * width + col].a = 0;

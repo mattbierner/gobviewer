@@ -1,3 +1,5 @@
+/**
+*/
 #pragma once
 
 #include <gober/WaxFileData.h>
@@ -12,8 +14,8 @@ namespace DF
 class WaxFileSequence
 {
 public:
-    WaxFileSequence(std::shared_ptr<Buffer> data, size_t offset) :
-        m_data(std::move(data)),
+    WaxFileSequence(const std::shared_ptr<Buffer>& data, size_t offset) :
+        m_data(data),
         m_offset(offset)
     { }
     
@@ -47,10 +49,10 @@ private:
     /**
         Get the main file header.
     */
-    Sequence GetHeader() const
+    WaxFileSequenceEntry GetHeader() const
     {
-        Sequence header;
-        (void)m_data->ReadObj<Sequence>(&header, m_offset);
+        WaxFileSequenceEntry header;
+        (void)m_data->ReadObj<WaxFileSequenceEntry>(&header, m_offset);
         return header;
     }
 };
@@ -60,8 +62,8 @@ private:
 class WaxFileWax
 {
 public:
-    WaxFileWax(std::shared_ptr<Buffer> data, size_t offset) :
-        m_data(std::move(data)),
+    WaxFileWax(const std::shared_ptr<Buffer>& data, size_t offset) :
+        m_data(data),
         m_offset(offset)
     { }
     
@@ -99,10 +101,10 @@ private:
     /**
         Get the main file header.
     */
-    Wax GetHeader() const
+    WaxFileWaxEntry GetHeader() const
     {
-        Wax header;
-        (void)m_data->ReadObj<Wax>(&header, m_offset);
+        WaxFileWaxEntry header;
+        (void)m_data->ReadObj<WaxFileWaxEntry>(&header, m_offset);
         return header;
     }
 };

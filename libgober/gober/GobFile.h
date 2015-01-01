@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cassert>
 #include <map>
 #include <vector>
 
@@ -31,7 +30,7 @@ static const std::map<std::string, FileType> fileTypeMap = {
 };
 
 /**
-    Gob file view.
+    Gob file.
     
     Allows reading from a Gob file.
 */
@@ -52,7 +51,13 @@ public:
     */
     static GobFile CreateFromFile(std::ifstream&& fs);
 
-    GobFile() { };
+    GobFile() { }
+
+    GobFile(std::unique_ptr<IDataReader>&& dataProvider) :
+        m_dataProvider(std::move(dataProvider))
+    {
+        Init();
+    }
 
     /**
         Get a list of all filenames in the Gob.
@@ -100,11 +105,12 @@ public:
         
         Returns 0 if the file does not exist.
     */
-    size_t GetFileSize(const std::string& filename)
+    size_t GetFileSize(const std::string& filename) const
     {
         if (HasFile(filename))
             return GetFile(filename).size;
-        return 0;
+        else
+            return 0;
     }
     
     /**
@@ -115,7 +121,7 @@ public:
         @param offset Relative offset within the file.
         @param max Maximum number of bytes to read.
     */
-    size_t ReadFile(const std::string& filename, uint8_t* buffer, size_t offset, size_t max)
+    size_t ReadFile(const std::string& filename, uint8_t* buffer, size_t offset, size_t max) const
     {
         if (!HasFile(filename))
             return 0;
@@ -149,27 +155,24 @@ private:
 
     std::vector<std::string> m_files;
     FileMap m_entries;
-    
-    GobFile(std::unique_ptr<IDataReader>&& dataProvider) :
-        m_dataProvider(std::move(dataProvider))
-    {
-        Init();
-    }
-
+  
     /**
         Initilize the internal data structures using the data provider.
     */
     void Init();
     
-    Entry GetFile(const std::string& filename)
+    /**
+        Get file entry information.
+    */
+    Entry GetFile(const std::string& filename) const
     {
-        return m_entries[filename];
+        return m_entries.at(filename);
     }
     
     /**
         Read the file header.
     */
-    GobFileHeader GetHeader()
+    GobFileHeader GetHeader() const
     {
         GobFileHeader header;
         Read<GobFileHeader>(&header, 0);
@@ -179,18 +182,18 @@ private:
     /**
         Read the file index.
     */
-    GobFileIndex GetIndex();
+    GobFileIndex GetIndex() const;
     
     /**
         Read an entry in the file index.
     */
-    GobFileEntry GetEntry(size_t i);
+    GobFileEntry GetEntry(size_t i) const;
     
     /**
         Read an object of type `T` from the Gob.
     */
     template <typename T>
-    void Read(T* output, size_t offset)
+    void Read(T* output, size_t offset) const
     {
         Read(reinterpret_cast<uint8_t*>(output), offset, sizeof(T));
     }
@@ -198,7 +201,7 @@ private:
     /**
         Read `max` bytes at absolute position `offset` from the gob.
     */
-    void Read(uint8_t* output, size_t offset, size_t max);
+    void Read(uint8_t* output, size_t offset, size_t max) const;
 };
 
 } // DF

@@ -1,6 +1,7 @@
+/**
+    Bitmap file.
+*/
 #pragma once
-
-#include <cassert>
 
 #include <gober/BmFileData.h>
 #include <gober/DataReader.h>
@@ -10,9 +11,12 @@ namespace DF
 {
 
 /**
-    Bitmap file view.
+    Bitmap file.
+    
+    May potentially contain multiple sub bitmaps.
 */
-class BmFile
+class BmFile :
+    public IBuffer
 {
 public:
     /**
@@ -29,6 +33,15 @@ public:
         m_data(std::move(data))
     { }
     
+    virtual bool IsReadable() const override { return m_data.IsReadable(); }
+    
+    /**
+        Size of the uncompressed BM.
+    */
+    size_t GetDataSize(size_t index) const { return GetWidth(index) * GetHeight(index); }
+    
+    virtual size_t GetDataSize() const override { return GetCountSubBms() * (GetWidth(0) * GetHeight(0)); }
+
     /**
         Get the width of the image.
         
@@ -51,19 +64,14 @@ public:
     
     /**
         Get the type of transparency of the image.
-        
+     
         @param index Sub BM to get ransparency of. Only valid for multiple BMs.
     */
     BmFileTransparency GetTransparency(size_t index = 0) const
     {
         return (IsMultipleBm() ? GetSubHeader(index).transparency : GetHeader().transparency);
     }
-
-    /**
-        Size of the uncompressed BM.
-    */
-    size_t GetDataSize(size_t index = 0) const { return GetWidth(index) * GetHeight(index); }
-
+    
     /**
         Does this file contain sub BMs?
     */
@@ -122,6 +130,15 @@ public:
     */
     size_t GetData(size_t index, uint8_t* output, size_t max) const;
 
+    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
+    {
+        return GetData(0, output, max);
+    }
+    
+    virtual uint8_t* Get(size_t offset) override { return GetImageDataStart(0, 0) + offset; }
+
+    virtual const uint8_t* Get(size_t offset) const override { return GetImageDataStart(0, 0) + offset; }
+
 private:
     Buffer m_data;
     
@@ -140,23 +157,7 @@ private:
      
         Only valid for multiple BM.
     */
-    BmFileSubHeader GetSubHeader(size_t index) const
-    {
-        assert(IsMultipleBm() && index < GetCountSubBms());
-        
-        int32_t offset = GetSubOffset(index);
-        BmFileSubHeader header;
-        (void)m_data.ReadObj<BmFileSubHeader>(&header, offset);
-        return header;
-    }
-    
-    /**
-        Read `max` bytes at absolute position `offset` from the gob.
-    */
-    size_t Read(uint8_t* output, size_t offset, size_t max) const
-    {
-        return m_data.Read(output, offset, max);
-    }
+    BmFileSubHeader GetSubHeader(size_t index) const;
         
     BmFileCompression GetCompression() const
     {
@@ -171,16 +172,12 @@ private:
     /**
         For a multiple BM, get the absolute offset to the start of the sub file.
     */
-    int32_t GetSubOffset(size_t index) const
-    {
-        assert(IsMultipleBm() && index < GetCountSubBms());
-    
-        const int32_t* startTable = m_data.GetObj<int32_t>(sizeof(BmFileHeader) + 2);
-        return startTable[index] + sizeof(BmFileHeader) + 2;
-    }
+    int32_t GetSubOffset(size_t index) const;
     
     /**
     */
+    uint8_t* GetImageDataStart(size_t index, size_t col) { return const_cast<uint8_t*>( GetImageDataStart(index, col)); }
+    
     const uint8_t* GetImageDataStart(size_t index, size_t col) const;
 };
 

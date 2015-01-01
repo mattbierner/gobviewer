@@ -27,20 +27,20 @@
     gob = std::make_shared<DF::GobFile>(DF::GobFile::CreateFromFile(std::move(fs)));
 }
 
-- (void) gob:(std::shared_ptr<DF::GobFile>)gob selectedFileDidChange:(NSString*)file
+- (void) gob:(std::shared_ptr<DF::GobFile>)gobFile selectedFileDidChange:(NSString*)file
 {
     std::string filename = [file UTF8String];
-    switch (gob->GetFileType(filename))
+    switch (gobFile->GetFileType(filename))
     {
     case DF::FileType::Bm:
-        [self.previewViewController loadBM:gob.get() named:filename.c_str()];
+        [self.previewViewController loadBM:gobFile.get() named:filename.c_str()];
         break;
     case DF::FileType::Fme:
-        [self.previewViewController loadFme:gob.get() named:filename.c_str()];
+        [self.previewViewController loadFme:gobFile.get() named:filename.c_str()];
         break;
     
     case DF::FileType::Wax:
-        [self.previewViewController loadWax:gob.get() named:filename.c_str()];
+        [self.previewViewController loadWax:gobFile.get() named:filename.c_str()];
         break;
         
     default: break;

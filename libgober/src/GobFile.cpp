@@ -20,7 +20,7 @@ void GobFile::Init()
     }
 }
 
-GobFileIndex GobFile::GetIndex()
+GobFileIndex GobFile::GetIndex() const
 {
     auto header = GetHeader();
     GobFileIndex index;
@@ -28,7 +28,7 @@ GobFileIndex GobFile::GetIndex()
     return index;
 }
 
-GobFileEntry GobFile::GetEntry(size_t i)
+GobFileEntry GobFile::GetEntry(size_t i) const
 {
     auto header = GetHeader();
     size_t startOffset = header.indexOffset + offsetof(GobFileIndex, entries);
@@ -39,7 +39,7 @@ GobFileEntry GobFile::GetEntry(size_t i)
     return entry;
 }
 
-void GobFile::Read(uint8_t* output, size_t offset, size_t max)
+void GobFile::Read(uint8_t* output, size_t offset, size_t max) const
 {
     m_dataProvider->Read(output, offset, max);
 }
