@@ -31,6 +31,19 @@ size_t FmeFile::Read(uint8_t* output, size_t offset, size_t max) const
         max);
 }
 
+Bitmap FmeFile::CreateBitmap() const
+{
+    // Uncompressed data.
+    DF::Buffer data = DF::Buffer::Create(GetDataSize());
+    Read(data.Get(0), 0, GetDataSize());
+
+    return Bitmap(
+        GetWidth(),
+        GetHeight(),
+        true,
+        std::move(data));
+}
+
 const uint8_t* FmeFile::GetImageDataStart() const
 {
     size_t header2Offset = m_data->ResolveOffset(GetHeader().header2);

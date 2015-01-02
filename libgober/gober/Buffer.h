@@ -71,6 +71,15 @@ public:
     {
         return offset;
     }
+    
+    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
+    {
+        if (!IsReadable()) return 0;
+        size_t read = std::min(GetDataSize() - offset, max);
+        const uint8_t* start = Get(offset);
+        std::copy(start, start + read, output);
+        return read;
+    }
 };
 
 /**
@@ -127,15 +136,6 @@ public:
 
     virtual const uint8_t* Get(size_t offset) const override { return &(Super::operator[](offset)); }
 
-    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
-    {
-        if (!IsReadable()) return 0;
-        size_t read = std::min(GetDataSize() - (offset), max);
-        const auto* start = Get(offset);
-        std::copy(start, start + read, output);
-        return read;
-    }
-
 private:
     Buffer(size_t size) :
         Super(size)
@@ -164,13 +164,6 @@ public:
     virtual uint8_t* Get(size_t offset) override { return m_data->Get(m_offset + offset); }
 
     virtual const uint8_t* Get(size_t offset) const override { return m_data->Get(m_offset + offset); }
-
-    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
-    {
-        if (IsReadable())
-            return m_data->Read(output, m_offset + offset, max);
-        return 0;
-    }
     
     virtual size_t ResolveOffset(size_t offset) const override
     {

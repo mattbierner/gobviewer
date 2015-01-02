@@ -57,7 +57,7 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     return DF::WaxFile(std::move(buffer));
 }
 
-RGB* BmDataToRgb(const DF::Buffer& buffer, const DF::PalFileData& pal, bool trans)
+RGB* BmDataToRgb(const DF::IBuffer& buffer, const DF::PalFileData& pal, bool trans)
 {
     size_t size = buffer.GetDataSize();
     RGB* imgData = new RGB[size];
@@ -83,32 +83,18 @@ RGB* BmDataToRgb(const DF::Buffer& buffer, const DF::PalFileData& pal, bool tran
 
 RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
 {
-    size_t size = bm.GetDataSize(index);
-    bool trans = bm.GetTransparency() != DF::BmFileTransparency::Normal;
-    
-    // Ensure we get uncompressed data.
-    DF::Buffer data = DF::Buffer::Create(size);
-    bm.GetData(index, data.Get(0), size);
-
-    return BmDataToRgb(data, pal, trans);
+    return BmDataToRgb(bm.CreateBitmap(index), pal, (bm.GetTransparency() != DF::BmFileTransparency::Normal));
 }
 
 RGB* FmeToRgb(const DF::FmeFile& bm, const DF::PalFileData& pal)
 {
-    size_t size = bm.GetDataSize();
-
-    // Ensure we get uncompressed data.
-    DF::Buffer data = DF::Buffer::Create(size);
-    bm.Read(data.Get(0), 0, size);
-
-    return BmDataToRgb(data, pal, true);
+    return BmDataToRgb(bm.CreateBitmap(), pal, true);
 }
 
 void f(void *info, const void *data, size_t size)
 {
    delete[] ((RGB*)data);
 }
-
 
 @implementation BmView
 

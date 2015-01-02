@@ -17,7 +17,7 @@ BmFileSubHeader BmFile::GetSubHeader(size_t index) const
     return header;
 }
 
-size_t BmFile::GetData(size_t index, uint8_t* output, size_t max) const
+size_t BmFile::GetData(unsigned index, uint8_t* output, size_t max) const
 {
      return CompressedBufferReader::ReadCompressedData(
         m_data,
@@ -25,6 +25,19 @@ size_t BmFile::GetData(size_t index, uint8_t* output, size_t max) const
         output,
         GetImageDataStart(index, 0) - m_data.Get(0),
         max);
+}
+
+Bitmap BmFile::CreateBitmap(unsigned index) const
+{
+    // Uncompresse data.
+    DF::Buffer data = DF::Buffer::Create(GetDataSize(index));
+    GetData(index, data.Get(0), GetDataSize(index));
+
+    return Bitmap(
+        GetWidth(index),
+        GetHeight(index),
+        true,
+        std::move(data));
 }
 
 int32_t BmFile::GetSubOffset(size_t index) const

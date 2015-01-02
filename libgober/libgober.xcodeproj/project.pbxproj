@@ -19,10 +19,9 @@
 		8975185A1A54D3930050B2B2 /* PalFileData.h in Headers */ = {isa = PBXBuildFile; fileRef = 8975184E1A54D3930050B2B2 /* PalFileData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8975185B1A54D3930050B2B2 /* WaxFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8975184F1A54D3930050B2B2 /* WaxFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8975185C1A54D3930050B2B2 /* WaxFileData.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518501A54D3930050B2B2 /* WaxFileData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		897D8C561A572CD3009C35ED /* WaxFile.cpp in Headers */ = {isa = PBXBuildFile; fileRef = 897D8C551A572CD3009C35ED /* WaxFile.cpp */; };
-		897D8C571A572CD3009C35ED /* WaxFile.cpp in Headers */ = {isa = PBXBuildFile; fileRef = 897D8C551A572CD3009C35ED /* WaxFile.cpp */; };
 		897D8C581A572DF6009C35ED /* WaxFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 897D8C551A572CD3009C35ED /* WaxFile.cpp */; };
 		897D8C591A572E03009C35ED /* WaxFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 897D8C551A572CD3009C35ED /* WaxFile.cpp */; };
+		897D8C5C1A5738BE009C35ED /* Bitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 897D8C5A1A573630009C35ED /* Bitmap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89ABBD661A54D8D400B72E36 /* BmFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DDE1A54D22600B71D68 /* BmFile.cpp */; };
 		89ABBD671A54D8D400B72E36 /* CompressedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DE01A54D22600B71D68 /* CompressedBuffer.cpp */; };
 		89ABBD681A54D8D400B72E36 /* FmeFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D40DE21A54D22600B71D68 /* FmeFile.cpp */; };
@@ -49,6 +48,7 @@
 		8975184F1A54D3930050B2B2 /* WaxFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaxFile.h; path = gober/WaxFile.h; sourceTree = "<group>"; };
 		897518501A54D3930050B2B2 /* WaxFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaxFileData.h; path = gober/WaxFileData.h; sourceTree = "<group>"; };
 		897D8C551A572CD3009C35ED /* WaxFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WaxFile.cpp; path = src/WaxFile.cpp; sourceTree = "<group>"; };
+		897D8C5A1A573630009C35ED /* Bitmap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Bitmap.h; path = gober/Bitmap.h; sourceTree = "<group>"; };
 		89ABBD5B1A54D8BC00B72E36 /* libgober.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgober.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		89D40DDE1A54D22600B71D68 /* BmFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BmFile.cpp; path = src/BmFile.cpp; sourceTree = "<group>"; };
 		89D40DDF1A54D22600B71D68 /* BufferWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BufferWriter.h; path = src/BufferWriter.h; sourceTree = "<group>"; };
@@ -115,6 +115,7 @@
 				89D40DDF1A54D22600B71D68 /* BufferWriter.h */,
 				89D40DE01A54D22600B71D68 /* CompressedBuffer.cpp */,
 				89D40DE11A54D22600B71D68 /* CompressedBuffer.h */,
+				897D8C5A1A573630009C35ED /* Bitmap.h */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -127,7 +128,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				897518531A54D3930050B2B2 /* Buffer.h in Headers */,
-				897D8C561A572CD3009C35ED /* WaxFile.cpp in Headers */,
 				897518581A54D3930050B2B2 /* GobFileData.h in Headers */,
 				897518561A54D3930050B2B2 /* FmeFileData.h in Headers */,
 				8975185B1A54D3930050B2B2 /* WaxFile.h in Headers */,
@@ -139,6 +139,7 @@
 				8975185C1A54D3930050B2B2 /* WaxFileData.h in Headers */,
 				897518541A54D3930050B2B2 /* DataReader.h in Headers */,
 				897518511A54D3930050B2B2 /* BmFile.h in Headers */,
+				897D8C5C1A5738BE009C35ED /* Bitmap.h in Headers */,
 				897518571A54D3930050B2B2 /* GobFile.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,7 +148,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				897D8C571A572CD3009C35ED /* WaxFile.cpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

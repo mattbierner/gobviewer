@@ -1,8 +1,9 @@
 #pragma once
 
-#include "BmFileData.h"
-#include "Buffer.h"
-#include "FmeFileData.h"
+#include <gober/Bitmap.h>
+#include <gober/BmFileData.h>
+#include <gober/Buffer.h>
+#include <gober/FmeFileData.h>
 
 namespace DF
 {
@@ -10,8 +11,7 @@ namespace DF
 /**
     Fme file view.
 */
-class FmeFile :
-    public IDataReader
+class FmeFile
 {
 public:
     static FmeFile CreateFromDataProvider(const IDataReader& dataProvider)
@@ -21,6 +21,8 @@ public:
     
     FmeFile() { }
     
+    virtual ~FmeFile() { }
+    
     FmeFile(const std::shared_ptr<IBuffer>& data) :
         m_data(data)
     { }
@@ -29,7 +31,7 @@ public:
         FmeFile(std::make_shared<Buffer>(std::move(data)))
     { }
     
-    virtual bool IsReadable() const override { return m_data->IsReadable(); }
+    bool IsReadable() const { return m_data->IsReadable(); }
     
     /**
         Get the width of the image.
@@ -51,8 +53,13 @@ public:
         
         This reads uncompressed bitmap data.
     */
-    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override;
-
+    size_t Read(uint8_t* output, size_t offset, size_t max) const;
+    
+    /**
+        Get the uncompressed bitmap data.
+    */
+    Bitmap CreateBitmap() const;
+    
 protected:
     std::shared_ptr<IBuffer> m_data;
     

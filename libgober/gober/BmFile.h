@@ -3,6 +3,7 @@
 */
 #pragma once
 
+#include <gober/Bitmap.h>
 #include <gober/BmFileData.h>
 #include <gober/DataReader.h>
 #include <gober/Buffer.h>
@@ -15,8 +16,7 @@ namespace DF
     
     May potentially contain multiple sub bitmaps.
 */
-class BmFile :
-    public IBuffer
+class BmFile
 {
 public:
     /**
@@ -33,15 +33,11 @@ public:
         m_data(std::move(data))
     { }
     
-    virtual bool IsReadable() const override { return m_data.IsReadable(); }
-    
     /**
         Size of the uncompressed BM.
     */
     size_t GetDataSize(size_t index) const { return GetWidth(index) * GetHeight(index); }
     
-    virtual size_t GetDataSize() const override { return GetCountSubBms() * (GetWidth(0) * GetHeight(0)); }
-
     /**
         Get the width of the image.
         
@@ -119,31 +115,13 @@ public:
             return (GetFrameRate() == 0);
         return false;
     }
-    
-    /**
-        Read at most `max` bytes of bitmap data into output.
-        
-        This reads uncompressed bitmap data.
-        
-        @param index Sub BM to read from.
-        @param
-    */
-    size_t GetData(size_t index, uint8_t* output, size_t max) const;
-
-    virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
-    {
-        return GetData(0, output, max);
-    }
-    
-    virtual uint8_t* Get(size_t offset) override { return Get(0, offset); }
-
-    virtual const uint8_t* Get(size_t offset) const override { return Get(0, offset); }
 
     /**
+        Uncompress the bitmap file.
+        
+        @param index Index of subbitmap to uncompress
     */
-    uint8_t* Get(unsigned index, size_t offset) { return GetImageDataStart(index, 0) + offset; }
-
-    const uint8_t* Get(unsigned index, size_t offset) const { return GetImageDataStart(index, 0) + offset; }
+    Bitmap CreateBitmap(unsigned index = 0) const;
 
 private:
     Buffer m_data;
@@ -164,12 +142,28 @@ private:
         Only valid for multiple BM.
     */
     BmFileSubHeader GetSubHeader(size_t index) const;
+    
+    /**
+        Read at most `max` bytes of bitmap data into output.
         
+        This reads uncompressed bitmap data.
+        
+        @param index Sub BM to read from.
+        @param
+    */
+    size_t GetData(unsigned index, uint8_t* output, size_t max) const;
+    
+    /**
+        Get the type of compression used on the bitmap data.
+    */
     BmFileCompression GetCompression() const
     {
         return (IsMultipleBm() ? BmFileCompression::None : GetHeader().compression);
     }
     
+    /**
+        Is the bitmap data compressed?
+    */
     bool IsCompressed() const
     {
         return (GetCompression() != BmFileCompression::None);
@@ -181,9 +175,8 @@ private:
     int32_t GetSubOffset(size_t index) const;
     
     /**
+        Get a pointer to the start of image data.
     */
-    uint8_t* GetImageDataStart(size_t index, size_t col) { return const_cast<uint8_t*>( GetImageDataStart(index, col)); }
-    
     const uint8_t* GetImageDataStart(size_t index, size_t col) const;
 };
 
