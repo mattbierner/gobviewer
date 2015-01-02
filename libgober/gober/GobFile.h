@@ -39,8 +39,8 @@ class GobFile
     struct Entry
     {
         FileType type;
-        int32_t offset;
-        int32_t size;
+        uint32_t offset;
+        uint32_t size;
     };
     
     using FileMap = std::map<std::string, Entry>;

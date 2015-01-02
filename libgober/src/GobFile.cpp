@@ -16,7 +16,7 @@ void GobFile::Init()
         auto entry = GetEntry(i);
         std::string filename(entry.filename);
         m_files.push_back(filename);
-        m_entries[filename] = {TypeForFileName(filename), entry.offset, entry.size};
+        m_entries[filename] = { TypeForFileName(filename), entry.offset, entry.size };
     }
 }
 
@@ -32,7 +32,7 @@ GobFileEntry GobFile::GetEntry(size_t i) const
 {
     auto header = GetHeader();
     size_t startOffset = header.indexOffset + offsetof(GobFileIndex, entries);
-    size_t offset = startOffset + i * sizeof(GobFileEntry);
+    size_t offset = startOffset + (i * sizeof(GobFileEntry));
 
     GobFileEntry entry;
     Read<GobFileEntry>(&entry, offset);

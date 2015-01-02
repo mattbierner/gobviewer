@@ -17,7 +17,7 @@ struct __attribute__((packed)) GobFileHeader
     char magic[4];
     
     /** Absolute offset to index. */
-    int32_t indexOffset;
+    uint32_t indexOffset;
 };
 
 /**
@@ -26,10 +26,10 @@ struct __attribute__((packed)) GobFileHeader
 struct __attribute__((packed)) GobFileEntry
 {
     /** Absolute offset to start of file data. */
-    int32_t offset;
+    uint32_t offset;
     
     /** Size of file data. */
-    int32_t size;
+    uint32_t size;
     
     /** Null terminated file name. */
     char filename[13];
@@ -41,7 +41,7 @@ struct __attribute__((packed)) GobFileEntry
 struct __attribute__((packed)) GobFileIndex
 {
     /** Number of files in the container. */
-    int32_t count;
+    uint32_t count;
     
     /** Array of `count` entries. */
     GobFileEntry entries[];

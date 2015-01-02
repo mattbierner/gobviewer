@@ -25,6 +25,7 @@
     std::ifstream fs;
     fs.open([file UTF8String], std::ifstream::binary | std::ifstream::in);
     gob = std::make_shared<DF::GobFile>(DF::GobFile::CreateFromFile(std::move(fs)));
+    [self.gobContentsViewController viewGob:gob];
 }
 
 - (void) gob:(std::shared_ptr<DF::GobFile>)gobFile selectedFileDidChange:(NSString*)file

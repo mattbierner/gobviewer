@@ -9,6 +9,7 @@
 - (void) viewGob:(std::shared_ptr<DF::GobFile>)file;
 {
     gob = file;
+    [self.table reloadData];
 }
 
 - (void) viewDidLoad
