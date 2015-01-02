@@ -2,9 +2,10 @@
 */
 #pragma once
 
-#include <gober/WaxFileData.h>
-#include <gober/DataReader.h>
 #include <gober/Buffer.h>
+#include <gober/DataReader.h>
+#include <gober/FmeFile.h>
+#include <gober/WaxFileData.h>
 
 namespace DF
 {
@@ -20,27 +21,13 @@ public:
     { }
     
     /**
-        Get the number of sequences in the wax stored.
+        Get the number of frames in the sequence.
     */
-    unsigned GetFramesCount() const
-    {
-        auto header = GetHeader();
-        for (unsigned i = 0; i < 32; ++i)
-            if (header.frames[i] == 0)
-                return i;
-        return 32;
-    }
+    unsigned GetFramesCount() const;
     
     /**
     */
-    FmeFile GetFrame(unsigned index) const
-    {
-        assert(index < GetFramesCount());
-        auto header = GetHeader();
-        size_t dataOffset = header.frames[index];
-        size_t offset = dataOffset;
-        return FmeFile(std::make_shared<RelativeOffsetBuffer>(m_data, offset));
-    }
+    FmeFile GetFrame(unsigned index) const;
 
 private:
     std::shared_ptr<IBuffer> m_data;
@@ -74,25 +61,13 @@ public:
     unsigned GetFrameRate() const { return GetHeader().frameRate; }
 
     /**
-        Get the number of sequences in the wax stored.
+        Get the number of sequences stored in the wax.
     */
-    unsigned GetSequencesCount() const
-    {
-        auto header = GetHeader();
-        for (unsigned i = 0; i < 32; ++i)
-            if (header.sequences[i] == 0)
-                return i;
-        return 32;
-    }
+    unsigned GetSequencesCount() const;
     
-    WaxFileSequence GetSequence(unsigned index) const
-    {
-        assert(index < GetSequencesCount());
-        auto header = GetHeader();
-        size_t offset = header.sequences[index];
-        
-        return WaxFileSequence(m_data, offset);
-    }
+    /**
+    */
+    WaxFileSequence GetSequence(unsigned index) const;
     
 private:
     std::shared_ptr<Buffer> m_data;
@@ -133,23 +108,16 @@ public:
     /**
         Get the number of waxes stored.
     */
-    unsigned GetWaxesCount() const
-    {
-        auto header = GetHeader();
-        for (unsigned i = 0; i < 32; ++i)
-            if (header.waxes[i] == 0)
-                return i;
-        return 32;
-    }
+    unsigned GetWaxesCount() const;
     
-    WaxFileWax GetWax(unsigned index) const
-    {
-        assert(index < GetWaxesCount());
-        auto header = GetHeader();
-        size_t offset = header.waxes[index];
-        
-        return WaxFileWax(m_data, offset);
-    }
+    /**
+        Does this wax file have a given wax animation entry?
+    */
+    bool HasWax(unsigned index) const;
+    
+    /**
+    */
+    WaxFileWax GetWax(unsigned index) const;
     
 private:
     std::shared_ptr<Buffer> m_data;

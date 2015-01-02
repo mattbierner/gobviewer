@@ -10,7 +10,8 @@ namespace DF
 /**
     Color palete defintion file.
 */
-class PalFile : public IDataReader
+class PalFile :
+    public IDataReader
 {
 public:
     /**

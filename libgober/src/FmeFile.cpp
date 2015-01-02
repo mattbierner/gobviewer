@@ -39,14 +39,6 @@ const uint8_t* FmeFile::GetImageDataStart() const
     {
         size_t imgDataOffset = dataOffset + sizeof(uint32_t) * GetWidth();
         return m_data->Get(imgDataOffset);
-        /*
-        // TODO: why is table offset not working here?
-        const uint32_t* tableEntry = m_data->GetObj<uint32_t>(tableOffset);
-        if (tableEntry)
-            return m_data->Get(sizeof(FmeFileHeader) + *tableEntry);
-        else
-            return nullptr;
-        */
     }
     else
     {
