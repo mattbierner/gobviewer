@@ -77,6 +77,7 @@
     [panel setCanChooseFiles:YES];
     [panel setCanChooseDirectories:NO];
     [panel setAllowsMultipleSelection:NO];
+    [panel setTreatsFilePackagesAsDirectories:YES];
     return panel;
 }
 
@@ -92,6 +93,11 @@
 
 - (BOOL) panel:(id)sender shouldShowFilename:(NSString*)filename
 {
+    BOOL isDir = NO;
+    [[NSFileManager defaultManager] fileExistsAtPath:filename isDirectory:&isDir];
+    if (isDir)
+        return YES;
+    
     NSString* ext = [filename pathExtension];
     return ([ext caseInsensitiveCompare:@"GOB"] == NSOrderedSame);
 }

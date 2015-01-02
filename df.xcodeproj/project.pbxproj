@@ -70,7 +70,7 @@
 		89C4CE991A5617C1002F95FF /* GobViewWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GobViewWindow.xib; sourceTree = "<group>"; };
 		89C4CE9B1A561816002F95FF /* GobViewWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobViewWindowController.h; sourceTree = "<group>"; };
 		89C4CE9C1A561816002F95FF /* GobViewWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GobViewWindowController.mm; sourceTree = "<group>"; };
-		89F452601A43F49B00A20C49 /* draw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = draw.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		89F452601A43F49B00A20C49 /* gobviewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gobviewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89F452631A43F49B00A20C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89F452641A43F49B00A20C49 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		89F452651A43F49B00A20C49 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -112,6 +112,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		897D8C541A572118009C35ED /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
+			sourceTree = "<group>";
+		};
 		89A3BC971A45718200B26F8F /* DFTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,7 +151,7 @@
 		89F452491A42A24000A20C49 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				89F452601A43F49B00A20C49 /* draw.app */,
+				89F452601A43F49B00A20C49 /* gobviewer.app */,
 				89F452721A43F49B00A20C49 /* drawTests.xctest */,
 			);
 			name = Products;
@@ -155,6 +162,7 @@
 			children = (
 				89F452641A43F49B00A20C49 /* AppDelegate.h */,
 				89F452651A43F49B00A20C49 /* AppDelegate.mm */,
+				897D8C541A572118009C35ED /* New Group */,
 				89F452691A43F49B00A20C49 /* Images.xcassets */,
 				89F4526B1A43F49B00A20C49 /* MainMenu.xib */,
 				89F452621A43F49B00A20C49 /* Supporting Files */,
@@ -219,7 +227,7 @@
 			);
 			name = gobviewer;
 			productName = draw;
-			productReference = 89F452601A43F49B00A20C49 /* draw.app */;
+			productReference = 89F452601A43F49B00A20C49 /* gobviewer.app */;
 			productType = "com.apple.product-type.application";
 		};
 		89F452711A43F49B00A20C49 /* drawTests */ = {

@@ -57,65 +57,51 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     return DF::WaxFile(std::move(buffer));
 }
 
-
-RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
+RGB* BmDataToRgb(const DF::Buffer& buffer, const DF::PalFileData& pal, bool trans)
 {
-    unsigned width = bm.GetWidth(index);
-    unsigned height = bm.GetHeight(index);
-    size_t size = bm.GetDataSize(index);
-
+    size_t size = buffer.GetDataSize();
     RGB* imgData = new RGB[size];
-
-    DF::Buffer data = DF::Buffer::Create(size);
-    bm.GetData(index, data.Get(0), size);
-    bool trans = bm.GetTransparency() != DF::BmFileTransparency::Normal;
-    for (unsigned row = 0; row < height; ++row)
+    RGB* dataWriter = imgData;
+    
+    const uint8_t* bmData = buffer.Get(0);
+    const uint8_t* bmDataEnd = bmData + size;
+    while (bmData < bmDataEnd)
     {
-        for (unsigned col = 0; col < width; ++col)
+        uint8_t entry = *(bmData++);
+        if (trans && entry == 0)
         {
-            uint8_t entry = data.At(col * height + row);
-            if (trans && entry == 0)
-            {
-                imgData[(height - 1 - row) * width + col].a = 0;
-            }
-            else
-            {
-                auto palColors = pal.colors[entry];
-                imgData[(height - 1 - row) * width + col] = {palColors.r, palColors.g, palColors.b, 255};
-            }
+            (*(dataWriter++)).a = 0;
+        }
+        else
+        {
+            auto palColors = pal.colors[entry];
+            (*(dataWriter++)) = {palColors.r, palColors.g, palColors.b, 255};
         }
     }
     return imgData;
 }
 
+RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
+{
+    size_t size = bm.GetDataSize(index);
+    bool trans = bm.GetTransparency() != DF::BmFileTransparency::Normal;
+    
+    // Ensure we get uncompressed data.
+    DF::Buffer data = DF::Buffer::Create(size);
+    bm.GetData(index, data.Get(0), size);
+
+    return BmDataToRgb(data, pal, trans);
+}
+
 RGB* FmeToRgb(const DF::FmeFile& bm, const DF::PalFileData& pal)
 {
-    unsigned width = bm.GetWidth();
-    unsigned height = bm.GetHeight();
     size_t size = bm.GetDataSize();
 
-    RGB* imgData = new RGB[size];
-
+    // Ensure we get uncompressed data.
     DF::Buffer data = DF::Buffer::Create(size);
     bm.Read(data.Get(0), 0, size);
 
-    for (unsigned row = 0; row < height; ++row)
-    {
-        for (unsigned col = 0; col < width; ++col)
-        {
-            uint8_t entry = data.At(col * height + row);
-            if (entry == 0)
-            {
-                imgData[(height - 1 - row) * width + col].a = 0;
-            }
-            else
-            {
-                auto palColors = pal.colors[entry];
-                imgData[(height - 1 - row) * width + col] = {palColors.r, palColors.g, palColors.b, 255};
-            }
-        }
-    }
-    return imgData;
+    return BmDataToRgb(data, pal, true);
 }
 
 void f(void *info, const void *data, size_t size)
@@ -200,7 +186,7 @@ void f(void *info, const void *data, size_t size)
         size_t imgDataSize = bm.GetDataSize(i) * 32;
         
         RGB* imgData = BmToRgb(bm, i, pal);
-        [self addImage:imgData size: imgDataSize width:width height:height];
+        [self addImage:imgData size: imgDataSize width:height height:width];
     }
     imageIndex = 0;
     [self update];
@@ -216,7 +202,7 @@ void f(void *info, const void *data, size_t size)
     
     RGB* imgData = FmeToRgb(bm, pal);
     self.images = [NSMutableArray arrayWithCapacity:1];
-    [self addImage:imgData size: imgDataSize width:width height:height];
+    [self addImage:imgData size: imgDataSize width:height height:width];
     
     imageIndex = 0;
     [self update];
@@ -251,7 +237,7 @@ void f(void *info, const void *data, size_t size)
                 size_t imgDataSize = bm.GetDataSize() * 32;
 
                 RGB* imgData = FmeToRgb(bm, pal);
-                [self addImage:imgData size: imgDataSize width:width height:height];
+                [self addImage:imgData size: imgDataSize width:height height:width];
             }
         }
     }
@@ -273,6 +259,7 @@ void f(void *info, const void *data, size_t size)
     if ([self.images count] > 0)
     {
         [self.imageView setImage:[self.images objectAtIndex:imageIndex]];
+        [self.imageView setFrameCenterRotation:90];
         imageIndex = (imageIndex + 1) % [self.images count];
         [self setNeedsDisplay:YES];
     }

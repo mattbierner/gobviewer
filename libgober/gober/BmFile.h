@@ -135,9 +135,15 @@ public:
         return GetData(0, output, max);
     }
     
-    virtual uint8_t* Get(size_t offset) override { return GetImageDataStart(0, 0) + offset; }
+    virtual uint8_t* Get(size_t offset) override { return Get(0, offset); }
 
-    virtual const uint8_t* Get(size_t offset) const override { return GetImageDataStart(0, 0) + offset; }
+    virtual const uint8_t* Get(size_t offset) const override { return Get(0, offset); }
+
+    /**
+    */
+    uint8_t* Get(unsigned index, size_t offset) { return GetImageDataStart(index, 0) + offset; }
+
+    const uint8_t* Get(unsigned index, size_t offset) const { return GetImageDataStart(index, 0) + offset; }
 
 private:
     Buffer m_data;
