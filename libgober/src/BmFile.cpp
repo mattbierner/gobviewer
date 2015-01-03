@@ -43,7 +43,11 @@ Bitmap BmFile::CreateBitmap(size_t index) const
     }
     else
     {
-        return Bitmap(width, height, transparency, std::make_unique<RelativeOffsetBuffer>(m_data, GetImageDataStart(index)));
+        return Bitmap(
+            width,
+            height,
+            transparency,
+            std::make_unique<RelativeOffsetBuffer>(m_data, GetImageDataStart(index), GetDataSize(index)));
     }
 }
 

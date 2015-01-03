@@ -46,7 +46,11 @@ Bitmap FmeFile::CreateBitmap() const
     }
     else
     {
-        return Bitmap(width, height, transparent, std::make_unique<RelativeOffsetBuffer>(m_data, GetImageDataStart()));
+        return Bitmap(
+            width,
+            height,
+            transparent,
+            std::make_unique<RelativeOffsetBuffer>(m_data, GetImageDataStart(), GetDataSize()));
     }
 }
 

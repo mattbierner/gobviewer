@@ -15,11 +15,13 @@ PACKED(struct RGB
 @interface BmView : NSImageView
 {
     unsigned imageIndex;
+    NSUInteger m_frameRate;
     
     DF::PalFileData pal;
 }
 
 @property (nonatomic, strong) NSMutableArray* images;
+@property (nonatomic, strong) NSTimer* animationTimer;
 
 - (id) initWithFrame:(NSRect)frameRect;
 
@@ -38,6 +40,8 @@ PACKED(struct RGB
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename;
 - (void) loadFme:(DF::GobFile*) gob named:(const char*)filename;
 - (void) loadWax:(DF::GobFile*) gob named:(const char*)filename;
+
+- (void) setFrameRate:(NSTimeInterval)frameRate;
 
 - (void) update;
 

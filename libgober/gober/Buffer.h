@@ -143,22 +143,32 @@ private:
 };
 
 /**
+    Buffer pointing to data inside of another buffer.
 */
 class RelativeOffsetBuffer : public IBuffer
 {
 public:
-    RelativeOffsetBuffer(const std::shared_ptr<IBuffer>& data, size_t offset) :
+    RelativeOffsetBuffer(const std::shared_ptr<IBuffer>& data, size_t offset, size_t size) :
         m_data(data),
-        m_offset(offset)
+        m_offset(offset),
+        m_size(size)
+    { }
+    
+     RelativeOffsetBuffer(const std::shared_ptr<IBuffer>& data, size_t offset) :
+        RelativeOffsetBuffer(
+            data,
+            offset,
+            (data ? data->GetDataSize() - offset : 0))
     { }
 
-    virtual bool IsReadable() const override { return (m_data && m_offset < m_data->GetDataSize()); }
+    virtual bool IsReadable() const override { return (m_data && (m_data->GetDataSize() - m_offset >= m_size)); }
    
     virtual size_t GetDataSize() const override
     {
         if (IsReadable())
-            return (m_data->GetDataSize() - m_offset);
-        return 0;
+            return m_size;
+        else
+            return 0;
     }
     
     virtual uint8_t* Get(size_t offset) override { return m_data->Get(m_offset + offset); }
@@ -172,6 +182,7 @@ public:
 
 private:
     std::shared_ptr<IBuffer> m_data;
+    size_t m_size;
     size_t m_offset;
 };
 

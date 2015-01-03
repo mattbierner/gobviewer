@@ -112,12 +112,6 @@ void f(void *info, const void *data, size_t size)
             p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
         }
         
-        [NSTimer scheduledTimerWithTimeInterval:0.05//1.0f / bm.GetFrameRate()
-                                 target:self
-                               selector:@selector(update)
-                               userInfo:nil
-                                repeats:YES];
-        
         [self setImageScaling:NSImageScaleProportionallyUpOrDown];
     }
 
@@ -179,6 +173,15 @@ void f(void *info, const void *data, size_t size)
         [self addImage:imgData size: imgDataSize width:height height:width];
     }
     
+    if (bm.IsSwitch())
+    {
+        [self setFrameRate:1];
+    }
+    else
+    {
+        [self setFrameRate:1.0f / bm.GetFrameRate()];
+    }
+    
     imageIndex = 0;
     [self update];
 }
@@ -195,6 +198,7 @@ void f(void *info, const void *data, size_t size)
     self.images = [NSMutableArray arrayWithCapacity:1];
     [self addImage:imgData size:imgDataSize width:height height:width];
     
+    [self setFrameRate:0];
     imageIndex = 0;
     [self update];
 }
@@ -244,11 +248,29 @@ void f(void *info, const void *data, size_t size)
         }
     }
     
+    // TODO: pull from wax
+    [self setFrameRate:1.0f / 5.0f];
+    
     for (const auto& pair : imageDatas)
         CGImageRelease(pair.second);
     
     imageIndex = 0;
     [self update];
+}
+
+
+- (void) setFrameRate:(NSTimeInterval)frameRate
+{
+    [self.animationTimer invalidate];
+    m_frameRate = frameRate;
+    if (frameRate > 0)
+    {
+        self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:frameRate
+            target:self
+            selector:@selector(update)
+            userInfo:nil
+            repeats:YES];
+    }
 }
 
 - (void) update

@@ -1,7 +1,7 @@
 #pragma once
 
 /**
-    Pack a struct
+    Pack an object.
 
     http://stackoverflow.com/a/3312896/306149
 */
