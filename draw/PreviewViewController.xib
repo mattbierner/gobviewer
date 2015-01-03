@@ -13,19 +13,14 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <rect key="frame" x="0.0" y="0.0" width="328" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="Fdl-sy-L7c" customClass="BmView">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fdl-sy-L7c" customClass="BmView">
+                    <rect key="frame" x="48" y="45" width="232" height="182"/>
                 </customView>
             </subviews>
-            <constraints>
-                <constraint firstAttribute="bottom" secondItem="Fdl-sy-L7c" secondAttribute="bottom" id="60T-sd-HZT"/>
-                <constraint firstItem="Fdl-sy-L7c" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="BOr-eT-suh"/>
-                <constraint firstItem="Fdl-sy-L7c" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="Jwh-6r-sUi"/>
-                <constraint firstAttribute="trailing" secondItem="Fdl-sy-L7c" secondAttribute="trailing" id="o8X-Hf-Meq"/>
-            </constraints>
+            <point key="canvasLocation" x="663" y="650"/>
         </customView>
     </objects>
 </document>

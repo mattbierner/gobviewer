@@ -11,6 +11,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    [self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
 }
 
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename

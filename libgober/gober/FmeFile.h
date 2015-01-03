@@ -49,13 +49,6 @@ public:
     size_t GetDataSize() const { return GetWidth() * GetHeight(); }
     
     /**
-        Read at most `max` bytes of bitmap data into output.
-        
-        This reads uncompressed bitmap data.
-    */
-    size_t Read(uint8_t* output, size_t offset, size_t max) const;
-    
-    /**
         Get the uncompressed bitmap data.
     */
     Bitmap CreateBitmap() const;
@@ -83,7 +76,12 @@ protected:
         return GetHeader2().compressed ? BmFileCompression::Rle0 : BmFileCompression::None;
     }
     
-    const uint8_t* GetImageDataStart() const;
+    /**
+       Read and uncompress the bitmap data.
+    */
+    Buffer Uncompress() const;
+    
+    const size_t GetImageDataStart() const;
 };
 
 } // DF

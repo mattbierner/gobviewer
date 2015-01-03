@@ -4,6 +4,7 @@
 #pragma once
 
 #include <gober/Bitmap.h>
+#include "Bm.h"
 #include <gober/BmFileData.h>
 #include <gober/DataReader.h>
 #include <gober/Buffer.h>
@@ -30,7 +31,7 @@ public:
     BmFile() { }
     
     BmFile(Buffer&& data) :
-        m_data(std::move(data))
+        m_data(std::make_shared<Buffer>(std::move(data)))
     { }
     
     /**
@@ -96,7 +97,7 @@ public:
     {
         if (IsMultipleBm())
         {
-            const uint8_t* frameRate = m_data.Get(sizeof(BmFileHeader));
+            const uint8_t* frameRate = m_data->Get(sizeof(BmFileHeader));
             if (frameRate)
                 return *frameRate;
         }
@@ -122,9 +123,13 @@ public:
         @param index Index of subbitmap to uncompress
     */
     Bitmap CreateBitmap(unsigned index = 0) const;
-
+    
+    /**
+    */
+    Bm CreateBm() const;
+    
 private:
-    Buffer m_data;
+    std::shared_ptr<IBuffer> m_data;
     
     /**
         Get the main file header.
@@ -132,7 +137,7 @@ private:
     BmFileHeader GetHeader() const
     {
         BmFileHeader header;
-        (void)m_data.ReadObj<BmFileHeader>(&header, 0);
+        (void)m_data->ReadObj<BmFileHeader>(&header, 0);
         return header;
     }
     
@@ -144,14 +149,9 @@ private:
     BmFileSubHeader GetSubHeader(size_t index) const;
     
     /**
-        Read at most `max` bytes of bitmap data into output.
-        
-        This reads uncompressed bitmap data.
-        
-        @param index Sub BM to read from.
-        @param
+        Read an uncompress the bitmap data.
     */
-    size_t GetData(unsigned index, uint8_t* output, size_t max) const;
+    Buffer Uncompress(unsigned index) const;
     
     /**
         Get the type of compression used on the bitmap data.
@@ -177,7 +177,7 @@ private:
     /**
         Get a pointer to the start of image data.
     */
-    const uint8_t* GetImageDataStart(size_t index, size_t col) const;
+    const size_t GetImageDataStart(size_t index) const;
 };
 
 } // DF

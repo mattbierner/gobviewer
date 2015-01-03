@@ -84,7 +84,6 @@ private:
     }
 };
 
-
 /**
     WaxFile file view.
 */

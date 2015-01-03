@@ -5,7 +5,7 @@
 
 @class PreviewViewController;
 
-@interface GobViewController : NSSplitViewController <
+@interface GobViewController : NSViewController <
     GobContentsDelegate>
 {
     std::shared_ptr<DF::GobFile> gob;
@@ -17,5 +17,6 @@
 - (void) loadFile:(NSString*)file;
 
 - (void) gob:(std::shared_ptr<DF::GobFile>)gob selectedFileDidChange:(NSString*)file;
+
 
 @end

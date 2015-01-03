@@ -20,42 +20,48 @@ FmeFileHeader2 FmeFile::GetHeader2() const
     return header2;
 }
 
-size_t FmeFile::Read(uint8_t* output, size_t offset, size_t max) const
+Buffer FmeFile::Uncompress() const
 {
-    const uint8_t* start = m_data->Get(0);
-    return CompressedBufferReader::ReadCompressedData(
+    size_t size = GetDataSize();
+    DF::Buffer data = DF::Buffer::Create(size);
+
+    CompressedBufferReader::ReadCompressedData(
         *m_data,
         GetCompression(),
-        output,
-        (GetImageDataStart() - start) + offset,
-        max);
+        data.Get(0),
+        GetImageDataStart(),
+        size);
+    return data;
 }
 
 Bitmap FmeFile::CreateBitmap() const
 {
-    // Uncompressed data.
-    DF::Buffer data = DF::Buffer::Create(GetDataSize());
-    Read(data.Get(0), 0, GetDataSize());
-
-    return Bitmap(
-        GetWidth(),
-        GetHeight(),
-        true,
-        std::move(data));
+    unsigned width = GetWidth();
+    unsigned height = GetHeight();
+    BmFileTransparency transparent = BmFileTransparency::Transparent;
+    if (IsCompressed())
+    {
+        // Uncompress data.
+        return Bitmap(width, height, transparent, Uncompress());
+    }
+    else
+    {
+        return Bitmap(width, height, transparent, std::make_unique<RelativeOffsetBuffer>(m_data, GetImageDataStart()));
+    }
 }
 
-const uint8_t* FmeFile::GetImageDataStart() const
+const size_t FmeFile::GetImageDataStart() const
 {
     size_t header2Offset = m_data->ResolveOffset(GetHeader().header2);
     size_t dataOffset = header2Offset + sizeof(FmeFileHeader2);
     if (IsCompressed())
     {
         size_t imgDataOffset = dataOffset + sizeof(uint32_t) * GetWidth();
-        return m_data->Get(imgDataOffset);
+        return imgDataOffset;
     }
     else
     {
-        return m_data->Get(dataOffset);
+        return dataOffset;
     }
 }
 

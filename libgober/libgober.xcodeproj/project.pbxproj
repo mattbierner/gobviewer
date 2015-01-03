@@ -47,6 +47,8 @@
 		8975184E1A54D3930050B2B2 /* PalFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PalFileData.h; path = gober/PalFileData.h; sourceTree = "<group>"; };
 		8975184F1A54D3930050B2B2 /* WaxFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaxFile.h; path = gober/WaxFile.h; sourceTree = "<group>"; };
 		897518501A54D3930050B2B2 /* WaxFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaxFileData.h; path = gober/WaxFileData.h; sourceTree = "<group>"; };
+		897561B51A57695B006A242F /* Wax.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Wax.h; path = gober/Wax.h; sourceTree = "<group>"; };
+		897561B61A576B4C006A242F /* Bm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Bm.h; path = gober/Bm.h; sourceTree = "<group>"; };
 		897D8C551A572CD3009C35ED /* WaxFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WaxFile.cpp; path = src/WaxFile.cpp; sourceTree = "<group>"; };
 		897D8C5A1A573630009C35ED /* Bitmap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Bitmap.h; path = gober/Bitmap.h; sourceTree = "<group>"; };
 		89ABBD5B1A54D8BC00B72E36 /* libgober.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgober.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,6 +118,8 @@
 				89D40DE01A54D22600B71D68 /* CompressedBuffer.cpp */,
 				89D40DE11A54D22600B71D68 /* CompressedBuffer.h */,
 				897D8C5A1A573630009C35ED /* Bitmap.h */,
+				897561B51A57695B006A242F /* Wax.h */,
+				897561B61A576B4C006A242F /* Bm.h */,
 			);
 			name = src;
 			sourceTree = "<group>";

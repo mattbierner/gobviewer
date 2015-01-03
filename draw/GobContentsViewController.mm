@@ -15,8 +15,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    [self.table setColumnAutoresizingStyle:NSTableViewUniformColumnAutoresizingStyle];
-
+    
     [self.table setDataSource:self];
     [self.table setDelegate:self];
 }
@@ -46,8 +45,6 @@
         cell = [[NSTableCellView alloc] init];
         cell.identifier = tableColumn.identifier;
     }
-    [cell setTranslatesAutoresizingMaskIntoConstraints:YES];
-    [cell setAutoresizingMask:NSViewWidthSizable];
 
     std::string fileName = gob->GetFilename(row);
     cell.textField.stringValue = [NSString stringWithUTF8String:fileName.c_str()];

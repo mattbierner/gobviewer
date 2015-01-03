@@ -8,18 +8,16 @@
 struct __attribute__((packed)) RGB { uint8_t r, g, b, a; };
 
 
-@interface BmView : NSView
+@interface BmView : NSImageView
 {
     unsigned imageIndex;
     
     DF::PalFileData pal;
 }
 
-@property (nonatomic, strong) NSImage* image;
 @property (nonatomic, strong) NSMutableArray* images;
-@property (nonatomic, strong) NSImageView* imageView;
 
-- (id) initWithFrame:(NSRect)frame;
+- (id) initWithFrame:(NSRect)frameRect;
 
 - (void) addImage:(RGB*) data
     size:(size_t) dataSize

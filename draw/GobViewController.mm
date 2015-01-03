@@ -9,15 +9,41 @@
 {
     [super viewDidLoad];
     
-    [self.view setAutoresizingMask:NSViewHeightSizable];
-    
     self.gobContentsViewController = [[GobContentsViewController alloc] init];
     self.gobContentsViewController.delegate = self;
     [self.gobContentsViewController viewGob:gob];
-    [self addSplitViewItem:[NSSplitViewItem splitViewItemWithViewController:self.gobContentsViewController]];
-    
+    [self.view addSubview:self.gobContentsViewController.view];
+
     self.previewViewController = [[PreviewViewController alloc] init];
-    [self addSplitViewItem:[NSSplitViewItem splitViewItemWithViewController:self.previewViewController]];
+    [self.view addSubview:self.previewViewController.view];
+    
+    [self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    NSDictionary* views = @{
+        @"list": self.gobContentsViewController.view,
+        @"content": self.previewViewController.view
+    };
+    
+    [self.view addConstraints:
+        [NSLayoutConstraint
+            constraintsWithVisualFormat:@"V:|[list]|"
+            options:0
+            metrics:nil
+            views:views]];
+    
+    [self.view addConstraints:
+        [NSLayoutConstraint
+            constraintsWithVisualFormat:@"V:|[content]|"
+            options:0
+            metrics:nil
+            views:views]];
+    
+    [self.view addConstraints:
+        [NSLayoutConstraint
+            constraintsWithVisualFormat:@"H:|[list(>=200)][content(>=200)]|"
+            options:0
+            metrics:nil
+            views:views]];
 }
 
 - (void) loadFile:(NSString*)file

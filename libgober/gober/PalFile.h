@@ -8,7 +8,7 @@ namespace DF
 {
 
 /**
-    Color palete defintion file.
+    Color palette defintion file.
 */
 class PalFile :
     public IDataReader

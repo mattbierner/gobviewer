@@ -11,8 +11,28 @@
 - (void) windowDidLoad
 {
     [super windowDidLoad];
-    [self.window.contentView addSubview:self.gobViewController.view];
-    self.gobViewController.view.frame = ((NSView*)self.window.contentView).bounds;
+    NSView* contentView = self.window.contentView;
+    
+    [contentView addSubview:self.gobViewController.view];
+    [self.gobViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    NSDictionary* views = @{
+        @"main": self.gobViewController.view
+    };
+
+    [contentView
+        addConstraints:[NSLayoutConstraint
+            constraintsWithVisualFormat:@"V:|[main]|"
+            options:0
+            metrics:nil
+            views:views]];
+    
+    [contentView
+        addConstraints:[NSLayoutConstraint
+            constraintsWithVisualFormat:@"H:|[main]|"
+            options:0
+            metrics:nil
+            views:views]];
 }
 
 - (void) loadGob:(NSURL*)path

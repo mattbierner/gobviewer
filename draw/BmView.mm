@@ -14,6 +14,7 @@
 #include <gober/PalFile.h>
 #include <gober/WaxFile.h>
 #include <gober/Buffer.h>
+#include <gober/Bm.h>
 
 DF::GobFile open(const char* file)
 {
@@ -25,7 +26,6 @@ DF::GobFile open(const char* file)
     }
     return { };
 }
-
 
 DF::BmFile loadBm(DF::GobFile* gob, const char* filename)
 {
@@ -81,9 +81,9 @@ RGB* BmDataToRgb(const DF::IBuffer& buffer, const DF::PalFileData& pal, bool tra
     return imgData;
 }
 
-RGB* BmToRgb(const DF::BmFile& bm, unsigned index, const DF::PalFileData& pal)
+RGB* BmToRgb(const DF::Bitmap& bm, const DF::PalFileData& pal)
 {
-    return BmDataToRgb(bm.CreateBitmap(index), pal, (bm.GetTransparency() != DF::BmFileTransparency::Normal));
+    return BmDataToRgb(bm, pal, (bm.GetTransparency() != DF::BmFileTransparency::Normal));
 }
 
 RGB* FmeToRgb(const DF::FmeFile& bm, const DF::PalFileData& pal)
@@ -98,12 +98,12 @@ void f(void *info, const void *data, size_t size)
 
 @implementation BmView
 
-- (id) initWithFrame:(NSRect)frame
+- (id) initWithFrame:(NSRect)frameRect
 {
-    if (self = [super initWithFrame:frame])
+    if (self = [super initWithFrame:frameRect])
     {
         imageIndex = 0;
-    
+
         {
             DF::GobFile gob = open("DARK.GOB");
             
@@ -116,21 +116,17 @@ void f(void *info, const void *data, size_t size)
             p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
         }
         
-        [self update];
         [NSTimer scheduledTimerWithTimeInterval:0.05//1.0f / bm.GetFrameRate()
                                  target:self
                                selector:@selector(update)
                                userInfo:nil
                                 repeats:YES];
         
-        self.imageView = [[NSImageView alloc] initWithFrame:self.bounds];
-        [self.imageView setAutoresizingMask:(NSViewWidthSizable | NSViewHeightSizable)];
-        [self.imageView setImageScaling:NSImageScaleProportionallyUpOrDown];
-        [self addSubview:self.imageView];
+        [self setImageScaling:NSImageScaleProportionallyUpOrDown];
     }
+
     return self;
 }
-
 
 - (void) addImage:(RGB*) imgData
     size:(size_t) imgDataSize
@@ -159,9 +155,8 @@ void f(void *info, const void *data, size_t size)
 
 - (void) loadBM:(DF::GobFile*)gob named:(const char*)filename
 {
-    DF::BmFile bm = loadBm(gob, filename);
-
-    unsigned subCount = bm.GetCountSubBms();
+    DF::Bm bm = loadBm(gob, filename).CreateBm();
+    size_t subCount = bm.GetCountSubBms();
 
     self.images = [NSMutableArray arrayWithCapacity:subCount];
 
@@ -171,7 +166,7 @@ void f(void *info, const void *data, size_t size)
         unsigned height = bm.GetHeight(i);
         size_t imgDataSize = bm.GetDataSize(i) * 32;
         
-        RGB* imgData = BmToRgb(bm, i, pal);
+        RGB* imgData = BmToRgb(*(bm.GetBitmap(i)), pal);
         [self addImage:imgData size: imgDataSize width:height height:width];
     }
     imageIndex = 0;
@@ -198,7 +193,6 @@ void f(void *info, const void *data, size_t size)
 - (void) loadWax:(DF::GobFile*)gob named:(const char*)filename
 {
     DF::WaxFile w = loadWax(gob, filename);
-
   
     self.images = [NSMutableArray arrayWithCapacity:0];
 
@@ -232,20 +226,12 @@ void f(void *info, const void *data, size_t size)
     [self update];
 }
 
-
-
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [super drawRect:dirtyRect];
-}
-
-
 - (void) update
 {
     if ([self.images count] > 0)
     {
-        [self.imageView setImage:[self.images objectAtIndex:imageIndex]];
-        [self.imageView setFrameCenterRotation:90];
+        [self setImage:[self.images objectAtIndex:imageIndex]];
+        [self setFrameCenterRotation:90];
         imageIndex = (imageIndex + 1) % [self.images count];
         [self setNeedsDisplay:YES];
     }
