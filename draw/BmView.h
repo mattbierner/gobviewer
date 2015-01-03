@@ -1,11 +1,15 @@
 #import <Cocoa/Cocoa.h>
 
-#include <gober/PalFile.h>
+#include <gober/Common.h>
 #include <gober/BmFile.h>
 #include <gober/GobFile.h>
+#include <gober/PalFile.h>
 
 
-struct __attribute__((packed)) RGB { uint8_t r, g, b, a; };
+PACKED(struct RGB
+{
+    uint8_t r, g, b, a;
+});
 
 
 @interface BmView : NSImageView
@@ -18,6 +22,13 @@ struct __attribute__((packed)) RGB { uint8_t r, g, b, a; };
 @property (nonatomic, strong) NSMutableArray* images;
 
 - (id) initWithFrame:(NSRect)frameRect;
+
+- (CGImageRef) createImage:(RGB*) data
+    size:(size_t) dataSize
+    width:(unsigned) width
+    height:(unsigned) height;
+
+- (void) addImage:(CGImageRef)img;
 
 - (void) addImage:(RGB*) data
     size:(size_t) dataSize

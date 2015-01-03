@@ -1,5 +1,3 @@
-/**
-*/
 #pragma once
 
 #include <gober/Buffer.h>
@@ -28,6 +26,13 @@ public:
     /**
     */
     FmeFile GetFrame(unsigned index) const;
+    
+    /**
+        Get an id that uniquly identifies the image data with in single wax.
+        
+        Multiple frames may share the same image data but use FME headers.
+    */
+    size_t GetDataUid(unsigned index) const;
 
 private:
     std::shared_ptr<IBuffer> m_data;
@@ -61,11 +66,15 @@ public:
     unsigned GetFrameRate() const { return GetHeader().frameRate; }
 
     /**
-        Get the number of sequences stored in the wax.
+        Get the number of views stored in the wax.
     */
-    unsigned GetSequencesCount() const;
+    unsigned GetSequencesCount() const { return 32; }
     
     /**
+        Get the animation for a specific view.
+        
+        This always returns a new WaxFileSequence, but it may be identical to
+        other views.
     */
     WaxFileSequence GetSequence(unsigned index) const;
     
@@ -105,18 +114,18 @@ public:
     { }
     
     /**
-        Get the number of waxes stored.
+        Get the indicies on the wax actions.
     */
-    unsigned GetWaxesCount() const;
+    std::vector<size_t> GetActions() const;
     
     /**
         Does this wax file have a given wax animation entry?
     */
-    bool HasWax(unsigned index) const;
+    bool HasWax(size_t index) const;
     
     /**
     */
-    WaxFileWax GetWax(unsigned index) const;
+    WaxFileWax GetAction(size_t index) const;
     
 private:
     std::shared_ptr<Buffer> m_data;
@@ -130,7 +139,6 @@ private:
         (void)m_data->ReadObj<WaxFileHeader>(&header, 0);
         return header;
     }
-    
 };
 
 

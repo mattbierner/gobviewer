@@ -5,23 +5,25 @@
 
 #include <stdint.h>
 
+#include <gober/Common.h>
+
 namespace DF
 {
 
 /**
     PAL file color.
 */
-struct __attribute__((packed)) PalFileColor
+PACKED(struct PalFileColor
 {
     uint8_t r, g, b;
-};
+});
 
 /**
     Complete PAL file.
 */
-struct __attribute__((packed)) PalFileData
+PACKED(struct PalFileData
 {
     PalFileColor colors[256];
-};
+});
 
 } // DF

@@ -3,7 +3,7 @@
 #include <cassert>
 
 template <typename T, size_t N>
-constexpr bool InExtent(const T(&)[N], unsigned index)
+constexpr bool InExtent(const T(&)[N], size_t index)
 {
     return (index < N);
 }
@@ -30,14 +30,12 @@ FmeFile WaxFileSequence::GetFrame(unsigned index) const
     return FmeFile(std::make_shared<RelativeOffsetBuffer>(m_data, offset));
 }
 
-unsigned WaxFileWax::GetSequencesCount() const
+size_t WaxFileSequence::GetDataUid(unsigned index) const
 {
+    assert(index < GetFramesCount());
     auto header = GetHeader();
-    return static_cast<unsigned>(
-        std::count_if(
-            std::begin(header.sequences),
-            std::end(header.sequences),
-            [](uint32_t offset) { return (offset > 0); }));
+    
+    return header.frames[index];
 }
 
 WaxFileSequence WaxFileWax::GetSequence(unsigned index) const
@@ -49,23 +47,24 @@ WaxFileSequence WaxFileWax::GetSequence(unsigned index) const
     return WaxFileSequence(m_data, offset);
 }
 
-unsigned WaxFile::GetWaxesCount() const
+std::vector<size_t> WaxFile::GetActions() const
 {
     auto header = GetHeader();
-    return static_cast<unsigned>(
-        std::count_if(
-            std::begin(header.waxes),
-            std::end(header.waxes),
-            [](uint32_t offset) { return (offset > 0); }));
+    
+    std::vector<size_t> indicies;
+    for (unsigned i = 0; i < std::extent<decltype(header.waxes)>(); ++i)
+        if (header.waxes[i])
+            indicies.push_back(i);
+    return indicies;
 }
 
-bool WaxFile::HasWax(unsigned index) const
+bool WaxFile::HasWax(size_t index) const
 {
     auto header = GetHeader();
     return (InExtent(header.waxes, index) && header.waxes[index] > 0);
 }
 
-WaxFileWax WaxFile::GetWax(unsigned index) const
+WaxFileWax WaxFile::GetAction(size_t index) const
 {
     assert(HasWax(index));
     auto header = GetHeader();

@@ -7,19 +7,21 @@
 
 #include <stdint.h>
 
+#include <gober/Common.h>
+
 namespace DF
 {
 
 /**
     Frame entry header.
 */
-struct __attribute__((packed)) FmeFileHeader
+PACKED(struct FmeFileHeader
 {
     /** Inerstion point, x coordinate. */
-    uint32_t insertX;
+    int32_t insertX;
     
     /** Insertion point, y coordinate. */
-    uint32_t insertY;
+    int32_t insertY;
     
     /** 0 = not flipped, 1 = flipped horizontally. */
     uint32_t flipped;
@@ -35,12 +37,12 @@ struct __attribute__((packed)) FmeFileHeader
     
      /** Unused. */
     uint32_t padding[2];
-};
+});
 
 /**
     Second FME header entry.
 */
-struct __attribute__((packed)) FmeFileHeader2
+PACKED(struct FmeFileHeader2
 {
      /** Size of cell, x value. */
     uint32_t sizeX;
@@ -59,6 +61,6 @@ struct __attribute__((packed)) FmeFileHeader2
     
     /** Unused. */
     uint32_t padding;
-};
+});
 
 } // DF

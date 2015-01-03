@@ -5,25 +5,27 @@
 
 #include <stdint.h>
 
+#include <gober/Common.h>
+
 namespace DF
 {
 
 /**
     File header.
 */
-struct __attribute__((packed)) GobFileHeader
+PACKED(struct GobFileHeader
 {
     /** GOB header. */
     char magic[4];
     
     /** Absolute offset to index. */
     uint32_t indexOffset;
-};
+});
 
 /**
     Entry for a file in the container.
 */
-struct __attribute__((packed)) GobFileEntry
+PACKED(struct GobFileEntry
 {
     /** Absolute offset to start of file data. */
     uint32_t offset;
@@ -33,18 +35,18 @@ struct __attribute__((packed)) GobFileEntry
     
     /** Null terminated file name. */
     char filename[13];
-};
+});
 
 /**
     List of files in the container.
 */
-struct __attribute__((packed)) GobFileIndex
+PACKED(struct GobFileIndex
 {
     /** Number of files in the container. */
     uint32_t count;
     
     /** Array of `count` entries. */
     GobFileEntry entries[];
-};
+});
 
 } // DF

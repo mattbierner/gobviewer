@@ -15,6 +15,7 @@
 #include <gober/WaxFile.h>
 #include <gober/Buffer.h>
 #include <gober/Bm.h>
+#include <gober/Cell.h>
 
 DF::GobFile open(const char* file)
 {
@@ -86,11 +87,6 @@ RGB* BmToRgb(const DF::Bitmap& bm, const DF::PalFileData& pal)
     return BmDataToRgb(bm, pal, (bm.GetTransparency() != DF::BmFileTransparency::Normal));
 }
 
-RGB* FmeToRgb(const DF::FmeFile& bm, const DF::PalFileData& pal)
-{
-    return BmDataToRgb(bm.CreateBitmap(), pal, true);
-}
-
 void f(void *info, const void *data, size_t size)
 {
    delete[] ((RGB*)data);
@@ -128,12 +124,12 @@ void f(void *info, const void *data, size_t size)
     return self;
 }
 
-- (void) addImage:(RGB*) imgData
-    size:(size_t) imgDataSize
+- (CGImageRef) createImage:(RGB*) imgData
+    size:(size_t) dataSize
     width:(unsigned) width
     height:(unsigned) height
 {
-    CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, imgDataSize, f);
+    CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, dataSize, f);
     CGImageRef img = CGImageCreate(
         width,
         height,
@@ -148,8 +144,21 @@ void f(void *info, const void *data, size_t size)
         kCGRenderingIntentDefault);
     
     CGDataProviderRelease(imageData);
-    
+    return img;
+}
+
+- (void) addImage:(CGImageRef)img
+{
     [self.images addObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
+}
+
+- (void) addImage:(RGB*) imgData
+    size:(size_t) imgDataSize
+    width:(unsigned) width
+    height:(unsigned) height
+{
+    CGImageRef img = [self createImage:imgData size:imgDataSize width:width height:height];
+    [self addImage:img];
     CGImageRelease(img);
 }
 
@@ -169,26 +178,26 @@ void f(void *info, const void *data, size_t size)
         RGB* imgData = BmToRgb(*(bm.GetBitmap(i)), pal);
         [self addImage:imgData size: imgDataSize width:height height:width];
     }
+    
     imageIndex = 0;
     [self update];
 }
 
 - (void) loadFme:(DF::GobFile*)gob named:(const char*)filename
 {
-    DF::FmeFile bm = loadFme(gob, filename);
+    DF::Cell bm = loadFme(gob, filename).CreateCell();
 
     unsigned width = bm.GetWidth();
     unsigned height = bm.GetHeight();
     size_t imgDataSize = bm.GetDataSize() * 32;
     
-    RGB* imgData = FmeToRgb(bm, pal);
+    RGB* imgData = BmToRgb(*bm.GetBitmap(), pal);
     self.images = [NSMutableArray arrayWithCapacity:1];
-    [self addImage:imgData size: imgDataSize width:height height:width];
+    [self addImage:imgData size:imgDataSize width:height height:width];
     
     imageIndex = 0;
     [self update];
 }
-
 
 - (void) loadWax:(DF::GobFile*)gob named:(const char*)filename
 {
@@ -196,10 +205,13 @@ void f(void *info, const void *data, size_t size)
   
     self.images = [NSMutableArray arrayWithCapacity:0];
 
-    unsigned waxesCount = w.GetWaxesCount();
-    for (unsigned waxIndex = 0; waxIndex < waxesCount; ++waxIndex)
+    // Since waxes reuse a lot of image data, make a cache so we avoid creating
+    // duplicate CGImages.
+    std::map<size_t, CGImageRef> imageDatas;
+    
+    for (size_t waxIndex : w.GetActions())
     {
-        DF::WaxFileWax wax = w.GetWax(waxIndex);
+        DF::WaxFileWax wax = w.GetAction(waxIndex);
 
         unsigned numSeqs = wax.GetSequencesCount();
         for (unsigned sequenceIndex = 0; sequenceIndex < numSeqs; ++sequenceIndex)
@@ -211,16 +223,29 @@ void f(void *info, const void *data, size_t size)
             for (unsigned frame = 0; frame < numFrames; ++frame)
             {
                 DF::FmeFile bm = seq.GetFrame(frame);
+                const auto found = imageDatas.find(bm.GetDataUid());
+                if (found != std::end(imageDatas))
+                {
+                    CGImageRef img = found->second;
+                    [self addImage:img];
+                }
+                else
+                {
+                    unsigned width = bm.GetWidth();
+                    unsigned height = bm.GetHeight();
+                    size_t imgDataSize = bm.GetDataSize() * 32;
 
-                unsigned width = bm.GetWidth();
-                unsigned height = bm.GetHeight();
-                size_t imgDataSize = bm.GetDataSize() * 32;
-
-                RGB* imgData = FmeToRgb(bm, pal);
-                [self addImage:imgData size: imgDataSize width:height height:width];
+                    RGB* imgData = BmToRgb(bm.CreateBitmap(), pal);
+                    CGImageRef img = [self createImage:imgData size: imgDataSize width:height height:width];
+                    imageDatas[bm.GetDataUid()] = img;
+                    [self addImage:img];
+                }
             }
         }
     }
+    
+    for (const auto& pair : imageDatas)
+        CGImageRelease(pair.second);
     
     imageIndex = 0;
     [self update];

@@ -122,7 +122,7 @@ public:
         
         @param index Index of subbitmap to uncompress
     */
-    Bitmap CreateBitmap(unsigned index = 0) const;
+    Bitmap CreateBitmap(size_t index = 0) const;
     
     /**
     */
@@ -151,7 +151,7 @@ private:
     /**
         Read an uncompress the bitmap data.
     */
-    Buffer Uncompress(unsigned index) const;
+    Buffer Uncompress(size_t index) const;
     
     /**
         Get the type of compression used on the bitmap data.

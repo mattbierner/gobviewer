@@ -2,7 +2,6 @@
 
 #include <gober/Bitmap.h>
 #include <gober/BmFileData.h>
-#include <gober/Buffer.h>
 
 namespace DF
 {

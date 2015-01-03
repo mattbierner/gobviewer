@@ -5,6 +5,8 @@
 
 #include <stdint.h>
 
+#include <gober/Common.h>
+
 namespace DF
 {
 
@@ -31,7 +33,7 @@ enum class BmFileCompression : uint16_t
 /**
     File header.
 */
-struct __attribute__((packed)) BmFileHeader
+PACKED(struct BmFileHeader
 {
     /** GOB header. */
     char magic[4];
@@ -58,12 +60,12 @@ struct __attribute__((packed)) BmFileHeader
     int32_t dataSize;
     
     uint8_t padding[12];
-};
+});
 
 /**
     Header for a sub BM file in a multiple BM.
 */
-struct __attribute__((packed)) BmFileSubHeader
+PACKED(struct BmFileSubHeader
 {
     /** Vertical size. */
     int16_t sizeX;
@@ -86,12 +88,12 @@ struct __attribute__((packed)) BmFileSubHeader
     BmFileTransparency transparency;
     
     uint8_t pad2[3];
-};
+});
 
 /**
     Immediately follows the `BmFileHeader` for a multiple BM.
 */
-struct __attribute__((packed)) BmFileMultipleIndex
+PACKED(struct BmFileMultipleIndex
 {
     /** Frame rate of animated texture or 0 if it is a switch. */
     uint8_t frameRate;
@@ -100,7 +102,6 @@ struct __attribute__((packed)) BmFileMultipleIndex
     
     /** List of `idemY` offsets to sub BMs */
     int32_t offsets[];
-};
-
+});
 
 } // DF

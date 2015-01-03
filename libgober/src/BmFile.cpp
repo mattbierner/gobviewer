@@ -17,7 +17,7 @@ BmFileSubHeader BmFile::GetSubHeader(size_t index) const
     return header;
 }
 
-Buffer BmFile::Uncompress(unsigned index) const
+Buffer BmFile::Uncompress(size_t index) const
 {
     size_t size = GetDataSize(index);
     DF::Buffer data = DF::Buffer::Create(size);
@@ -31,7 +31,7 @@ Buffer BmFile::Uncompress(unsigned index) const
     return data;
 }
 
-Bitmap BmFile::CreateBitmap(unsigned index) const
+Bitmap BmFile::CreateBitmap(size_t index) const
 {
     unsigned width = GetWidth(index);
     unsigned height = GetHeight(index);
@@ -66,7 +66,7 @@ int32_t BmFile::GetSubOffset(size_t index) const
 {
     assert(IsMultipleBm() && index < GetCountSubBms());
 
-    const int32_t* startTable = m_data->GetObj<int32_t>(sizeof(BmFileHeader) + 2);
+    const uint32_t* startTable = m_data->GetObj<uint32_t>(sizeof(BmFileHeader) + 2);
     return startTable[index] + sizeof(BmFileHeader) + 2;
 }
 
@@ -76,7 +76,7 @@ const size_t BmFile::GetImageDataStart(size_t index) const
     {
         size_t dataOffset = sizeof(BmFileHeader);
         size_t tableOffset = dataOffset + GetHeader().dataSize;
-        const int32_t* tableEntry = m_data->GetObj<int32_t>(tableOffset);
+        const uint32_t* tableEntry = m_data->GetObj<uint32_t>(tableOffset);
         if (tableEntry)
             return dataOffset + *tableEntry;
         else
