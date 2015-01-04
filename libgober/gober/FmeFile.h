@@ -3,7 +3,6 @@
 #include <gober/Bitmap.h>
 #include <gober/BmFileData.h>
 #include <gober/Buffer.h>
-#include "Cell.h"
 #include <gober/FmeFileData.h>
 
 namespace DF
@@ -76,11 +75,6 @@ public:
         Get the uncompressed bitmap data.
     */
     Bitmap CreateBitmap() const;
-    
-    /**
-        Get the uncompressed bitmap data.
-    */
-    Cell CreateCell() const;
     
 protected:
     static FmeFileHeader s_emptyHeader;

@@ -80,21 +80,6 @@ Bitmap BmFile::CreateBitmap(size_t index) const
     }
 }
 
-Bm BmFile::CreateBm() const
-{
-    size_t count = GetCountSubBms();
-    
-    auto bitmaps = std::vector<std::shared_ptr<Bitmap>>();
-    bitmaps.reserve(count);
-    for (unsigned i = 0; i < count; ++i)
-        bitmaps.push_back(std::make_shared<Bitmap>(std::move(CreateBitmap(i))));
-    
-    return Bm(
-        GetFrameRate(),
-        IsSwitch(),
-        std::move(bitmaps));
-}
-
 int32_t BmFile::GetSubOffset(size_t index) const
 {
     assert(IsMultipleBm() && index < GetCountSubBms());

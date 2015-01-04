@@ -65,11 +65,6 @@ Bitmap FmeFile::CreateBitmap() const
     }
 }
 
-Cell FmeFile::CreateCell() const
-{
-    return Cell(GetInsertX(), GetInsertY(), IsFlipped(), std::make_shared<Bitmap>(std::move(CreateBitmap())));
-}
-
 const size_t FmeFile::GetImageDataStart() const
 {
     size_t header2Offset = m_data->ResolveOffset(GetHeader()->header2);

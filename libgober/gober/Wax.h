@@ -10,44 +10,78 @@
 namespace DF
 {
 
-
+/**
+    Collection of frames of an animation.
+*/
 class WaxActionSequence
 {
     using action_frames = std::vector<Cell>;
+
 public:
-    static WaxActionSequence CreateFromFile(const WaxFileSequence& seq)
+    static WaxActionSequence CreateFromFile(const WaxFileSequence& seq);
+    
+    static WaxActionSequence CreateFromFile(const WaxFileSequence& seq, bitmap_cache& cache);
+    
+    WaxActionSequence() { }
+    
+
+    size_t GetFramesCount() const { return m_frames.size(); }
+    
+    bool HasFrame(size_t index) const
     {
-        return {};
+        return (index < GetFramesCount());
     }
+    
+    /**
+        Get the sprite FME associated with a given frame.
+    */
+    Cell GetFrame(size_t index) const { return m_frames[index]; }
+
 private:
     action_frames m_frames;
+    
+    WaxActionSequence(action_frames&& frames) :
+        m_frames(std::move(frames))
+    { }
 };
 
 /**
-    Collection of views from different angles of a single animation.
+    Collection of views of an animation from different angles.
 */
 class WaxAction
 {
-    using action_views = std::array<WaxActionSequence, 32>;
-    
 public:
-    static WaxAction CreateFromFile(const WaxFileAction& action)
-    {
-        action_views views;
-        for (size_t i = 0; i < action.GetSequencesCount(); ++i)
-            views[i] = WaxActionSequence::CreateFromFile(action.GetSequence(i));
-        
-        return WaxAction(std::move(views));
-    }
+    using action_views = std::array<WaxActionSequence, 32>;
+
+    static WaxAction CreateFromFile(const WaxFileAction& action);
     
-    WaxAction() { }
+    static WaxAction CreateFromFile(const WaxFileAction& action, bitmap_cache& cache);
+
+    WaxAction(action_views&& views, unsigned frameRate) :
+        m_views(std::move(views)),
+        m_frameRate(frameRate)
+    { }
+    
+    unsigned GetFrameRate() const { return m_frameRate; }
+    
+    /**
+        Get the number of views stored in the wax.
+        
+        Sequences are always densely packed.
+    */
+    size_t GetSequencesCount() const { return m_views.size(); }
+    
+    /**
+        Get the animation for a specific view.
+    */
+    WaxActionSequence GetSequence(size_t index) const
+    {
+        return m_views[index];
+    }
     
 private:
     action_views m_views;
-    
-    WaxAction(action_views&& views) :
-        m_views(std::move(views))
-    { }
+    unsigned m_frameRate;
 };
 
 /**
@@ -55,18 +89,18 @@ private:
 */
 class Wax
 {
-    using action_map = std::map<size_t, WaxAction>;
-    
 public:
-    static Wax CreateFromFile(const WaxFile& wax)
-    {
-        action_map actions;
-        for (size_t i : wax.GetActions())
-            actions[i] = WaxAction::CreateFromFile(wax.GetAction(i));
-        
-        return Wax(std::move(actions));
-    }
+    using action_map = std::map<size_t, WaxAction>;
+
+    static Wax CreateFromFile(const WaxFile& wax);
     
+    Wax(action_map&& actions) :
+        m_actions(std::move(actions))
+    { }
+    
+    /**
+        Get list of actions.
+    */
     std::vector<size_t> GetActions() const
     {
         std::vector<size_t> indicies;
@@ -93,10 +127,6 @@ public:
     
 private:
     action_map m_actions;
-    
-    Wax(action_map&& actions) :
-        m_actions(std::move(actions))
-    { }
 };
 
 } // DF

@@ -5,15 +5,26 @@
 
 namespace DF
 {
+    class BmFile;
+}
+
+
+namespace DF
+{
 
 /**
-    Bitmap data file.
+    Bitmap texture.
     
     May contain multiple sub bitmaps.
 */
 class Bm
 {
 public:
+    /**
+        Create a bitmap from a file.
+    */
+    static Bm CreateFromFile(const BmFile& bm);
+    
     Bm(unsigned frameRate, bool isSwitch, std::vector<std::shared_ptr<Bitmap>>&& bitmaps) :
         m_frameRate(frameRate),
         m_isSwitch(isSwitch),
@@ -101,9 +112,9 @@ public:
     /**
         Does a given sub bitmap exist?
     */
-    bool HasBitmap(size_t index) const
+    bool HasBitmap(size_t index = 0) const
     {
-        return (index < GetCountSubBms());
+        return (index < GetCountSubBms() && m_bitmaps[index]);
     }
     
     /**
@@ -112,7 +123,7 @@ public:
     std::shared_ptr<Bitmap> GetBitmap(size_t index = 0) const
     {
         if (HasBitmap(index))
-            return m_bitmaps[index];
+            return m_bitmaps.at(index);
         else
             return nullptr;
     }

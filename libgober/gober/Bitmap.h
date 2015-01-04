@@ -26,12 +26,22 @@ public:
         Bitmap(width, height, transparency, std::make_unique<Buffer>(std::move(buffer)))
     { }
     
+    /**
+        Get the width of the image.
+    */
     unsigned GetWidth() const { return m_width; }
     
+    /**
+        Get the height of the image.
+    */
     unsigned GetHeight() const { return m_height; }
     
+    /**
+        Get the type of transparency that should be used to render the image.
+    */
     BmFileTransparency GetTransparency() const { return m_transparency; }
 
+// IBuffer
     virtual bool IsReadable() const override { return (m_data && m_data->IsReadable()); }
     
     virtual size_t GetDataSize() const override { return m_data->GetDataSize(); }

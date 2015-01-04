@@ -1,10 +1,6 @@
-/**
-    Bitmap file.
-*/
 #pragma once
 
 #include <gober/Bitmap.h>
-#include "Bm.h"
 #include <gober/BmFileData.h>
 #include <gober/DataReader.h>
 #include <gober/Buffer.h>
@@ -114,10 +110,6 @@ public:
         @param index Index of subbitmap to uncompress
     */
     Bitmap CreateBitmap(size_t index = 0) const;
-    
-    /**
-    */
-    Bm CreateBm() const;
     
 private:
     static BmFileHeader s_emptyHeader;

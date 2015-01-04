@@ -241,7 +241,7 @@ void f(void *info, const void *data, size_t size)
 
 - (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
-    DF::Bm bm = loadBm(gob, filename).CreateBm();
+    DF::Bm bm = DF::Bm::CreateFromFile(loadBm(gob, filename));
     size_t subCount = bm.GetCountSubBms();
 
     BmAnimation* animation = [[BmAnimation alloc] init];
@@ -278,7 +278,7 @@ void f(void *info, const void *data, size_t size)
 
 - (void) loadFme:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
-    DF::Cell bm = loadFme(gob, filename).CreateCell();
+    DF::Cell bm = DF::Cell::CreateFromFile(loadFme(gob, filename));
 
     unsigned width = bm.GetWidth();
     unsigned height = bm.GetHeight();
@@ -297,31 +297,31 @@ void f(void *info, const void *data, size_t size)
 
 - (void) loadWax:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
-    DF::WaxFile w = loadWax(gob, filename);
+    DF::Wax w = DF::Wax::CreateFromFile(loadWax(gob, filename));
   
     self.animations = [NSMutableArray arrayWithCapacity:0];
 
     // Since waxes reuse a lot of image data, make a cache so we avoid creating
     // duplicate CGImages.
-    std::map<size_t, CGImageRef> imageDatas;
+    std::map<std::shared_ptr<DF::Bitmap>, CGImageRef> imageDatas;
     
     for (size_t waxIndex : w.GetActions())
     {
-        DF::WaxFileAction wax = w.GetAction(waxIndex);
+        DF::WaxAction wax = w.GetAction(waxIndex);
     
-        unsigned numSeqs = wax.GetSequencesCount();
-        for (unsigned sequenceIndex = 0; sequenceIndex < numSeqs; ++sequenceIndex)
+        size_t numSeqs = wax.GetSequencesCount();
+        for (size_t sequenceIndex = 0; sequenceIndex < numSeqs; ++sequenceIndex)
         {
-            DF::WaxFileSequence seq = wax.GetSequence(sequenceIndex);
+            DF::WaxActionSequence seq = wax.GetSequence(sequenceIndex);
             
-            unsigned numFrames = seq.GetFramesCount();
+            size_t numFrames = seq.GetFramesCount();
             BmAnimation* animation = [[BmAnimation alloc] init];
             animation.frameRate = 1.0f / wax.GetFrameRate();
             
-            for (unsigned frame = 0; frame < numFrames; ++frame)
+            for (size_t frame = 0; frame < numFrames; ++frame)
             {
-                DF::FmeFile bm = seq.GetFrame(frame);
-                const auto found = imageDatas.find(bm.GetDataUid());
+                DF::Cell bm = seq.GetFrame(frame);
+                const auto found = imageDatas.find(bm.GetBitmap());
                 CGImageRef img;
                 if (found != std::end(imageDatas))
                 {
@@ -332,10 +332,10 @@ void f(void *info, const void *data, size_t size)
                     unsigned width = bm.GetWidth();
                     unsigned height = bm.GetHeight();
                     size_t imgDataSize = bm.GetDataSize() * 32;
-
-                    RGB* imgData = BmToRgb(bm.CreateBitmap(), *pal);
+                    auto bitmap = bm.GetBitmap();
+                    RGB* imgData = BmToRgb(*bitmap, *pal);
                     img = [self createImage:imgData size:imgDataSize width:height height:width];
-                    imageDatas[bm.GetDataUid()] = img;
+                    imageDatas[bitmap] = img;
                 }
                 [animation.frames addObject:
                     [BmCell cellForImage:[[NSImage alloc] initWithCGImage:img size:CGSizeZero]

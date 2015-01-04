@@ -1,15 +1,15 @@
 /**
     Structures for reading a WAX from binary data.
     
-    Waxs store animations for sprites. The sprites include views from different
-    angles. The actual bitmap data is stored in a FME.
+    A Wax file is a collection of animated actions. Each action is a collection
+    of sequences from different angles. Each Sequence is a collection of
+    animation frames.
 */
 #pragma once
 
 #include <stdint.h>
 
 #include <gober/Common.h>
-#include <gober/FmeFileData.h>
 
 namespace DF
 {
@@ -50,7 +50,7 @@ PACKED(struct WaxFileHeader
 /**
     Wax entry.
     
-    Wax entries store animations for different actions, e.g. walking, attacking, ...
+    An action stores views of an animations for some action, e.g. walking, attacking, ...
 */
 PACKED(struct WaxFileActionEntry
 {

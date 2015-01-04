@@ -3,18 +3,45 @@
 #include <gober/Bitmap.h>
 #include <gober/BmFileData.h>
 
+#include <map>
+
+namespace DF
+{
+    class FmeFile;
+}
+
 namespace DF
 {
 
 /**
+*/
+using bitmap_cache = std::map<size_t, std::shared_ptr<Bitmap>>;
+
+/**
     Single animation cell.
+    
+    Multiple cells may share a single bitmap (such as within a Wax).
 */
 class Cell
 {
 public:
-    Cell(int32_t insertX, int32_t insertY, bool IsFlipped, const std::shared_ptr<Bitmap>& bitmap) :
+    /**
+        Create a cell from a Fme file.
+    */
+    static Cell CreateFromFile(const FmeFile& fme);
+    
+    /**
+        Create a cell from an Fme file.
+        
+        Attempts to get the bitmap from a cache or creates an inserts a 
+        new entry into the cache.
+    */
+    static Cell CreateFromFile(const FmeFile& fme, bitmap_cache& map);
+
+    Cell(int32_t insertX, int32_t insertY, bool isFlipped, const std::shared_ptr<Bitmap>& bitmap) :
         m_insertX(insertX),
         m_insertY(insertY),
+        m_isFlipped(isFlipped),
         m_bitmap(bitmap)
     { }
     
@@ -22,12 +49,12 @@ public:
     int32_t GetInsertY() const { return m_insertY; }
     
     /**
-        Is the cell flipped?
+        Should the sprite be drawn flipped?
     */
     bool IsFlipped() const { return m_isFlipped; }
 
     /**
-        Size of the a bitmap.
+        Get the size of the a bitmap.
     */
     size_t GetDataSize() const
     {
@@ -38,7 +65,7 @@ public:
     }
     
     /**
-        Get the width of the image.
+        Get the width of the sprite.
     */
     unsigned GetWidth() const
     {
@@ -49,7 +76,7 @@ public:
     }
     
     /**
-        Get the height of the image.
+        Get the height of the sprite.
     */
     unsigned GetHeight() const
     {
@@ -60,9 +87,7 @@ public:
     }
     
     /**
-        Get the type of transparency of the image.
-     
-        @param index Sub bitmap to get transparency of.
+        Get the type of transparency used to render the sprite.
     */
     BmFileTransparency GetTransparency() const
     {
@@ -81,7 +106,7 @@ public:
     }
     
     /**
-        Get a the bitmapsthat stores the cell's data.
+        Get the bitmap that stores the sprite's data.
     */
     std::shared_ptr<Bitmap> GetBitmap() const { return m_bitmap; }
 
