@@ -3,8 +3,6 @@
 namespace DF
 {
 
-
-
 /*static*/ size_t CompressedBufferReader::ReadCompressedData(
     const IBuffer& buffer,
     BmFileCompression compression,

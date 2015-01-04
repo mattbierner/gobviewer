@@ -7,7 +7,7 @@ namespace DF
 {
 
 /**
-    Bitmap data.
+    Bitmap data file.
     
     May contain multiple sub bitmaps.
 */

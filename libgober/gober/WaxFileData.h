@@ -43,7 +43,7 @@ PACKED(struct WaxFileHeader
     /** unused. */
     uint32_t pad4;
     
-    /** `WaxFileWaxEntry` pointers. */
+    /** `WaxFileActionEntry` pointers. */
     uint32_t waxes[32];
 });
 
@@ -52,7 +52,7 @@ PACKED(struct WaxFileHeader
     
     Wax entries store animations for different actions, e.g. walking, attacking, ...
 */
-PACKED(struct WaxFileWaxEntry
+PACKED(struct WaxFileActionEntry
 {
     /** World width. */
     uint32_t worldWidth;

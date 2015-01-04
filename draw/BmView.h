@@ -5,9 +5,22 @@
 #include <gober/GobFile.h>
 #include <gober/PalFile.h>
 
+/**
+*/
+@interface BmCell : NSObject
+
+@property (nonatomic, strong) NSImage* image;
+@property (nonatomic) bool flipped;
+
++ (BmCell*) cellForImage:(NSImage*)image flipped:(bool)flipped;
+
+- (id) init;
+
+@end
+
+/**
+*/
 @interface BmAnimation : NSObject
-{
-}
 
 @property (nonatomic, strong) NSMutableArray* frames;
 @property (nonatomic) NSTimeInterval frameRate;
@@ -18,7 +31,8 @@
 
 @end
 
-
+/**
+*/
 @interface BmView : NSView
 {
     unsigned imageIndex;

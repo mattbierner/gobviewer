@@ -9,11 +9,12 @@ namespace DF
 {
 
 /**
+    Animation sequence in a Wax file.
 */
 class WaxFileSequence
 {
 public:
-    WaxFileSequence(const std::shared_ptr<Buffer>& data, size_t offset) :
+    WaxFileSequence(const std::shared_ptr<IBuffer>& data, size_t offset) :
         m_data(data),
         m_offset(offset)
     { }
@@ -21,87 +22,91 @@ public:
     /**
         Get the number of frames in the sequence.
     */
-    unsigned GetFramesCount() const;
+    size_t GetFramesCount() const;
     
     /**
+        Does a given frame exist?
     */
-    FmeFile GetFrame(unsigned index) const;
+    bool HasFrame(size_t index) const
+    {
+        return (index < GetFramesCount());
+    }
     
     /**
-        Get an id that uniquly identifies the image data with in single wax.
+        Get the sprite FME associated with a given frame.
+    */
+    FmeFile GetFrame(size_t index) const;
+    
+    /**
+        Get an id that uniquely identifies the image data within a Wax.
         
-        Multiple frames may share the same image data but use FME headers.
+        Multiple frames may share the same image data but use different FME headers.
     */
-    size_t GetDataUid(unsigned index) const;
+    size_t GetDataUid(size_t index) const;
 
 private:
+    static WaxFileSequenceEntry s_emptyHeader;
+
     std::shared_ptr<IBuffer> m_data;
     size_t m_offset;
     
     /**
         Get the main file header.
     */
-    WaxFileSequenceEntry GetHeader() const
-    {
-        WaxFileSequenceEntry header;
-        (void)m_data->ReadObj<WaxFileSequenceEntry>(&header, m_offset);
-        return header;
-    }
+    const WaxFileSequenceEntry* GetHeader() const;
 };
 
 /**
+    Single animated animation within a Wax file.
+    
+    Contains 32 views from different angles for the animation.
 */
-class WaxFileWax
+class WaxFileAction
 {
 public:
-    WaxFileWax(const std::shared_ptr<Buffer>& data, size_t offset) :
+    WaxFileAction(const std::shared_ptr<IBuffer>& data, size_t offset) :
         m_data(data),
         m_offset(offset)
     { }
     
-    unsigned GetWorldWidth() const { return GetHeader().worldWidth; }
+    unsigned GetWorldWidth() const { return GetHeader()->worldWidth; }
     
-    unsigned GetWorldHeight() const { return GetHeader().worldHeight; }
+    unsigned GetWorldHeight() const { return GetHeader()->worldHeight; }
 
-    unsigned GetFrameRate() const { return GetHeader().frameRate; }
+    unsigned GetFrameRate() const { return GetHeader()->frameRate; }
 
     /**
         Get the number of views stored in the wax.
+        
+        Sequences are always densely packed.
     */
-    unsigned GetSequencesCount() const { return 32; }
+    size_t GetSequencesCount() const { return 32; }
     
     /**
         Get the animation for a specific view.
-        
-        This always returns a new WaxFileSequence, but it may be identical to
-        other views.
     */
-    WaxFileSequence GetSequence(unsigned index) const;
+    WaxFileSequence GetSequence(size_t index) const;
     
 private:
-    std::shared_ptr<Buffer> m_data;
+    static WaxFileActionEntry s_emptyHeader;
+
+    std::shared_ptr<IBuffer> m_data;
     size_t m_offset;
     
     /**
         Get the main file header.
     */
-    WaxFileWaxEntry GetHeader() const
-    {
-        WaxFileWaxEntry header;
-        (void)m_data->ReadObj<WaxFileWaxEntry>(&header, m_offset);
-        return header;
-    }
+    const WaxFileActionEntry* GetHeader() const;
 };
 
 /**
-    WaxFile file view.
+    Wax file.
+    
+    Collection of animations for a sprite.
 */
 class WaxFile
 {
 public:
-    /**
-        Create a BM file from data in a file stream.
-    */
     static WaxFile CreateFromDataProvider(const IDataReader& dataProvider)
     {
         return WaxFile(Buffer::CreateFromDataProvider(dataProvider));
@@ -114,31 +119,29 @@ public:
     { }
     
     /**
-        Get the indicies on the wax actions.
+        Get the indicies of all of the Wax's actions.
     */
     std::vector<size_t> GetActions() const;
     
     /**
-        Does this wax file have a given wax animation entry?
+        Does this Wax file have a given animation entry?
     */
-    bool HasWax(size_t index) const;
+    bool HasAction(size_t index) const;
     
     /**
+        Get the animation entry for a given action.
     */
-    WaxFileWax GetAction(size_t index) const;
+    WaxFileAction GetAction(size_t index) const;
     
 private:
-    std::shared_ptr<Buffer> m_data;
+    static WaxFileHeader s_emptyHeader;
+
+    std::shared_ptr<IBuffer> m_data;
     
     /**
         Get the main file header.
     */
-    WaxFileHeader GetHeader() const
-    {
-        WaxFileHeader header;
-        (void)m_data->ReadObj<WaxFileHeader>(&header, 0);
-        return header;
-    }
+    const WaxFileHeader* GetHeader() const;
 };
 
 

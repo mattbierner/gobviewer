@@ -11,66 +11,102 @@ constexpr bool InExtent(const T(&)[N], size_t index)
 namespace DF
 {
 
-unsigned WaxFileSequence::GetFramesCount() const
+/*static*/ WaxFileSequenceEntry WaxFileSequence::s_emptyHeader = { };
+
+size_t WaxFileSequence::GetFramesCount() const
 {
-    auto header = GetHeader();
-    return static_cast<unsigned>(
-        std::count_if(
-            std::begin(header.frames),
-            std::end(header.frames),
-            [](uint32_t offset) { return (offset > 0); }));
+    const auto* header = GetHeader();
+    unsigned i = 0;
+    for (; i < std::extent<decltype(header->frames)>(); ++i)
+        if (header->frames[i] == 0)
+            return i;
+    return i;
 }
 
-FmeFile WaxFileSequence::GetFrame(unsigned index) const
+FmeFile WaxFileSequence::GetFrame(size_t index) const
 {
-    assert(index < GetFramesCount());
-    auto header = GetHeader();
-    size_t dataOffset = header.frames[index];
+    assert(HasFrame(index));
+    size_t dataOffset = GetHeader()->frames[index];
     size_t offset = dataOffset;
     return FmeFile(std::make_shared<RelativeOffsetBuffer>(m_data, offset));
 }
 
-size_t WaxFileSequence::GetDataUid(unsigned index) const
+size_t WaxFileSequence::GetDataUid(size_t index) const
 {
     assert(index < GetFramesCount());
-    auto header = GetHeader();
-    
-    return header.frames[index];
+    return GetHeader()->frames[index];
 }
 
-WaxFileSequence WaxFileWax::GetSequence(unsigned index) const
+const WaxFileSequenceEntry* WaxFileSequence::GetHeader() const
+{
+   if (m_data)
+    {
+        const auto* header = m_data->GetObj<WaxFileSequenceEntry>(m_offset);
+        if (header)
+            return header;
+    }
+    return &s_emptyHeader;
+}
+
+/*static*/ WaxFileActionEntry WaxFileAction::s_emptyHeader = { };
+
+WaxFileSequence WaxFileAction::GetSequence(size_t index) const
 {
     assert(index < GetSequencesCount());
-    auto header = GetHeader();
-    size_t offset = header.sequences[index];
+    const auto* header = GetHeader();
+    size_t offset = header->sequences[index];
     
     return WaxFileSequence(m_data, offset);
 }
 
+const WaxFileActionEntry* WaxFileAction::GetHeader() const
+{
+    if (m_data)
+    {
+        const auto* header = m_data->GetObj<WaxFileActionEntry>(m_offset);
+        if (header)
+            return header;
+    }
+    return &s_emptyHeader;
+}
+
+/*static*/ WaxFileHeader WaxFile::s_emptyHeader = { };
+
 std::vector<size_t> WaxFile::GetActions() const
 {
-    auto header = GetHeader();
+    const auto* header = GetHeader();
     
     std::vector<size_t> indicies;
-    for (unsigned i = 0; i < std::extent<decltype(header.waxes)>(); ++i)
-        if (header.waxes[i])
+    for (unsigned i = 0; i < std::extent<decltype(header->waxes)>(); ++i)
+        if (header->waxes[i])
             indicies.push_back(i);
     return indicies;
 }
 
-bool WaxFile::HasWax(size_t index) const
+bool WaxFile::HasAction(size_t index) const
 {
-    auto header = GetHeader();
-    return (InExtent(header.waxes, index) && header.waxes[index] > 0);
+    const auto* header = GetHeader();
+    return (InExtent(header->waxes, index) && header->waxes[index] > 0);
 }
 
-WaxFileWax WaxFile::GetAction(size_t index) const
+WaxFileAction WaxFile::GetAction(size_t index) const
 {
-    assert(HasWax(index));
-    auto header = GetHeader();
-    size_t offset = header.waxes[index];
+    assert(HasAction(index));
+    const auto* header = GetHeader();
+    size_t offset = header->waxes[index];
     
-    return WaxFileWax(m_data, offset);
+    return WaxFileAction(m_data, offset);
+}
+
+const WaxFileHeader* WaxFile::GetHeader() const
+{
+    if (m_data)
+    {
+        const auto* header = m_data->GetObj<WaxFileHeader>(0);
+        if (header)
+            return header;
+    }
+    return &s_emptyHeader;
 }
 
 } // DF

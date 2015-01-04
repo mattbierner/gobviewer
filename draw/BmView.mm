@@ -16,6 +16,7 @@
 #include <gober/Buffer.h>
 #include <gober/Bm.h>
 #include <gober/Cell.h>
+#include <gober/Wax.h>
 
 PACKED(struct RGB
 {
@@ -91,13 +92,35 @@ void f(void *info, const void *data, size_t size)
    delete[] ((RGB*)data);
 }
 
+@implementation BmCell
+
++ (BmCell*) cellForImage:(NSImage*)image flipped:(bool)flipped
+{
+    BmCell* cell = [[BmCell alloc] init];
+    cell.image = image;
+    cell.flipped = flipped;
+    return cell;
+}
+
+- (id) init
+{
+    if (self = [super init])
+    {
+        self.flipped = false;
+        self.image = nil;
+    }
+    return self;
+}
+
+@end
+
 
 @implementation BmAnimation
 
 + (BmAnimation*) animationForImage:(NSImage*)image
 {
     BmAnimation* animation = [[BmAnimation alloc] init];
-    [animation.frames addObject: image];
+    [animation.frames addObject:[BmCell cellForImage:image flipped:NO]];
     animation.frameRate = 0;
     return animation;
 }
@@ -234,7 +257,7 @@ void f(void *info, const void *data, size_t size)
         CGImageRef imgRef = [self createImage:imgData size: imgDataSize width:height height:width];
         NSImage* img = [[NSImage alloc] initWithCGImage:imgRef size:CGSizeZero];
         CGImageRelease(imgRef);
-        [animation.frames addObject:img];
+        [animation.frames addObject:[BmCell cellForImage:img flipped:NO]];
     }
     
     if (bm.IsSwitch())
@@ -284,7 +307,7 @@ void f(void *info, const void *data, size_t size)
     
     for (size_t waxIndex : w.GetActions())
     {
-        DF::WaxFileWax wax = w.GetAction(waxIndex);
+        DF::WaxFileAction wax = w.GetAction(waxIndex);
     
         unsigned numSeqs = wax.GetSequencesCount();
         for (unsigned sequenceIndex = 0; sequenceIndex < numSeqs; ++sequenceIndex)
@@ -299,11 +322,10 @@ void f(void *info, const void *data, size_t size)
             {
                 DF::FmeFile bm = seq.GetFrame(frame);
                 const auto found = imageDatas.find(bm.GetDataUid());
+                CGImageRef img;
                 if (found != std::end(imageDatas))
                 {
-                    CGImageRef img = found->second;
-                    NSImage* nsImage = [[NSImage alloc] initWithCGImage:img size:CGSizeZero];
-                    [animation.frames addObject:nsImage];
+                    img = found->second;
                 }
                 else
                 {
@@ -312,16 +334,16 @@ void f(void *info, const void *data, size_t size)
                     size_t imgDataSize = bm.GetDataSize() * 32;
 
                     RGB* imgData = BmToRgb(bm.CreateBitmap(), *pal);
-                    CGImageRef img = [self createImage:imgData size: imgDataSize width:height height:width];
+                    img = [self createImage:imgData size:imgDataSize width:height height:width];
                     imageDatas[bm.GetDataUid()] = img;
-                     NSImage* nsImage = [[NSImage alloc] initWithCGImage:img size:CGSizeZero];
-                    [animation.frames addObject:nsImage];
                 }
+                [animation.frames addObject:
+                    [BmCell cellForImage:[[NSImage alloc] initWithCGImage:img size:CGSizeZero]
+                        flipped:bm.IsFlipped()]];
             }
             [self.animations addObject:animation];
         }
     }
-    
     
     for (const auto& pair : imageDatas)
         CGImageRelease(pair.second);
@@ -351,22 +373,24 @@ void f(void *info, const void *data, size_t size)
     if ([self.animations count] == 0) return;
     
     BmAnimation* animation = [self.animations objectAtIndex:animationIndex];
-    NSImage* image = [animation.frames objectAtIndex:imageIndex];
+    BmCell* cell = [animation.frames objectAtIndex:imageIndex];
     
     CGRect drawRect = dirtyRect;
     CGRect imageRect = [self
-        proportionallyScale: image.size
+        proportionallyScale: cell.image.size
         toSize: drawRect.size];
    
     NSAffineTransform* rotation = [[NSAffineTransform alloc] init];
     [rotation translateXBy:NSWidth(drawRect) / 2 yBy:NSHeight(drawRect) / 2];
     [rotation rotateByDegrees:90];
+    if (cell.flipped)
+        [rotation scaleXBy:1.0 yBy:-1.0];
     [rotation translateXBy:-NSWidth(drawRect) / 2 yBy:-NSHeight(drawRect) / 2];
     
     NSGraphicsContext* context = [NSGraphicsContext currentContext];
     [context saveGraphicsState];
     [rotation concat];
-    [image drawInRect:imageRect fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+    [cell.image drawInRect:imageRect fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
     [context restoreGraphicsState];
 }
 
@@ -375,7 +399,7 @@ void f(void *info, const void *data, size_t size)
     if ([self.animations count] > 0)
     {
         NSUInteger numberFrames = [((BmAnimation*)[self.animations objectAtIndex:animationIndex]).frames count];
-        imageIndex++;
+        ++imageIndex;
         if (imageIndex >= numberFrames)
         {
             animationIndex = (animationIndex + 1) % [self.animations count];
