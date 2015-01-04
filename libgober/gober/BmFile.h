@@ -37,7 +37,10 @@ public:
     /**
         Size of the uncompressed BM.
     */
-    size_t GetDataSize(size_t index) const { return GetWidth(index) * GetHeight(index); }
+    size_t GetDataSize(size_t index) const
+    {
+        return GetWidth(index) * GetHeight(index);
+    }
     
     /**
         Get the width of the image.
@@ -46,7 +49,7 @@ public:
     */
     unsigned GetWidth(size_t index = 0) const
     {
-        return (IsMultipleBm() ? GetSubHeader(index).sizeX : GetHeader().sizeX);
+        return (IsMultipleBm() ? GetSubHeader(index)->sizeX : GetHeader()->sizeX);
     }
     
     /**
@@ -56,7 +59,7 @@ public:
     */
     unsigned GetHeight(size_t index = 0) const
     {
-        return (IsMultipleBm() ? GetSubHeader(index).sizeY : GetHeader().sizeY);
+        return (IsMultipleBm() ? GetSubHeader(index)->sizeY : GetHeader()->sizeY);
     }
     
     /**
@@ -66,7 +69,7 @@ public:
     */
     BmFileTransparency GetTransparency(size_t index = 0) const
     {
-        return (IsMultipleBm() ? GetSubHeader(index).transparency : GetHeader().transparency);
+        return (IsMultipleBm() ? GetSubHeader(index)->transparency : GetHeader()->transparency);
     }
     
     /**
@@ -74,8 +77,8 @@ public:
     */
     bool IsMultipleBm() const
     {
-        auto header = GetHeader();
-        return (header.sizeX == 1 && header.sizeY != 1);
+        const auto* header = GetHeader();
+        return (header->sizeX == 1 && header->sizeY != 1);
     }
     
     /**
@@ -85,25 +88,15 @@ public:
     */
     unsigned GetCountSubBms() const
     {
-        return (IsMultipleBm() ? GetHeader().idemY : 1);
+        return (IsMultipleBm() ? GetHeader()->idemY : 1);
     }
     
     /**
         Get the frame rate setting of a multiple BM.
         
-        Returns 0 for non-multiple BMs.
+        Returns 0 for non-multiple BMs and for switches.
     */
-    uint8_t GetFrameRate() const
-    {
-        if (IsMultipleBm())
-        {
-            const uint8_t* frameRate = m_data->Get(sizeof(BmFileHeader));
-            if (frameRate)
-                return *frameRate;
-        }
-        
-        return 0;
-    }
+    uint8_t GetFrameRate() const;
     
     /**
         Is a multiple BM a switch?
@@ -112,9 +105,7 @@ public:
     */
     bool IsSwitch() const
     {
-        if (IsMultipleBm())
-            return (GetFrameRate() == 0);
-        return false;
+        return (IsMultipleBm() && GetFrameRate() == 0);
     }
 
     /**
@@ -129,24 +120,22 @@ public:
     Bm CreateBm() const;
     
 private:
+    static BmFileHeader s_emptyHeader;
+    static BmFileSubHeader s_emptySubHeader;
+    
     std::shared_ptr<IBuffer> m_data;
     
     /**
         Get the main file header.
     */
-    BmFileHeader GetHeader() const
-    {
-        BmFileHeader header;
-        (void)m_data->ReadObj<BmFileHeader>(&header, 0);
-        return header;
-    }
+    const BmFileHeader* GetHeader() const;
     
     /**
         Get the sub header for a multiple BM.
      
         Only valid for multiple BM.
     */
-    BmFileSubHeader GetSubHeader(size_t index) const;
+    const BmFileSubHeader* GetSubHeader(size_t index) const;
     
     /**
         Read an uncompress the bitmap data.
@@ -158,7 +147,7 @@ private:
     */
     BmFileCompression GetCompression() const
     {
-        return (IsMultipleBm() ? BmFileCompression::None : GetHeader().compression);
+        return (IsMultipleBm() ? BmFileCompression::None : GetHeader()->compression);
     }
     
     /**

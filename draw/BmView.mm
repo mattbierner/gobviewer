@@ -17,15 +17,14 @@
 #include <gober/Bm.h>
 #include <gober/Cell.h>
 
-DF::GobFile open(const char* file)
+PACKED(struct RGB
 {
-    std::ifstream fs;
-    fs.open(file, std::ifstream::binary | std::ifstream::in);
-    if (fs.is_open())
-    {
-        return DF::GobFile::CreateFromFile(std::move(fs));
-    }
-    return { };
+    uint8_t r, g, b, a;
+});
+
+CGSize flipSize(CGSize size)
+{
+    return CGSizeMake(size.height, size.width);
 }
 
 DF::BmFile loadBm(DF::GobFile* gob, const char* filename)
@@ -92,27 +91,86 @@ void f(void *info, const void *data, size_t size)
    delete[] ((RGB*)data);
 }
 
+
+@implementation BmAnimation
+
++ (BmAnimation*) animationForImage:(NSImage*)image
+{
+    BmAnimation* animation = [[BmAnimation alloc] init];
+    [animation.frames addObject: image];
+    animation.frameRate = 0;
+    return animation;
+}
+
+- (id) init
+{
+    if (self = [super init])
+    {
+        self.frames = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
+@end
+
+
+@interface BmView()
+
+- (CGImageRef) createImage:(RGB*) data
+    size:(size_t) dataSize
+    width:(unsigned) width
+    height:(unsigned) height;
+
+- (void) addImage:(CGImageRef)img;
+
+- (void) addImage:(RGB*) data
+    size:(size_t) dataSize
+    width:(unsigned) width
+    height:(unsigned) height;
+
+@end
+
+
 @implementation BmView
+
+- (CGRect) proportionallyScale:(CGSize)fromSize toSize:(CGSize)toSize
+{
+    CGPoint origin = CGPointZero;
+
+    CGFloat width = fromSize.width;
+    CGFloat height = fromSize.height;
+    
+    CGFloat targetWidth = toSize.width;
+    CGFloat targetHeight = toSize.height;
+    
+    CGFloat scaledWidth = targetWidth;
+    CGFloat scaledHeight = targetHeight;
+    
+    if (!NSEqualSizes(fromSize, toSize))
+    {
+        float widthFactor = targetWidth / width;
+        float heightFactor = targetHeight / height;
+
+        CGFloat scaleFactor = std::min(widthFactor, heightFactor);
+
+        scaledWidth = width * scaleFactor;
+        scaledHeight = height * scaleFactor;
+
+        if (widthFactor < heightFactor)
+            origin.y = (targetHeight - scaledHeight) / 2.0;
+        else if (widthFactor > heightFactor)
+            origin.x = (targetWidth - scaledWidth) / 2.0;
+    }
+    return {origin, {scaledWidth, scaledHeight}};
+}
 
 - (id) initWithFrame:(NSRect)frameRect
 {
     if (self = [super initWithFrame:frameRect])
     {
-        imageIndex = 0;
-
-        {
-            DF::GobFile gob = open("DARK.GOB");
-            
-            std::string file("SECBASE.PAL");
-            size_t size = gob.GetFileSize(file);
-            DF::Buffer buffer = DF::Buffer::Create(size);
-            gob.ReadFile(file, buffer.Get(0), 0, size);
-            DF::PalFile p(std::move(buffer));
-
-            p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
-        }
+        self.wantsLayer = YES;
         
-        [self setImageScaling:NSImageScaleProportionallyUpOrDown];
+        imageIndex = 0;
     }
 
     return self;
@@ -143,7 +201,9 @@ void f(void *info, const void *data, size_t size)
 
 - (void) addImage:(CGImageRef)img
 {
-    [self.images addObject:[[NSImage alloc] initWithCGImage:img size:NSZeroSize]];
+    NSImage* image = [[NSImage alloc] initWithCGImage:img size:CGSizeZero];
+    BmAnimation* animation = [BmAnimation animationForImage:image];
+    [self.animations addObject:animation];
 }
 
 - (void) addImage:(RGB*) imgData
@@ -156,37 +216,44 @@ void f(void *info, const void *data, size_t size)
     CGImageRelease(img);
 }
 
-- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename
+- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
     DF::Bm bm = loadBm(gob, filename).CreateBm();
     size_t subCount = bm.GetCountSubBms();
 
-    self.images = [NSMutableArray arrayWithCapacity:subCount];
-
+    BmAnimation* animation = [[BmAnimation alloc] init];
+    
     for (unsigned i = 0; i < subCount; ++i)
     {
         unsigned width = bm.GetWidth(i);
         unsigned height = bm.GetHeight(i);
         size_t imgDataSize = bm.GetDataSize(i) * 32;
         
-        RGB* imgData = BmToRgb(*(bm.GetBitmap(i)), pal);
-        [self addImage:imgData size: imgDataSize width:height height:width];
+        RGB* imgData = BmToRgb(*(bm.GetBitmap(i)), *pal);
+        
+        CGImageRef imgRef = [self createImage:imgData size: imgDataSize width:height height:width];
+        NSImage* img = [[NSImage alloc] initWithCGImage:imgRef size:CGSizeZero];
+        CGImageRelease(imgRef);
+        [animation.frames addObject:img];
     }
     
     if (bm.IsSwitch())
     {
-        [self setFrameRate:1];
+        animation.frameRate = 1;
     }
     else
     {
-        [self setFrameRate:1.0f / bm.GetFrameRate()];
+        animation.frameRate = 1.0f / bm.GetFrameRate();
     }
     
+    self.animations = [NSMutableArray arrayWithObject:animation];
+
+    animationIndex = 0;
     imageIndex = 0;
     [self update];
 }
 
-- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename
+- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
     DF::Cell bm = loadFme(gob, filename).CreateCell();
 
@@ -194,20 +261,22 @@ void f(void *info, const void *data, size_t size)
     unsigned height = bm.GetHeight();
     size_t imgDataSize = bm.GetDataSize() * 32;
     
-    RGB* imgData = BmToRgb(*bm.GetBitmap(), pal);
-    self.images = [NSMutableArray arrayWithCapacity:1];
+    RGB* imgData = BmToRgb(*bm.GetBitmap(), *pal);
+    
+    self.animations = [NSMutableArray arrayWithCapacity:1];
     [self addImage:imgData size:imgDataSize width:height height:width];
     
     [self setFrameRate:0];
+    animationIndex = 0;
     imageIndex = 0;
     [self update];
 }
 
-- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename
+- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
     DF::WaxFile w = loadWax(gob, filename);
   
-    self.images = [NSMutableArray arrayWithCapacity:0];
+    self.animations = [NSMutableArray arrayWithCapacity:0];
 
     // Since waxes reuse a lot of image data, make a cache so we avoid creating
     // duplicate CGImages.
@@ -216,14 +285,16 @@ void f(void *info, const void *data, size_t size)
     for (size_t waxIndex : w.GetActions())
     {
         DF::WaxFileWax wax = w.GetAction(waxIndex);
-
+    
         unsigned numSeqs = wax.GetSequencesCount();
         for (unsigned sequenceIndex = 0; sequenceIndex < numSeqs; ++sequenceIndex)
         {
             DF::WaxFileSequence seq = wax.GetSequence(sequenceIndex);
-        
+            
             unsigned numFrames = seq.GetFramesCount();
-
+            BmAnimation* animation = [[BmAnimation alloc] init];
+            animation.frameRate = 1.0f / wax.GetFrameRate();
+            
             for (unsigned frame = 0; frame < numFrames; ++frame)
             {
                 DF::FmeFile bm = seq.GetFrame(frame);
@@ -231,7 +302,8 @@ void f(void *info, const void *data, size_t size)
                 if (found != std::end(imageDatas))
                 {
                     CGImageRef img = found->second;
-                    [self addImage:img];
+                    NSImage* nsImage = [[NSImage alloc] initWithCGImage:img size:CGSizeZero];
+                    [animation.frames addObject:nsImage];
                 }
                 else
                 {
@@ -239,30 +311,29 @@ void f(void *info, const void *data, size_t size)
                     unsigned height = bm.GetHeight();
                     size_t imgDataSize = bm.GetDataSize() * 32;
 
-                    RGB* imgData = BmToRgb(bm.CreateBitmap(), pal);
+                    RGB* imgData = BmToRgb(bm.CreateBitmap(), *pal);
                     CGImageRef img = [self createImage:imgData size: imgDataSize width:height height:width];
                     imageDatas[bm.GetDataUid()] = img;
-                    [self addImage:img];
+                     NSImage* nsImage = [[NSImage alloc] initWithCGImage:img size:CGSizeZero];
+                    [animation.frames addObject:nsImage];
                 }
             }
+            [self.animations addObject:animation];
         }
     }
     
-    // TODO: pull from wax
-    [self setFrameRate:1.0f / 5.0f];
     
     for (const auto& pair : imageDatas)
         CGImageRelease(pair.second);
     
+    animationIndex = 0;
     imageIndex = 0;
     [self update];
 }
 
-
 - (void) setFrameRate:(NSTimeInterval)frameRate
 {
     [self.animationTimer invalidate];
-    m_frameRate = frameRate;
     if (frameRate > 0)
     {
         self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:frameRate
@@ -273,13 +344,44 @@ void f(void *info, const void *data, size_t size)
     }
 }
 
+- (void) drawRect:(NSRect)dirtyRect
+{
+    [super drawRect:dirtyRect];
+
+    if ([self.animations count] == 0) return;
+    
+    BmAnimation* animation = [self.animations objectAtIndex:animationIndex];
+    NSImage* image = [animation.frames objectAtIndex:imageIndex];
+    
+    CGRect drawRect = dirtyRect;
+    CGRect imageRect = [self
+        proportionallyScale: image.size
+        toSize: drawRect.size];
+   
+    NSAffineTransform* rotation = [[NSAffineTransform alloc] init];
+    [rotation translateXBy:NSWidth(drawRect) / 2 yBy:NSHeight(drawRect) / 2];
+    [rotation rotateByDegrees:90];
+    [rotation translateXBy:-NSWidth(drawRect) / 2 yBy:-NSHeight(drawRect) / 2];
+    
+    NSGraphicsContext* context = [NSGraphicsContext currentContext];
+    [context saveGraphicsState];
+    [rotation concat];
+    [image drawInRect:imageRect fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+    [context restoreGraphicsState];
+}
+
 - (void) update
 {
-    if ([self.images count] > 0)
+    if ([self.animations count] > 0)
     {
-        [self setImage:[self.images objectAtIndex:imageIndex]];
-        [self setFrameCenterRotation:90];
-        imageIndex = (imageIndex + 1) % [self.images count];
+        NSUInteger numberFrames = [((BmAnimation*)[self.animations objectAtIndex:animationIndex]).frames count];
+        imageIndex++;
+        if (imageIndex >= numberFrames)
+        {
+            animationIndex = (animationIndex + 1) % [self.animations count];
+            imageIndex = 0;
+        }
+        [self setFrameRate:((BmAnimation*)[self.animations objectAtIndex:animationIndex]).frameRate];
         [self setNeedsDisplay:YES];
     }
 }

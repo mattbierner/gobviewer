@@ -1,6 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
 #include <gober/GobFile.h>
+#include <gober/PalFile.h>
 
 @class BmView;
 
@@ -10,9 +11,8 @@
 
 @property (nonatomic, strong) IBOutlet BmView* preview;
 
-- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename;
-- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename;
-- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename;
-
+- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
+- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
+- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal ;
 
 @end

@@ -37,6 +37,7 @@
 
 - (void) loadGob:(NSURL*)path
 {
+    [self.gobViewController loadPal:@"SECBASE.PAL" fromGob:@"DARK.GOB"];
     [self.gobViewController loadFile:path.path];
 }
 

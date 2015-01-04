@@ -5,41 +5,34 @@
 #include <gober/GobFile.h>
 #include <gober/PalFile.h>
 
-
-PACKED(struct RGB
+@interface BmAnimation : NSObject
 {
-    uint8_t r, g, b, a;
-});
-
-
-@interface BmView : NSImageView
-{
-    unsigned imageIndex;
-    NSUInteger m_frameRate;
-    
-    DF::PalFileData pal;
 }
 
-@property (nonatomic, strong) NSMutableArray* images;
+@property (nonatomic, strong) NSMutableArray* frames;
+@property (nonatomic) NSTimeInterval frameRate;
+
++ (BmAnimation*) animationForImage:(NSImage*)image;
+
+- (id) init;
+
+@end
+
+
+@interface BmView : NSView
+{
+    unsigned imageIndex;
+    unsigned animationIndex;
+}
+
+@property (nonatomic, strong) NSMutableArray* animations;
 @property (nonatomic, strong) NSTimer* animationTimer;
 
 - (id) initWithFrame:(NSRect)frameRect;
 
-- (CGImageRef) createImage:(RGB*) data
-    size:(size_t) dataSize
-    width:(unsigned) width
-    height:(unsigned) height;
-
-- (void) addImage:(CGImageRef)img;
-
-- (void) addImage:(RGB*) data
-    size:(size_t) dataSize
-    width:(unsigned) width
-    height:(unsigned) height;
-
-- (void) loadBM:(DF::GobFile*) gob named:(const char*)filename;
-- (void) loadFme:(DF::GobFile*) gob named:(const char*)filename;
-- (void) loadWax:(DF::GobFile*) gob named:(const char*)filename;
+- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
+- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
+- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
 
 - (void) setFrameRate:(NSTimeInterval)frameRate;
 

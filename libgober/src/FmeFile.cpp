@@ -5,19 +5,30 @@
 namespace DF
 {
 
-FmeFileHeader FmeFile::GetHeader() const
+/*static*/ FmeFileHeader FmeFile::s_emptyHeader = { };
+/*static*/ FmeFileHeader2 FmeFile::s_emptyHeader2 = { };
+
+const FmeFileHeader* FmeFile::GetHeader() const
 {
-    FmeFileHeader header;
-    (void)m_data->ReadObj<FmeFileHeader>(&header, 0);
-    return header;
+    if (m_data)
+    {
+        const auto* header = m_data->GetObj<FmeFileHeader>(0);
+        if (header)
+            return header;
+    }
+    return &s_emptyHeader;
 }
 
-FmeFileHeader2 FmeFile::GetHeader2() const
+const FmeFileHeader2* FmeFile::GetHeader2() const
 {
-    auto header = GetHeader();
-    FmeFileHeader2 header2;
-    (void)m_data->ReadObj<FmeFileHeader2>(&header2, m_data->ResolveOffset(header.header2));
-    return header2;
+    auto* header = GetHeader();
+    if (m_data && header->header2)
+    {
+        const auto* header2 = m_data->GetObj<FmeFileHeader2>(m_data->ResolveOffset(header->header2));
+        if (header2)
+            return header2;
+    }
+    return &s_emptyHeader2;
 }
 
 Buffer FmeFile::Uncompress() const
@@ -61,7 +72,7 @@ Cell FmeFile::CreateCell() const
 
 const size_t FmeFile::GetImageDataStart() const
 {
-    size_t header2Offset = m_data->ResolveOffset(GetHeader().header2);
+    size_t header2Offset = m_data->ResolveOffset(GetHeader()->header2);
     size_t dataOffset = header2Offset + sizeof(FmeFileHeader2);
     if (IsCompressed())
     {
