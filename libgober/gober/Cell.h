@@ -14,6 +14,7 @@ namespace DF
 {
 
 /**
+    Mapping of bitmap Fme data UIDs to bitmap objects.
 */
 using bitmap_cache = std::map<size_t, std::shared_ptr<Bitmap>>;
 
@@ -33,7 +34,7 @@ public:
     /**
         Create a cell from an Fme file.
         
-        Attempts to get the bitmap from a cache or creates an inserts a 
+        Attempts to get the bitmap from a cache or creates and inserts a
         new entry into the cache.
     */
     static Cell CreateFromFile(const FmeFile& fme, bitmap_cache& map);

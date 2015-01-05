@@ -13,6 +13,10 @@
 		892AB8711A59D58B00E092A9 /* Bm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 892AB86F1A59D58B00E092A9 /* Bm.cpp */; };
 		892AB8731A59DB9E00E092A9 /* Wax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 892AB8721A59DB9E00E092A9 /* Wax.cpp */; };
 		892AB8741A59DB9E00E092A9 /* Wax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 892AB8721A59DB9E00E092A9 /* Wax.cpp */; };
+		892AB8D01A5A150300E092A9 /* MsgFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 892AB8CE1A5A150300E092A9 /* MsgFile.cpp */; };
+		892AB8D11A5A150300E092A9 /* MsgFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 892AB8CE1A5A150300E092A9 /* MsgFile.cpp */; };
+		892AB8D21A5A150300E092A9 /* MsgFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 892AB8CF1A5A150300E092A9 /* MsgFile.h */; };
+		892AB8D31A5A150300E092A9 /* MsgFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 892AB8CF1A5A150300E092A9 /* MsgFile.h */; };
 		897518511A54D3930050B2B2 /* BmFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518451A54D3930050B2B2 /* BmFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		897518521A54D3930050B2B2 /* BmFileData.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518461A54D3930050B2B2 /* BmFileData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		897518531A54D3930050B2B2 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 897518471A54D3930050B2B2 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -45,6 +49,9 @@
 		892AB86C1A59D41500E092A9 /* Cell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cell.cpp; path = src/Cell.cpp; sourceTree = "<group>"; };
 		892AB86F1A59D58B00E092A9 /* Bm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Bm.cpp; path = src/Bm.cpp; sourceTree = "<group>"; };
 		892AB8721A59DB9E00E092A9 /* Wax.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Wax.cpp; path = src/Wax.cpp; sourceTree = "<group>"; };
+		892AB8CE1A5A150300E092A9 /* MsgFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MsgFile.cpp; path = gober/MsgFile.cpp; sourceTree = "<group>"; };
+		892AB8CF1A5A150300E092A9 /* MsgFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MsgFile.h; path = gober/MsgFile.h; sourceTree = "<group>"; };
+		892AB8D41A5A165F00E092A9 /* Msg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Msg.h; path = gober/Msg.h; sourceTree = "<group>"; };
 		897518451A54D3930050B2B2 /* BmFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BmFile.h; path = gober/BmFile.h; sourceTree = "<group>"; };
 		897518461A54D3930050B2B2 /* BmFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BmFileData.h; path = gober/BmFileData.h; sourceTree = "<group>"; };
 		897518471A54D3930050B2B2 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = gober/Buffer.h; sourceTree = "<group>"; };
@@ -107,35 +114,70 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		89D40DB71A54D1F100B71D68 /* src */ = {
+		892AB8CA1A5A131700E092A9 /* Bm */ = {
 			isa = PBXGroup;
 			children = (
+				897561B61A576B4C006A242F /* Bm.h */,
+				892AB86F1A59D58B00E092A9 /* Bm.cpp */,
 				897518451A54D3930050B2B2 /* BmFile.h */,
 				89D40DDE1A54D22600B71D68 /* BmFile.cpp */,
 				897518461A54D3930050B2B2 /* BmFileData.h */,
-				897518471A54D3930050B2B2 /* Buffer.h */,
-				897518481A54D3930050B2B2 /* DataReader.h */,
+			);
+			name = Bm;
+			sourceTree = "<group>";
+		};
+		892AB8CB1A5A135A00E092A9 /* Fme */ = {
+			isa = PBXGroup;
+			children = (
+				897561B81A57871F006A242F /* Cell.h */,
+				892AB86C1A59D41500E092A9 /* Cell.cpp */,
 				897518491A54D3930050B2B2 /* FmeFile.h */,
 				89D40DE21A54D22600B71D68 /* FmeFile.cpp */,
 				8975184A1A54D3930050B2B2 /* FmeFileData.h */,
+			);
+			name = Fme;
+			sourceTree = "<group>";
+		};
+		892AB8CC1A5A136B00E092A9 /* Wax */ = {
+			isa = PBXGroup;
+			children = (
+				8975184F1A54D3930050B2B2 /* WaxFile.h */,
+				897D8C551A572CD3009C35ED /* WaxFile.cpp */,
+				897518501A54D3930050B2B2 /* WaxFileData.h */,
+				897561B51A57695B006A242F /* Wax.h */,
+				892AB8721A59DB9E00E092A9 /* Wax.cpp */,
+			);
+			name = Wax;
+			sourceTree = "<group>";
+		};
+		892AB8CD1A5A142300E092A9 /* Msg */ = {
+			isa = PBXGroup;
+			children = (
+				892AB8CF1A5A150300E092A9 /* MsgFile.h */,
+				892AB8CE1A5A150300E092A9 /* MsgFile.cpp */,
+				892AB8D41A5A165F00E092A9 /* Msg.h */,
+			);
+			name = Msg;
+			sourceTree = "<group>";
+		};
+		89D40DB71A54D1F100B71D68 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				892AB8CD1A5A142300E092A9 /* Msg */,
+				892AB8CC1A5A136B00E092A9 /* Wax */,
+				892AB8CB1A5A135A00E092A9 /* Fme */,
+				892AB8CA1A5A131700E092A9 /* Bm */,
+				897518471A54D3930050B2B2 /* Buffer.h */,
+				897518481A54D3930050B2B2 /* DataReader.h */,
 				8975184B1A54D3930050B2B2 /* GobFile.h */,
 				89D40DE31A54D22600B71D68 /* GobFile.cpp */,
 				8975184C1A54D3930050B2B2 /* GobFileData.h */,
 				8975184D1A54D3930050B2B2 /* PalFile.h */,
 				8975184E1A54D3930050B2B2 /* PalFileData.h */,
-				8975184F1A54D3930050B2B2 /* WaxFile.h */,
-				897D8C551A572CD3009C35ED /* WaxFile.cpp */,
-				897518501A54D3930050B2B2 /* WaxFileData.h */,
 				89D40DDF1A54D22600B71D68 /* BufferWriter.h */,
 				89D40DE01A54D22600B71D68 /* CompressedBuffer.cpp */,
 				89D40DE11A54D22600B71D68 /* CompressedBuffer.h */,
 				897D8C5A1A573630009C35ED /* Bitmap.h */,
-				897561B51A57695B006A242F /* Wax.h */,
-				892AB8721A59DB9E00E092A9 /* Wax.cpp */,
-				897561B61A576B4C006A242F /* Bm.h */,
-				892AB86F1A59D58B00E092A9 /* Bm.cpp */,
-				897561B81A57871F006A242F /* Cell.h */,
-				892AB86C1A59D41500E092A9 /* Cell.cpp */,
 				897561BA1A5798DE006A242F /* Common.h */,
 			);
 			name = src;
@@ -154,6 +196,7 @@
 				8975185B1A54D3930050B2B2 /* WaxFile.h in Headers */,
 				897518551A54D3930050B2B2 /* FmeFile.h in Headers */,
 				897518521A54D3930050B2B2 /* BmFileData.h in Headers */,
+				892AB8D21A5A150300E092A9 /* MsgFile.h in Headers */,
 				8975185A1A54D3930050B2B2 /* PalFileData.h in Headers */,
 				89D40DE51A54D22600B71D68 /* BufferWriter.h in Headers */,
 				897518591A54D3930050B2B2 /* PalFile.h in Headers */,
@@ -170,6 +213,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				892AB8D31A5A150300E092A9 /* MsgFile.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,6 +301,7 @@
 				89D40DE61A54D22600B71D68 /* CompressedBuffer.cpp in Sources */,
 				892AB86D1A59D41500E092A9 /* Cell.cpp in Sources */,
 				89D40DE41A54D22600B71D68 /* BmFile.cpp in Sources */,
+				892AB8D01A5A150300E092A9 /* MsgFile.cpp in Sources */,
 				89D40DE81A54D22600B71D68 /* FmeFile.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -272,6 +317,7 @@
 				89ABBD671A54D8D400B72E36 /* CompressedBuffer.cpp in Sources */,
 				892AB86E1A59D41500E092A9 /* Cell.cpp in Sources */,
 				89ABBD681A54D8D400B72E36 /* FmeFile.cpp in Sources */,
+				892AB8D11A5A150300E092A9 /* MsgFile.cpp in Sources */,
 				89ABBD691A54D8D400B72E36 /* GobFile.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -316,6 +362,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)",
+					"$(SRCROOT)/deps/boost_1_57_0/",
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -362,6 +409,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)",
+					"$(SRCROOT)/deps/boost_1_57_0/",
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;

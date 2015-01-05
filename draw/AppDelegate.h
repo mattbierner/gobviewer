@@ -4,16 +4,22 @@
 
 @interface AppDelegate : NSObject <
     NSApplicationDelegate,
-    NSOpenSavePanelDelegate>
-{
-}
+    NSOpenSavePanelDelegate,
+    NSUserInterfaceValidations>
+
 @property(strong) NSMutableArray* windows;
 
-
+/**
+*/
 - (IBAction) openDocument:(id)sender;
 
-/* NSOpenSavePanelDelegate */
-- (BOOL) panel:(id)sender shouldShowFilename:(NSString *)filename;
+/**
+*/
+- (IBAction) saveToFile:(id)sender;
+
+// NSOpenSavePanelDelegate
+- (BOOL) panel:(id)sender
+    shouldShowFilename:(NSString*)filename;
 
 @end
 

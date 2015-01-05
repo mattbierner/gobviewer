@@ -15,18 +15,27 @@ namespace DF
 */
 class WaxActionSequence
 {
+public:
     using action_frames = std::vector<Cell>;
 
-public:
     static WaxActionSequence CreateFromFile(const WaxFileSequence& seq);
     
     static WaxActionSequence CreateFromFile(const WaxFileSequence& seq, bitmap_cache& cache);
     
+    WaxActionSequence(action_frames&& frames) :
+        m_frames(std::move(frames))
+    { }
+    
     WaxActionSequence() { }
     
-
+    /**
+        Get the number of frames in the animation.
+    */
     size_t GetFramesCount() const { return m_frames.size(); }
     
+    /**
+        Does a given frame exist in the animation?
+    */
     bool HasFrame(size_t index) const
     {
         return (index < GetFramesCount());
@@ -39,10 +48,6 @@ public:
 
 private:
     action_frames m_frames;
-    
-    WaxActionSequence(action_frames&& frames) :
-        m_frames(std::move(frames))
-    { }
 };
 
 /**
@@ -101,16 +106,7 @@ public:
     /**
         Get list of actions.
     */
-    std::vector<size_t> GetActions() const
-    {
-        std::vector<size_t> indicies;
-        std::transform(
-            std::begin(m_actions),
-            std::end(m_actions),
-            std::back_inserter(indicies),
-            [](const auto& pair) { return pair.first; });
-        return indicies;
-    }
+    std::vector<size_t> GetActions() const;
     
     /**
         Does a given action exist?

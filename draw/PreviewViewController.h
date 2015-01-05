@@ -15,4 +15,6 @@
 - (void) loadFme:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
 - (void) loadWax:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal ;
 
+- (void) loadMsg:(DF::GobFile*)gob named:(const char*)filename;
+
 @end

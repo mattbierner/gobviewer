@@ -41,4 +41,9 @@
     [self.gobViewController loadFile:path.path];
 }
 
+- (BOOL) validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem
+{
+    return YES;
+}
+
 @end

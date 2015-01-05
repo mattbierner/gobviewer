@@ -2,7 +2,8 @@
 
 @class GobViewController;
 
-@interface GobViewWindowController : NSWindowController
+@interface GobViewWindowController : NSWindowController<
+    NSUserInterfaceValidations>
 
 @property (nonatomic, strong) IBOutlet GobViewController* gobViewController;
 

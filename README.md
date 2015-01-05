@@ -10,6 +10,10 @@ GOB container file reader library for Dark Forces.
 
 ## Supported File Types
 
-* BM - Multiple, compressed and uncompressed. Needs more user friendly backing class.
-* FME - Compressed and uncompressed. Needs more user friendly backing class.
-* WAX - Compressed and uncompressed. Needs more user friendly backing class.
+* BM - Multiple, compressed and uncompressed.
+* FME - Compressed and uncompressed.
+* WAX - Compressed and uncompressed. 
+* MSG
+
+## Dependencies
+* Boost 1.5.x - Header only dep on boost for Spirit.

@@ -2,7 +2,7 @@
 
 #import "GobContentsViewController.h"
 #import "PreviewViewController.h"
-
+#include <gober/MsgFile.h>
 
 DF::GobFile open(const char* file)
 {
@@ -94,7 +94,11 @@ DF::GobFile open(const char* file)
     case DF::FileType::Wax:
         [self.previewViewController loadWax:gobFile.get() named:filename.c_str() withPal:&pal];
         break;
-        
+    
+    case DF::FileType::Msg:
+        [self.previewViewController loadMsg:gobFile.get() named:filename.c_str()];
+        break;
+    
     default: break;
     }
 }

@@ -15,18 +15,57 @@ namespace DF
 enum class FileType
 {
     Unknown,
+    
+// In-game graphics
     Bm,
     Fme,
-    Wax
+    Wax,
+    ThreeDO,
+    Vue,
+    Pal,
+    Cmp,
+    Fnt,
+
+// In-game sound
+    Voc,
+    Gmd,
+    
+// In-game level
+    Lev,
+    Inf,
+    Gol,
+    O,
+    
+// Messages
+    Msg
 };
 
 /**
     Maps file extensions used in dark forces to file types.
 */
 static const std::map<std::string, FileType> fileTypeMap = {
+// In-game graphics
     {"BM", FileType::Bm},
     {"FME", FileType::Fme},
-    {"WAX", FileType::Wax}
+    {"WAX", FileType::Wax},
+    {"3DO", FileType::ThreeDO},
+    {"VUE", FileType::Vue},
+    {"PAL", FileType::Pal},
+    {"CMP", FileType::Cmp},
+    {"FNT", FileType::Fnt},
+
+// In-game sound
+    {"VOC", FileType::Voc},
+    {"GMD", FileType::Gmd},
+
+// In-game Level
+    {"LEV", FileType::Lev},
+    {"INF", FileType::Inf},
+    {"Gol", FileType::Gol},
+    {"O", FileType::O},
+
+// Messages
+    {"MSG", FileType::Msg}
 };
 
 /**

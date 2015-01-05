@@ -63,6 +63,23 @@
     [self launchFilePicker];
 }
 
+- (IBAction) saveToFile:(id)sender
+{
+    GobViewWindowController* controller = [[NSApplication sharedApplication] mainWindow].windowController;
+    if (controller)
+    {
+        NSSavePanel* panel = [NSSavePanel savePanel];
+        [panel setCanCreateDirectories:YES];
+        [panel setTreatsFilePackagesAsDirectories:YES];
+        
+        NSInteger clicked = [panel runModal];
+        if (clicked == NSFileHandlingPanelOKButton)
+        {
+            //[controller saveCurrentItemToFile];
+        }
+    }
+}
+
 - (void) openGob:(NSURL*)path
 {
     GobViewWindowController* window = [[GobViewWindowController alloc] initWithWindowNibName:@"GobViewWindow"];
@@ -106,6 +123,20 @@
 {
     [window showWindow:NSApp];
     [self.windows addObject:window];
+}
+
+- (BOOL) validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem
+{
+    SEL action = [anItem action];
+    
+    NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
+    if (mainWindow)
+    {
+        GobViewWindowController* controller = mainWindow.windowController;
+        if (controller)
+            return [controller validateUserInterfaceItem:anItem];
+    }
+    return YES;
 }
 
 @end

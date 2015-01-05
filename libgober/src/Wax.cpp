@@ -49,5 +49,16 @@ namespace DF
     }
     return Wax(std::move(actions));
 }
+
+std::vector<size_t> Wax::GetActions() const
+{
+    std::vector<size_t> indicies;
+    std::transform(
+        std::begin(m_actions),
+        std::end(m_actions),
+        std::back_inserter(indicies),
+        [](const auto& pair) { return pair.first; });
+    return indicies;
+}
     
 }

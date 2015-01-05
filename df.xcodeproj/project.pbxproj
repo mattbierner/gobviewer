@@ -20,7 +20,6 @@
 		89F452681A43F49B00A20C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452671A43F49B00A20C49 /* main.m */; };
 		89F4526A1A43F49B00A20C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89F452691A43F49B00A20C49 /* Images.xcassets */; };
 		89F4526D1A43F49B00A20C49 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89F4526B1A43F49B00A20C49 /* MainMenu.xib */; };
-		89F452791A43F49B00A20C49 /* drawTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452781A43F49B00A20C49 /* drawTests.m */; };
 		89F452851A43F57E00A20C49 /* BmView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89F452841A43F57E00A20C49 /* BmView.mm */; };
 /* End PBXBuildFile section */
 
@@ -45,13 +44,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 89ABBD5A1A54D8BC00B72E36;
 			remoteInfo = gober.a;
-		};
-		89F452731A43F49B00A20C49 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 89F452401A42A24000A20C49 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 89F4525F1A43F49B00A20C49;
-			remoteInfo = draw;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -79,7 +71,6 @@
 		89F452671A43F49B00A20C49 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		89F452691A43F49B00A20C49 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		89F4526C1A43F49B00A20C49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		89F452721A43F49B00A20C49 /* drawTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = drawTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89F452771A43F49B00A20C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89F452781A43F49B00A20C49 /* drawTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = drawTests.m; sourceTree = "<group>"; };
 		89F452831A43F57E00A20C49 /* BmView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BmView.h; sourceTree = "<group>"; };
@@ -92,13 +83,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				89ABBD701A54D93F00B72E36 /* libgober.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		89F4526F1A43F49B00A20C49 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,7 +138,6 @@
 			isa = PBXGroup;
 			children = (
 				89F452601A43F49B00A20C49 /* gobviewer.app */,
-				89F452721A43F49B00A20C49 /* drawTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -233,24 +216,6 @@
 			productReference = 89F452601A43F49B00A20C49 /* gobviewer.app */;
 			productType = "com.apple.product-type.application";
 		};
-		89F452711A43F49B00A20C49 /* drawTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 89F4527D1A43F49B00A20C49 /* Build configuration list for PBXNativeTarget "drawTests" */;
-			buildPhases = (
-				89F4526E1A43F49B00A20C49 /* Sources */,
-				89F4526F1A43F49B00A20C49 /* Frameworks */,
-				89F452701A43F49B00A20C49 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				89F452741A43F49B00A20C49 /* PBXTargetDependency */,
-			);
-			name = drawTests;
-			productName = drawTests;
-			productReference = 89F452721A43F49B00A20C49 /* drawTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -262,10 +227,6 @@
 				TargetAttributes = {
 					89F4525F1A43F49B00A20C49 = {
 						CreatedOnToolsVersion = 6.1.1;
-					};
-					89F452711A43F49B00A20C49 = {
-						CreatedOnToolsVersion = 6.1.1;
-						TestTargetID = 89F4525F1A43F49B00A20C49;
 					};
 				};
 			};
@@ -289,7 +250,6 @@
 			projectRoot = "";
 			targets = (
 				89F4525F1A43F49B00A20C49 /* gobviewer */,
-				89F452711A43F49B00A20C49 /* drawTests */,
 			);
 		};
 /* End PBXProject section */
@@ -325,13 +285,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		89F452701A43F49B00A20C49 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -349,14 +302,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		89F4526E1A43F49B00A20C49 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				89F452791A43F49B00A20C49 /* drawTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -364,11 +309,6 @@
 			isa = PBXTargetDependency;
 			name = gober.a;
 			targetProxy = 89ABBD6E1A54D93A00B72E36 /* PBXContainerItemProxy */;
-		};
-		89F452741A43F49B00A20C49 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 89F4525F1A43F49B00A20C49 /* gobviewer */;
-			targetProxy = 89F452731A43F49B00A20C49 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -504,42 +444,6 @@
 			};
 			name = Release;
 		};
-		89F4527E1A43F49B00A20C49 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = drawTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/draw.app/Contents/MacOS/draw";
-			};
-			name = Debug;
-		};
-		89F4527F1A43F49B00A20C49 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = drawTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/draw.app/Contents/MacOS/draw";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -557,15 +461,6 @@
 			buildConfigurations = (
 				89F4527B1A43F49B00A20C49 /* Debug */,
 				89F4527C1A43F49B00A20C49 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		89F4527D1A43F49B00A20C49 /* Build configuration list for PBXNativeTarget "drawTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				89F4527E1A43F49B00A20C49 /* Debug */,
-				89F4527F1A43F49B00A20C49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
