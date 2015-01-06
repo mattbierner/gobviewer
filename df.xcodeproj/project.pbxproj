@@ -16,6 +16,7 @@
 		89C4CE961A55DE62002F95FF /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89C4CE941A55DE61002F95FF /* PreviewViewController.xib */; };
 		89C4CE9A1A5617C1002F95FF /* GobViewWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89C4CE991A5617C1002F95FF /* GobViewWindow.xib */; };
 		89C4CE9D1A561816002F95FF /* GobViewWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE9C1A561816002F95FF /* GobViewWindowController.mm */; };
+		89E621F71A5B9D3000E75E01 /* PalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89E621F61A5B9D3000E75E01 /* PalView.mm */; };
 		89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89F452651A43F49B00A20C49 /* AppDelegate.mm */; };
 		89F452681A43F49B00A20C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F452671A43F49B00A20C49 /* main.m */; };
 		89F4526A1A43F49B00A20C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89F452691A43F49B00A20C49 /* Images.xcassets */; };
@@ -64,6 +65,8 @@
 		89C4CE991A5617C1002F95FF /* GobViewWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GobViewWindow.xib; sourceTree = "<group>"; };
 		89C4CE9B1A561816002F95FF /* GobViewWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobViewWindowController.h; sourceTree = "<group>"; };
 		89C4CE9C1A561816002F95FF /* GobViewWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GobViewWindowController.mm; sourceTree = "<group>"; };
+		89E621F51A5B9D3000E75E01 /* PalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PalView.h; sourceTree = "<group>"; };
+		89E621F61A5B9D3000E75E01 /* PalView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PalView.mm; sourceTree = "<group>"; };
 		89F452601A43F49B00A20C49 /* gobviewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gobviewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89F452631A43F49B00A20C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89F452641A43F49B00A20C49 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -165,6 +168,8 @@
 				89C4CE991A5617C1002F95FF /* GobViewWindow.xib */,
 				89C4CE9B1A561816002F95FF /* GobViewWindowController.h */,
 				89C4CE9C1A561816002F95FF /* GobViewWindowController.mm */,
+				89E621F51A5B9D3000E75E01 /* PalView.h */,
+				89E621F61A5B9D3000E75E01 /* PalView.mm */,
 			);
 			path = draw;
 			sourceTree = "<group>";
@@ -296,6 +301,7 @@
 				89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */,
 				89C4CE901A55C1E5002F95FF /* GobContentsViewController.mm in Sources */,
 				89C4CE9D1A561816002F95FF /* GobViewWindowController.mm in Sources */,
+				89E621F71A5B9D3000E75E01 /* PalView.mm in Sources */,
 				89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */,
 				89ABBD771A54F11C00B72E36 /* GobViewController.mm in Sources */,
 				89F452851A43F57E00A20C49 /* BmView.mm in Sources */,

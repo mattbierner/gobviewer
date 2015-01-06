@@ -27,8 +27,7 @@ public:
     */
     PalFileColor operator[](size_t index) const
     {
-        index = std::min(index, 256);
-        if (IsValid())
+        if (index < 256 && IsValid())
             return *m_data.GetObj<PalFileColor>(index * sizeof(PalFileColor));
         else
             return { };

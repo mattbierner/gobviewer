@@ -101,6 +101,11 @@ DF::GobFile open(const char* file)
         [self.previewViewController loadMsg:gobFile.get() named:filename.c_str()];
         break;
     
+     case DF::FileType::Pal:
+        [self.previewViewController loadPal:gobFile.get() named:filename.c_str()];
+        break;
+    
+    
     default:
     {
         size_t size = gobFile->GetFileSize(filename);

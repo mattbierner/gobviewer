@@ -58,7 +58,7 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     return DF::WaxFile(std::move(buffer));
 }
 
-RGB* BmDataToRgb(const DF::IBuffer& buffer, const DF::PalFileData& pal, bool trans)
+RGB* BmDataToRgb(const DF::IReadableBuffer& buffer, const DF::PalFileData& pal, bool trans)
 {
     size_t size = buffer.GetDataSize();
     RGB* imgData = new RGB[size];

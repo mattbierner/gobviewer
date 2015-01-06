@@ -1,6 +1,7 @@
 #import "PreviewViewController.h"
 
 #import "BmView.h"
+#import "PalView.h"
 
 #include <gober/MsgFile.h>
 #include <gober/Msg.h>
@@ -37,6 +38,9 @@
             options:0
             metrics:nil
             views:views]];
+    
+    self.palView = [[PalView alloc] init];
+    [self.view addSubview:self.palView];
 }
 
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
@@ -63,7 +67,24 @@
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
     DF::Msg msg = DF::MsgFile(std::move(buffer)).CreateMsg();
-    
 }
+
+- (void) loadPal:(DF::GobFile*)gob named:(const char*)filename
+{
+    std::string file(filename);
+    size_t size = gob->GetFileSize(file);
+    DF::Buffer buffer = DF::Buffer::Create(size);
+    gob->ReadFile(file, buffer.GetW(0), 0, size);
+
+    DF::PalFileData pal;
+    DF::PalFile p(std::move(buffer));
+    p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
+    
+    [self.palView upateForPal:pal];
+    [self.view replaceSubview:self.preview with:self.palView];
+    self.palView.frame = self.preview.frame;
+    [self.palView setNeedsDisplay:YES];
+}
+
 
 @end

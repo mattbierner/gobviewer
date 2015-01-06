@@ -13,7 +13,7 @@ namespace DF
 */
 
 class Bitmap :
-    public IBuffer
+    public IReadableBuffer
 {
 public:
 using T = uint8_t;
@@ -62,7 +62,7 @@ using T = uint8_t;
     virtual const T* GetR(size_t offset) const override { return m_data->GetR(offset); }
     
 private:
-    std::unique_ptr<IBuffer> m_data;
+    std::unique_ptr<IReadableBuffer> m_data;
     unsigned m_width;
     unsigned m_height;
     BmFileTransparency m_transparency;
