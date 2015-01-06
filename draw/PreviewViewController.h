@@ -10,8 +10,9 @@
 {
 }
 
-@property (nonatomic, strong) IBOutlet BmView* preview;
-@property (nonatomic, strong) IBOutlet PalView* palView;
+@property (nonatomic, strong) BmView* preview;
+@property (nonatomic, strong) PalView* palView;
+@property (nonatomic, strong) NSTextView* msgView;
 
 
 - (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;

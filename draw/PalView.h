@@ -1,14 +1,15 @@
 #import <Cocoa/Cocoa.h>
 
-#include <gober/PalFileData.h>
+#include "Pal.h"
 
-
+/**
+    View that displays a PAL file as a vertical gradient of values.
+*/
 @interface PalView : NSView
 {
-    CGGradientRef gradient;
+    CGImageRef colorData;
 }
 
-- (void) upateForPal:(DF::PalFileData)data;
-
+@property (nonatomic, strong) Pal* pal;
 
 @end

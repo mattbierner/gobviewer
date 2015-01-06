@@ -11,7 +11,7 @@ namespace DF
 
 /**
 */
-using message = boost::tuple<size_t, size_t, std::string>;
+using message = boost::tuple<message_index_t, message_priority_t, message_contents_t>;
 
 /**
 */
@@ -77,7 +77,10 @@ Msg MsgFile::CreateMsg() const
     if (result && (start == end)) // only accept fully valid files
     {
         for (const auto& message : messages)
-            messageObject.AddMessage(boost::get<0>(message), boost::get<1>(message), boost::get<2>(message));
+            messageObject.AddMessage(
+                boost::get<0>(message),
+                boost::get<1>(message),
+                std::move(boost::get<2>(message)));
     }
     return messageObject;
 }
