@@ -4,6 +4,8 @@
 #import "PreviewViewController.h"
 #include <gober/MsgFile.h>
 
+#include <iostream>
+
 DF::GobFile open(const char* file)
 {
     std::ifstream fs;
@@ -66,7 +68,7 @@ DF::GobFile open(const char* file)
     std::string file([name UTF8String]);
     size_t size = gob.GetFileSize(file);
     DF::Buffer buffer = DF::Buffer::Create(size);
-    gob.ReadFile(file, buffer.Get(0), 0, size);
+    gob.ReadFile(file, buffer.GetW(0), 0, size);
     DF::PalFile p(std::move(buffer));
     p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
 }
@@ -99,7 +101,14 @@ DF::GobFile open(const char* file)
         [self.previewViewController loadMsg:gobFile.get() named:filename.c_str()];
         break;
     
-    default: break;
+    default:
+    {
+        size_t size = gobFile->GetFileSize(filename);
+        DF::Buffer buffer = DF::Buffer::Create(size);
+        gobFile->ReadFile(filename, buffer.GetW(0), 0, size);
+        std::cout << std::string(buffer.GetObjR<char>(), size);
+        break;
+    }
     }
 }
 

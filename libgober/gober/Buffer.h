@@ -9,9 +9,9 @@ namespace DF
 {
 
 /**
-    Provides basic read and write access to a block of memory.
+    Provides basic read access to a block of memory.
 */
-class IBuffer :
+class IReadableBuffer :
     public IDataReader
 {
 public:
@@ -25,9 +25,7 @@ public:
         
         Returns nullptr if invalid offset.
     */
-    virtual uint8_t* Get(size_t offset) = 0;
-    
-    virtual const uint8_t* Get(size_t offset) const = 0;
+    virtual const uint8_t* GetR(size_t offset) const = 0;
     
     /**
         Get direct access to an object of type `T` in the buffer.
@@ -38,19 +36,10 @@ public:
         an object of type `T`.
     */
     template <typename T = uint8_t>
-    T* GetObj(size_t offset = 0)
+    const T* GetObjR(size_t offset = 0) const
     {
         if (CanRead<T>(offset))
-            return reinterpret_cast<T*>(Get(offset));
-        else
-            return nullptr;
-    }
-
-    template <typename T = uint8_t>
-    const T* GetObj(size_t offset = 0) const
-    {
-        if (CanRead<T>(offset))
-            return reinterpret_cast<const T*>(Get(offset));
+            return reinterpret_cast<const T*>(GetR(offset));
         else
             return nullptr;
     }
@@ -58,9 +47,7 @@ public:
     /**
         Get reference to element at `offset`.
     */
-    uint8_t& At(size_t offset) { return *Get(offset); }
-
-    const uint8_t& At(size_t offset) const { return *Get(offset); }
+    const uint8_t& AtR(size_t offset) const { return *GetR(offset); }
     
     /**
         Turn an absolute offset into a relative offset.
@@ -76,10 +63,31 @@ public:
     {
         if (!IsReadable()) return 0;
         size_t read = std::min(GetDataSize() - offset, max);
-        const uint8_t* start = Get(offset);
+        const uint8_t* start = GetR(offset);
         std::copy(start, start + read, output);
         return read;
     }
+};
+
+/**
+    Provides basic read and write access to a block of memory.
+*/
+class IBuffer :
+    public IReadableBuffer
+{
+public:
+    virtual uint8_t* GetW(size_t offset)
+    {
+        return const_cast<uint8_t*>(static_cast<const IBuffer&>(*this).GetR(offset));
+    }
+    
+    template <typename T = uint8_t>
+    T* GetObjW(size_t offset = 0)
+    {
+        return const_cast<T*>(static_cast<const IBuffer&>(*this).GetObjR<T>(offset));
+    }
+    
+    uint8_t& AtW(size_t offset) { return *GetW(offset); }
 };
 
 /**
@@ -100,7 +108,7 @@ public:
     {
         size_t size = provider.GetDataSize();
         Buffer buf = Create(size);
-        provider.Read(buf.Get(0), 0, size);
+        provider.Read(buf.GetW(0), 0, size);
         return buf;
     }
     
@@ -132,9 +140,7 @@ public:
 
     virtual size_t GetDataSize() const override { return this->size(); }
 
-    virtual uint8_t* Get(size_t offset) override { return &(Super::operator[](offset)); }
-
-    virtual const uint8_t* Get(size_t offset) const override { return &(Super::operator[](offset)); }
+    virtual const uint8_t* GetR(size_t offset) const override { return &(Super::operator[](offset)); }
 
 private:
     Buffer(size_t size) :
@@ -171,9 +177,7 @@ public:
             return 0;
     }
     
-    virtual uint8_t* Get(size_t offset) override { return m_data->Get(m_offset + offset); }
-
-    virtual const uint8_t* Get(size_t offset) const override { return m_data->Get(m_offset + offset); }
+    virtual const uint8_t* GetR(size_t offset) const override { return m_data->GetR(m_offset + offset); }
     
     virtual size_t ResolveOffset(size_t offset) const override
     {

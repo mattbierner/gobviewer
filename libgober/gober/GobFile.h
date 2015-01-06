@@ -41,34 +41,6 @@ enum class FileType
 };
 
 /**
-    Maps file extensions used in dark forces to file types.
-*/
-static const std::map<std::string, FileType> fileTypeMap = {
-// In-game graphics
-    {"BM", FileType::Bm},
-    {"FME", FileType::Fme},
-    {"WAX", FileType::Wax},
-    {"3DO", FileType::ThreeDO},
-    {"VUE", FileType::Vue},
-    {"PAL", FileType::Pal},
-    {"CMP", FileType::Cmp},
-    {"FNT", FileType::Fnt},
-
-// In-game sound
-    {"VOC", FileType::Voc},
-    {"GMD", FileType::Gmd},
-
-// In-game Level
-    {"LEV", FileType::Lev},
-    {"INF", FileType::Inf},
-    {"Gol", FileType::Gol},
-    {"O", FileType::O},
-
-// Messages
-    {"MSG", FileType::Msg}
-};
-
-/**
     Gob file.
     
     Allows reading from a Gob file.
@@ -83,6 +55,8 @@ class GobFile
     };
     
     using FileMap = std::map<std::string, Entry>;
+
+    using FileExtMap = std::map<std::string, FileType>;
 
 public:
     /**
@@ -175,23 +149,17 @@ public:
     }
     
 private:
-    static FileType TypeForFileName(const std::string& filename)
-    {
-        auto extPos = filename.find(".");
-        if (extPos != std::string::npos)
-        {
-            std::string ext = filename.substr(extPos + 1);
-            auto type = fileTypeMap.find(ext);
-            if (type != std::end(fileTypeMap))
-            {
-                return type->second;
-            }
-        }
-        return FileType::Unknown;
-    }
+    /**
+        Maps file extensions used in dark forces to file types.
+    */
+    static const FileExtMap fileTypeMap;
+
+    /**
+        For a given filename, guess its file type based on its extension.
+    */
+    static FileType TypeForFileName(const std::string& filename);
 
     std::unique_ptr<IDataReader> m_dataProvider;
-
     std::vector<std::string> m_files;
     FileMap m_entries;
   

@@ -29,7 +29,7 @@ namespace DF
     size_t offset,
     BufferWriter writer)
 {
-    const uint8_t* start = buffer.Get(offset);
+    const uint8_t* start = buffer.GetR(offset);
     while (writer.IsWritable())
     {
         uint8_t n = *(start++);
@@ -60,7 +60,7 @@ namespace DF
     size_t offset,
     BufferWriter writer)
 {
-    const uint8_t* start = buffer.Get(offset);
+    const uint8_t* start = buffer.GetR(offset);
     while (writer.IsWritable())
     {
         uint8_t n = *(start++);

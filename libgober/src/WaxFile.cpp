@@ -41,7 +41,7 @@ const WaxFileSequenceEntry* WaxFileSequence::GetHeader() const
 {
    if (m_data)
     {
-        const auto* header = m_data->GetObj<WaxFileSequenceEntry>(m_offset);
+        const auto* header = m_data->GetObjR<WaxFileSequenceEntry>(m_offset);
         if (header)
             return header;
     }
@@ -63,7 +63,7 @@ const WaxFileActionEntry* WaxFileAction::GetHeader() const
 {
     if (m_data)
     {
-        const auto* header = m_data->GetObj<WaxFileActionEntry>(m_offset);
+        const auto* header = m_data->GetObjR<WaxFileActionEntry>(m_offset);
         if (header)
             return header;
     }
@@ -102,7 +102,7 @@ const WaxFileHeader* WaxFile::GetHeader() const
 {
     if (m_data)
     {
-        const auto* header = m_data->GetObj<WaxFileHeader>(0);
+        const auto* header = m_data->GetObjR<WaxFileHeader>(0);
         if (header)
             return header;
     }

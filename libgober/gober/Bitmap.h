@@ -11,10 +11,13 @@ namespace DF
  
     Holds uncompressed bitmap data.
 */
+
 class Bitmap :
     public IBuffer
 {
 public:
+using T = uint8_t;
+
     Bitmap(unsigned width, unsigned height, BmFileTransparency transparency, std::unique_ptr<IBuffer>&& buffer) :
         m_width(width),
         m_height(height),
@@ -25,6 +28,16 @@ public:
     Bitmap(unsigned width, unsigned height, BmFileTransparency transparency, Buffer&& buffer) :
         Bitmap(width, height, transparency, std::make_unique<Buffer>(std::move(buffer)))
     { }
+    
+    /**
+        Does the bitmap have valid data.
+        
+        A valid bitmap allows reading from the entire buffer.
+    */
+    bool IsValid() const
+    {
+        return (GetWidth() * GetHeight()) <= GetDataSize();
+    }
     
     /**
         Get the width of the image.
@@ -44,11 +57,9 @@ public:
 // IBuffer
     virtual bool IsReadable() const override { return (m_data && m_data->IsReadable()); }
     
-    virtual size_t GetDataSize() const override { return m_data->GetDataSize(); }
+    virtual size_t GetDataSize() const override { return m_data->GetDataSize() / sizeof(T); }
     
-    virtual uint8_t* Get(size_t offset) override { return m_data->Get(offset); }
-    
-    virtual const uint8_t* Get(size_t offset) const override { return m_data->Get(offset); }
+    virtual const T* GetR(size_t offset) const override { return m_data->GetR(offset); }
     
 private:
     std::unique_ptr<IBuffer> m_data;

@@ -33,7 +33,7 @@ DF::BmFile loadBm(DF::GobFile* gob, const char* filename)
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
     DF::Buffer buffer = DF::Buffer::Create(size);
-    gob->ReadFile(file, buffer.Get(0), 0, size);
+    gob->ReadFile(file, buffer.GetW(0), 0, size);
     
     return DF::BmFile(std::move(buffer));
 }
@@ -43,7 +43,7 @@ DF::FmeFile loadFme(DF::GobFile* gob, const char* filename)
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
     DF::Buffer buffer = DF::Buffer::Create(size);
-    gob->ReadFile(file, buffer.Get(0), 0, size);
+    gob->ReadFile(file, buffer.GetW(0), 0, size);
     
     return DF::FmeFile(std::move(buffer));
 }
@@ -53,7 +53,7 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
     DF::Buffer buffer = DF::Buffer::Create(size);
-    gob->ReadFile(file, buffer.Get(0), 0, size);
+    gob->ReadFile(file, buffer.GetW(0), 0, size);
     
     return DF::WaxFile(std::move(buffer));
 }
@@ -64,7 +64,7 @@ RGB* BmDataToRgb(const DF::IBuffer& buffer, const DF::PalFileData& pal, bool tra
     RGB* imgData = new RGB[size];
     RGB* dataWriter = imgData;
     
-    const uint8_t* bmData = buffer.Get(0);
+    const uint8_t* bmData = buffer.GetR(0);
     const uint8_t* bmDataEnd = bmData + size;
     while (bmData < bmDataEnd)
     {

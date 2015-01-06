@@ -1,5 +1,5 @@
-#include "MsgFile.h"
-#include <gober/Msg.h>
+#include "TdoFile.h"
+#include <gober/Tdo.h>
 
 #include <boost/fusion/include/boost_tuple.hpp>
 #include <boost/spirit/home/qi.hpp>
@@ -63,23 +63,9 @@ struct msg_parser : grammar<Iterator, message_list()>
     rule<Iterator> end;
 };
     
-Msg MsgFile::CreateMsg() const
+Tdo TdoFile::CreateTdo() const
 {
-    static const msg_parser<const char*> p = { };
-
-    const char* start = m_data.GetObjR<char>(0);
-    const char* end = m_data.GetObjR<char>(m_data.GetDataSize() - 1);
-    
-    message_list messages;
-    bool result = parse(start, end, p, messages);
-    
-    Msg messageObject = { };
-    if (result && (start == end)) // only accept fully valid files
-    {
-        for (const auto& message : messages)
-            messageObject.AddMessage(boost::get<0>(message), boost::get<1>(message), boost::get<2>(message));
-    }
-    return messageObject;
+   return { };
 }
 
 } // DF

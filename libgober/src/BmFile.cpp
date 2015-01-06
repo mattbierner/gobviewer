@@ -14,7 +14,7 @@ const BmFileHeader* BmFile::GetHeader() const
 {
     if (m_data)
     {
-        const auto* header = m_data->GetObj<BmFileHeader>(0);
+        const auto* header = m_data->GetObjR<BmFileHeader>(0);
         if (header)
             return header;
     }
@@ -25,7 +25,7 @@ uint8_t BmFile::GetFrameRate() const
 {
     if (IsMultipleBm())
     {
-        const uint8_t* frameRate = m_data->Get(sizeof(BmFileHeader));
+        const uint8_t* frameRate = m_data->GetR(sizeof(BmFileHeader));
         if (frameRate)
             return *frameRate;
     }
@@ -39,7 +39,7 @@ const BmFileSubHeader* BmFile::GetSubHeader(size_t index) const
     if (m_data)
     {
         int32_t offset = GetSubOffset(index);
-        const auto* subHeader = m_data->GetObj<BmFileSubHeader>(offset);
+        const auto* subHeader = m_data->GetObjR<BmFileSubHeader>(offset);
         if (subHeader)
             return subHeader;
     }
@@ -54,7 +54,7 @@ Buffer BmFile::Uncompress(size_t index) const
     CompressedBufferReader::ReadCompressedData(
         *m_data,
         GetCompression(),
-        data.Get(0),
+        data.GetW(0),
         GetImageDataStart(index),
         size);
     return data;
@@ -84,7 +84,7 @@ int32_t BmFile::GetSubOffset(size_t index) const
 {
     assert(IsMultipleBm() && index < GetCountSubBms());
 
-    const uint32_t* startTable = m_data->GetObj<uint32_t>(sizeof(BmFileHeader) + 2);
+    const uint32_t* startTable = m_data->GetObjR<uint32_t>(sizeof(BmFileHeader) + 2);
     if (startTable)
     {
         return startTable[index] + sizeof(BmFileHeader) + 2;
@@ -101,7 +101,7 @@ const size_t BmFile::GetImageDataStart(size_t index) const
     {
         size_t dataOffset = sizeof(BmFileHeader);
         size_t tableOffset = dataOffset + GetHeader()->dataSize;
-        const uint32_t* tableEntry = m_data->GetObj<uint32_t>(tableOffset);
+        const uint32_t* tableEntry = m_data->GetObjR<uint32_t>(tableOffset);
         if (tableEntry)
             return dataOffset + *tableEntry;
         else

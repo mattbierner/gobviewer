@@ -60,7 +60,7 @@
     size_t size = gob->GetFileSize(file);
     
     DF::Buffer buffer = DF::Buffer::Create(size);
-    gob->ReadFile(file, buffer.Get(0), 0, size);
+    gob->ReadFile(file, buffer.GetW(0), 0, size);
     
     DF::Msg msg = DF::MsgFile(std::move(buffer)).CreateMsg();
     

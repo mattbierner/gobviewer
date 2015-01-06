@@ -12,7 +12,7 @@ const FmeFileHeader* FmeFile::GetHeader() const
 {
     if (m_data)
     {
-        const auto* header = m_data->GetObj<FmeFileHeader>(0);
+        const auto* header = m_data->GetObjR<FmeFileHeader>(0);
         if (header)
             return header;
     }
@@ -24,7 +24,7 @@ const FmeFileHeader2* FmeFile::GetHeader2() const
     auto* header = GetHeader();
     if (m_data && header->header2)
     {
-        const auto* header2 = m_data->GetObj<FmeFileHeader2>(m_data->ResolveOffset(header->header2));
+        const auto* header2 = m_data->GetObjR<FmeFileHeader2>(m_data->ResolveOffset(header->header2));
         if (header2)
             return header2;
     }
@@ -39,7 +39,7 @@ Buffer FmeFile::Uncompress() const
     CompressedBufferReader::ReadCompressedData(
         *m_data,
         GetCompression(),
-        data.Get(0),
+        data.GetW(0),
         GetImageDataStart(),
         size);
     return data;

@@ -25,7 +25,7 @@ public:
     PalFile() { }
     
     PalFile(Buffer&& buffer) :
-        m_data(std::move(buffer))
+        m_data(std::make_shared<Buffer>(std::move(buffer)))
     { }
     
     virtual size_t GetDataSize() const override
@@ -35,16 +35,19 @@ public:
     
     virtual bool IsReadable() const override
     {
-        return m_data.IsReadable();
+        return (m_data && m_data->IsReadable());
     }
     
     virtual size_t Read(uint8_t* output, size_t offset, size_t max) const override
     {
-        return m_data.Read(output, offset, max);
+        if (m_data)
+            return m_data->Read(output, offset, max);
+        else
+            return 0;
     }
 
 private:
-    Buffer m_data;
+    std::shared_ptr<IBuffer> m_data;
 };
 
 } // DF

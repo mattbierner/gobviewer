@@ -14,6 +14,8 @@ GOB container file reader library for Dark Forces.
 * FME - Compressed and uncompressed.
 * WAX - Compressed and uncompressed. 
 * MSG
+* PAL
+* 3DO - in progress
 
 ## Dependencies
 * Boost 1.5.x - Header only dep on boost for Spirit.
