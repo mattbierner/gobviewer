@@ -8,29 +8,41 @@
     return pal;
 }
 
-- (id) initWithPal:(DF::PalFileData)p
+- (id) initWithPal:(DF::PalFileData)pal
 {
-   pal = p;
+   _pal = pal;
    return self;
 }
 
 - (CGImageRef) createImage
 {
-    CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, pal.colors, sizeof(pal.colors), NULL);
+    const unsigned width = 1;
+    const unsigned height = 256;
+
+    CGDataProviderRef imageData = CGDataProviderCreateWithData(
+        NULL,
+        _pal.colors,
+        sizeof(_pal.colors),
+        NULL);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     
     CGImageRef imgRef = CGImageCreate(
-        1,
-        256,
+        width,
+        height,
         8,
         8 * 3,
         3,
-        CGColorSpaceCreateDeviceRGB(),
+        colorSpace,
         kCGBitmapByteOrderDefault | kCGImageAlphaNone,
         imageData,
         NULL,
         NO,
         kCGRenderingIntentDefault);
+    
+    CGColorSpaceRelease(colorSpace);
     CGDataProviderRelease(imageData);
+
     return imgRef;
 }
 

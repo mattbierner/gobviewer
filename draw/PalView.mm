@@ -1,7 +1,7 @@
 #import "PalView.h"
 
 @interface PalView()
-- (void) updateGradient;
+- (void) updateImage;
 @end
 
 
@@ -16,10 +16,10 @@
 - (void) setPal:(Pal*)pal
 {
     _pal = pal;
-    [self updateGradient];
+    [self updateImage];
 }
 
-- (void) updateGradient
+- (void) updateImage
 {
     if (colorData)
     {
@@ -36,9 +36,13 @@
 - (void) drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
+    if (!colorData) return;
     
     NSGraphicsContext* context = [NSGraphicsContext currentContext];
-    CGContextDrawImage(context.CGContext, dirtyRect, colorData);
+    CGContextDrawImage(
+        context.CGContext,
+        dirtyRect,
+        colorData);
 }
 
 @end

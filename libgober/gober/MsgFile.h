@@ -21,6 +21,8 @@ public:
         m_data(std::move(data))
     { }
     
+    /**
+    */
     Msg CreateMsg() const;
     
 private:

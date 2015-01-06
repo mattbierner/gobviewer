@@ -7,7 +7,7 @@
 */
 @interface Pal : NSObject
 {
-    DF::PalFileData pal;
+    DF::PalFileData _pal;
 }
 
 + (Pal*) createForPal:(DF::PalFileData)pal;
@@ -15,7 +15,7 @@
 - (id) initWithPal:(DF::PalFileData)pal;
 
 /**
-    Create a 1d image from the pal.
+    Create a 1d image from the PAL.
 */
 - (CGImageRef) createImage;
 

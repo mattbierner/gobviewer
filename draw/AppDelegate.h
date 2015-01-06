@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-@class GobViewController;
+@class GobController;
 
 @interface AppDelegate : NSObject <
     NSApplicationDelegate,

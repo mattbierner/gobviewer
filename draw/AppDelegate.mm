@@ -1,7 +1,6 @@
 #import "AppDelegate.h"
 
-#include "GobViewController.h"
-#include "GobViewWindowController.h"
+#include "GobController.h"
 
 @interface AppDelegate ()
 
@@ -14,7 +13,7 @@
 - (NSOpenPanel*) createFilePicker;
 - (void) launchFilePicker;
 
-- (void) addWindow:(GobViewWindowController*)window;
+- (void) addWindow:(GobController*)window;
 
 @end
 
@@ -65,7 +64,7 @@
 
 - (IBAction) saveToFile:(id)sender
 {
-    GobViewWindowController* controller = [[NSApplication sharedApplication] mainWindow].windowController;
+    GobController* controller = [[NSApplication sharedApplication] mainWindow].windowController;
     if (controller)
     {
         NSSavePanel* panel = [NSSavePanel savePanel];
@@ -82,9 +81,9 @@
 
 - (void) openGob:(NSURL*)path
 {
-    GobViewWindowController* window = [[GobViewWindowController alloc] initWithWindowNibName:@"GobViewWindow"];
+    GobController* window = [[GobController alloc] initWithWindowNibName:@"GobViewWindow"];
     [self addWindow:window];
-    [window loadGob:path];
+    [window loadFile:path];
 }
 
 - (NSOpenPanel*) createFilePicker
@@ -119,7 +118,7 @@
     return ([ext caseInsensitiveCompare:@"GOB"] == NSOrderedSame);
 }
 
-- (void) addWindow:(GobViewWindowController*)window
+- (void) addWindow:(GobController*)window
 {
     [window showWindow:NSApp];
     [self.windows addObject:window];
@@ -132,9 +131,9 @@
     NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
     if (mainWindow)
     {
-        GobViewWindowController* controller = mainWindow.windowController;
-        if (controller)
-            return [controller validateUserInterfaceItem:anItem];
+        GobController* controller = mainWindow.windowController;
+      //  if (controller)
+        //    return [controller validateUserInterfaceItem:anItem];
     }
     return YES;
 }
