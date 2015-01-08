@@ -13,58 +13,67 @@
 
 @implementation PreviewViewController
 
+- (void) setPreview:(NSView *)preview
+{
+    if (_preview)
+    {
+        [self.view removeConstraints:_preview.constraints];
+        [self.view replaceSubview:_preview with:preview];
+    }
+    else
+    {
+        [self.view addSubview:preview];
+    }
+    
+    NSDictionary* views = @{
+        @"main": preview
+    };
+
+    [self.view
+        addConstraints:[NSLayoutConstraint
+            constraintsWithVisualFormat:@"V:|[main]|"
+            options:0
+            metrics:nil
+            views:views]];
+
+    [self.view
+        addConstraints:[NSLayoutConstraint
+            constraintsWithVisualFormat:@"H:|[main]|"
+            options:0
+            metrics:nil
+            views:views]];
+
+    _preview = preview;
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
     [self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
     
-    {
-        self.preview = [[BmView alloc] initWithFrame:self.view.bounds];
-        self.preview.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.view addSubview:self.preview];
-        
-        NSDictionary* views = @{
-            @"main": self.preview
-        };
+    self.bmView = [[BmView alloc] initWithFrame:self.view.bounds];
+    self.bmView.translatesAutoresizingMaskIntoConstraints = NO;
 
-        [self.view
-            addConstraints:[NSLayoutConstraint
-                constraintsWithVisualFormat:@"V:|[main]|"
-                options:0
-                metrics:nil
-                views:views]];
-        
-        [self.view
-            addConstraints:[NSLayoutConstraint
-                constraintsWithVisualFormat:@"H:|[main]|"
-                options:0
-                metrics:nil
-                views:views]];
-    }
-    {
-        self.palView = [[PalView alloc] init];
-        [self.view addSubview:self.palView];
-    }
-    
-    {
-        self.msgView = [[NSTextView alloc] init];
-        [self.view addSubview:self.msgView];
-    }
+    self.palView = [[PalView alloc] init];
+    self.palView.translatesAutoresizingMaskIntoConstraints = NO;
+
+    self.msgView = [[NSTextView alloc] init];
+    self.msgView.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
-    [self.preview loadBM:gob named:filename withPal:pal];
+    [self.bmView loadBM:gob named:filename withPal:pal];
 }
 
 - (void) loadFme:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
-    [self.preview loadFme:gob named:filename withPal:pal];
+    [self.bmView loadFme:gob named:filename withPal:pal];
 }
 
 - (void) loadWax:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
-    [self.preview loadWax:gob named:filename withPal:pal];
+    [self.bmView loadWax:gob named:filename withPal:pal];
 }
 
 - (void) loadMsg:(DF::GobFile*)gob named:(const char*)filename
@@ -77,8 +86,8 @@
     
     DF::Msg msg = DF::MsgFile(std::move(buffer)).CreateMsg();
     
-    [self.msgView setString:[NSString stringWithUTF8String:msg.GetMessage(0).c_str()]];
-    self.msgView.frame = self.preview.frame;
+    [self.msgView setString:@"adas"];//[NSString stringWithUTF8String:msg.GetMessage(0).c_str()]];
+    self.preview = self.msgView;
 }
 
 - (void) loadPal:(DF::GobFile*)gob named:(const char*)filename
@@ -93,8 +102,7 @@
     p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
     
     self.palView.pal = [Pal createForPal:pal];
-    self.palView.frame = self.preview.frame;
-    [self.palView setNeedsDisplay:YES];
+    self.preview = self.palView;
 }
 
 

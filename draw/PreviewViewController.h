@@ -10,7 +10,8 @@
 {
 }
 
-@property (nonatomic, strong) BmView* preview;
+@property (nonatomic, strong) NSView* preview;
+@property (nonatomic, strong) BmView* bmView;
 @property (nonatomic, strong) PalView* palView;
 @property (nonatomic, strong) NSTextView* msgView;
 

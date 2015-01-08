@@ -97,8 +97,6 @@ DF::GobFile open(const char* file)
             options:0
             metrics:nil
             views:views]];
-    
-      //[self.window visualizeConstraints:[contentView constraints]];
 }
 
 - (void) loadPal:(NSString*)name fromGob:(NSString*)gobFile
