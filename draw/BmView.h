@@ -1,5 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
+#include "BitmapView.h"
+
 #include <gober/Common.h>
 #include <gober/BmFile.h>
 #include <gober/GobFile.h>
@@ -33,7 +35,7 @@
 
 /**
 */
-@interface BmView : NSView
+@interface BmView : BitmapView
 {
     unsigned imageIndex;
     unsigned animationIndex;

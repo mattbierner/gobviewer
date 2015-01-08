@@ -15,6 +15,9 @@
 
 - (void) setPreview:(NSView *)preview
 {
+    if (_preview == preview)
+        return;
+    
     if (_preview)
     {
         [self.view removeConstraints:_preview.constraints];
@@ -64,16 +67,19 @@
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
     [self.bmView loadBM:gob named:filename withPal:pal];
+    self.preview = self.bmView;
 }
 
 - (void) loadFme:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
     [self.bmView loadFme:gob named:filename withPal:pal];
+    self.preview = self.bmView;
 }
 
 - (void) loadWax:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
 {
     [self.bmView loadWax:gob named:filename withPal:pal];
+    self.preview = self.bmView;
 }
 
 - (void) loadMsg:(DF::GobFile*)gob named:(const char*)filename
@@ -86,7 +92,7 @@
     
     DF::Msg msg = DF::MsgFile(std::move(buffer)).CreateMsg();
     
-    [self.msgView setString:@"adas"];//[NSString stringWithUTF8String:msg.GetMessage(0).c_str()]];
+    [self.msgView setString:[NSString stringWithUTF8String:msg.GetMessage(0).c_str()]];
     self.preview = self.msgView;
 }
 

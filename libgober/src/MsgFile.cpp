@@ -42,7 +42,7 @@ struct msg_parser : grammar<Iterator, message_list()>
     template<typename Name, typename Value>
     static auto attribute(Name name, Value&& value)
     {
-        return name >> ':' >> omit[*space] >> value;
+        return boost::proto::deep_copy(name >> ':' >> omit[*space] >> value);
     }
 
     msg_parser() : msg_parser::base_type(start)
@@ -102,15 +102,6 @@ Msg MsgFile::CreateMsg() const
                 boost::get<0>(message),
                 boost::get<1>(message),
                 std::move(boost::get<2>(message)));
-    }
-    
-    {
-        static const msg_parser<std::string::const_iterator> p = { };
-        const std::string s = "0 1:\"x\"";
-        
-        message messages;
-        bool result = parse(std::begin(s), std::end(s), p.message, messages);
-        result;
     }
     
     return messageObject;

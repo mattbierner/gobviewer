@@ -182,8 +182,6 @@ DF::GobFile open(const char* file)
     }
     std::string fileName = gob->GetFilename(row);
     cell.textField.stringValue = [NSString stringWithUTF8String:fileName.c_str()];
-    //cell.textField.preferredMaxLayoutWidth = cell.textField.bounds.size.width;
-    //[cell setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     return cell;
 }
 

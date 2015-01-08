@@ -23,11 +23,6 @@ PACKED(struct RGB
     uint8_t r, g, b, a;
 });
 
-CGSize flipSize(CGSize size)
-{
-    return CGSizeMake(size.height, size.width);
-}
-
 DF::BmFile loadBm(DF::GobFile* gob, const char* filename)
 {
     std::string file(filename);
@@ -156,43 +151,10 @@ void f(void *info, const void *data, size_t size)
 
 @implementation BmView
 
-- (CGRect) proportionallyScale:(CGSize)fromSize toSize:(CGSize)toSize
-{
-    CGPoint origin = CGPointZero;
-
-    CGFloat width = fromSize.width;
-    CGFloat height = fromSize.height;
-    
-    CGFloat targetWidth = toSize.width;
-    CGFloat targetHeight = toSize.height;
-    
-    CGFloat scaledWidth = targetWidth;
-    CGFloat scaledHeight = targetHeight;
-    
-    if (!NSEqualSizes(fromSize, toSize))
-    {
-        float widthFactor = targetWidth / width;
-        float heightFactor = targetHeight / height;
-
-        CGFloat scaleFactor = std::min(widthFactor, heightFactor);
-
-        scaledWidth = width * scaleFactor;
-        scaledHeight = height * scaleFactor;
-
-        if (widthFactor < heightFactor)
-            origin.y = (targetHeight - scaledHeight) / 2.0;
-        else if (widthFactor > heightFactor)
-            origin.x = (targetWidth - scaledWidth) / 2.0;
-    }
-    return {origin, {scaledWidth, scaledHeight}};
-}
-
 - (id) initWithFrame:(NSRect)frameRect
 {
     if (self = [super initWithFrame:frameRect])
     {
-        self.wantsLayer = YES;
-        
         imageIndex = 0;
     }
 
@@ -366,37 +328,6 @@ void f(void *info, const void *data, size_t size)
     }
 }
 
-- (void) drawRect:(NSRect)dirtyRect
-{
-    [super drawRect:dirtyRect];
-
-    if ([self.animations count] == 0) return;
-    
-    BmAnimation* animation = [self.animations objectAtIndex:animationIndex];
-    BmCell* cell = [animation.frames objectAtIndex:imageIndex];
-    
-    CGRect drawRect = dirtyRect;
-    CGRect imageRect = [self
-        proportionallyScale: cell.image.size
-        toSize: flipSize(drawRect.size)];
-    
-    imageRect = CGRectInset(imageRect, 10, 10);
-    imageRect.origin.x += NSWidth(drawRect) / 2 - NSHeight(drawRect) / 2;
-    imageRect.origin.y += NSHeight(drawRect) / 2 - NSWidth(drawRect) / 2;
-    
-    NSAffineTransform* rotation = [[NSAffineTransform alloc] init];
-    [rotation translateXBy:NSWidth(drawRect) / 2 yBy:NSHeight(drawRect) / 2];
-    [rotation rotateByDegrees:90];
-    if (cell.flipped)
-        [rotation scaleXBy:1.0 yBy:-1.0];
-    [rotation translateXBy:-NSWidth(drawRect) / 2 yBy:-NSHeight(drawRect) / 2];
-    
-    NSGraphicsContext* context = [NSGraphicsContext currentContext];
-    [context saveGraphicsState];
-    [rotation concat];
-    [cell.image drawInRect:imageRect fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
-    [context restoreGraphicsState];
-}
 
 - (void) update
 {
@@ -410,7 +341,17 @@ void f(void *info, const void *data, size_t size)
             imageIndex = 0;
         }
         [self setFrameRate:((BmAnimation*)[self.animations objectAtIndex:animationIndex]).frameRate];
+        
+        BmAnimation* animation = [self.animations objectAtIndex:animationIndex];
+        BmCell* cell = [animation.frames objectAtIndex:imageIndex];
+        self.image = cell.image;
+        self.drawFlipped = cell.flipped;
+    
         [self setNeedsDisplay:YES];
+    }
+    else
+    {
+        self.image = nil;
     }
 }
 
