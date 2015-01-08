@@ -94,6 +94,7 @@ DF::GobFile open(const char* file)
 
 - (void) loadFile:(NSURL*)path
 {
+    // TODO: move to settings
     [self loadPal:@"SECBASE.PAL" fromGob:@"DARK.GOB"];
     
     std::string filename([path.path UTF8String]);
@@ -102,6 +103,7 @@ DF::GobFile open(const char* file)
     fs.open(filename, std::ifstream::binary | std::ifstream::in);
     gob = std::make_shared<DF::GobFile>(DF::GobFile::CreateFromFile(std::move(fs)));
     
+    self.window.title = [path.path lastPathComponent];
     [self.contentsTable reloadData];
 }
 
@@ -110,6 +112,7 @@ DF::GobFile open(const char* file)
     if (!gob) return;
     
     std::string filename = [file UTF8String];
+    
     switch (gob->GetFileType(filename))
     {
     case DF::FileType::Bm:
