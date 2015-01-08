@@ -378,8 +378,12 @@ void f(void *info, const void *data, size_t size)
     CGRect drawRect = dirtyRect;
     CGRect imageRect = [self
         proportionallyScale: cell.image.size
-        toSize: drawRect.size];
-   
+        toSize: flipSize(drawRect.size)];
+    
+    imageRect = CGRectInset(imageRect, 10, 10);
+    imageRect.origin.x += NSWidth(drawRect) / 2 - NSHeight(drawRect) / 2;
+    imageRect.origin.y += NSHeight(drawRect) / 2 - NSWidth(drawRect) / 2;
+    
     NSAffineTransform* rotation = [[NSAffineTransform alloc] init];
     [rotation translateXBy:NSWidth(drawRect) / 2 yBy:NSHeight(drawRect) / 2];
     [rotation rotateByDegrees:90];

@@ -20,6 +20,7 @@
     
     {
         self.preview = [[BmView alloc] initWithFrame:self.view.bounds];
+        self.preview.translatesAutoresizingMaskIntoConstraints = NO;
         [self.view addSubview:self.preview];
         
         NSDictionary* views = @{

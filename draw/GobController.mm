@@ -47,7 +47,8 @@ DF::GobFile open(const char* file)
 - (void) windowDidLoad
 {
     [super windowDidLoad];
-    
+    self.window.styleMask |= NSResizableWindowMask;
+
     NSView* contentView = self.window.contentView;
     
     self.contentsTable = [[NSTableView alloc] initWithFrame:contentView.bounds];
@@ -92,12 +93,12 @@ DF::GobFile open(const char* file)
     
     [contentView addConstraints:
         [NSLayoutConstraint
-            constraintsWithVisualFormat:@"H:|[list(200)][content(>=200)]|"
+            constraintsWithVisualFormat:@"H:|[list(==200)][content(>=200)]|"
             options:0
             metrics:nil
             views:views]];
     
-    // [self.window visualizeConstraints:[contentView constraints]];
+      //[self.window visualizeConstraints:[contentView constraints]];
 }
 
 - (void) loadPal:(NSString*)name fromGob:(NSString*)gobFile

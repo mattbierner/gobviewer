@@ -3,6 +3,9 @@
 
 #include <boost/fusion/include/boost_tuple.hpp>
 #include <boost/spirit/home/qi.hpp>
+#include <boost/spirit/include/lex_lexertl.hpp>
+
+namespace lex = boost::spirit::lex;
 
 using namespace boost::spirit::qi;
 
@@ -17,12 +20,30 @@ using message = boost::tuple<message_index_t, message_priority_t, message_conten
 */
 using message_list = std::vector<message>;
 
+
 /**
     MSG file format parser.
 */
 template <typename Iterator>
 struct msg_parser : grammar<Iterator, message_list()>
 {
+    template<typename Name, typename Value>
+    static auto element(Name name, Value value)
+    {
+        return name >> omit[+space] >> value;
+    }
+    
+    template<typename Name, typename Attribute>
+    static auto attributedElement(Name name, Attribute attr)
+    {
+        return name >> omit[+space] >> attr;
+    }
+    
+    template<typename Name, typename Value>
+    static auto attribute(Name name, Value&& value)
+    {
+        return name >> ':' >> omit[*space] >> value;
+    }
 
     msg_parser() : msg_parser::base_type(start)
     {
@@ -30,15 +51,15 @@ struct msg_parser : grammar<Iterator, message_list()>
 
         quoted_string %= lexeme['"' >> +(~char_('"')) >> '"'];
         
-        version = "MSG" >> omit[+space] >> version_number >> eol;
+        version = element("MSG", version_number) >> eol;
         
-        count = "MSGS" >> omit[+space] >> int_ >> eol;
+        count = element("MSGS", int_) >> eol;
        
         comment %= "#" >> *(char_ - eol) >> eol;
         
         comment_or_space = (comment | +space);
         
-        message %= int_ >> omit[+space] >> int_ >> ':' >> omit[*space] >> +quoted_string;
+        message %= int_ >> omit[+space] >> attribute(int_, +quoted_string);
         
         contents %= *comment_or_space >> *(message >> *comment_or_space);
         
@@ -82,6 +103,16 @@ Msg MsgFile::CreateMsg() const
                 boost::get<1>(message),
                 std::move(boost::get<2>(message)));
     }
+    
+    {
+        static const msg_parser<std::string::const_iterator> p = { };
+        const std::string s = "0 1:\"x\"";
+        
+        message messages;
+        bool result = parse(std::begin(s), std::end(s), p.message, messages);
+        result;
+    }
+    
     return messageObject;
 }
 
