@@ -1,6 +1,8 @@
 #import "PreviewViewController.h"
 
 #import "BmView.h"
+#import "Msg.h"
+#import "MsgView.h"
 #import "PalView.h"
 
 #include <gober/MsgFile.h>
@@ -60,7 +62,7 @@
     self.palView = [[PalView alloc] init];
     self.palView.translatesAutoresizingMaskIntoConstraints = NO;
 
-    self.msgView = [[NSTextView alloc] init];
+    self.msgView = [[MsgView alloc] init];
     self.msgView.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
@@ -92,7 +94,7 @@
     
     DF::Msg msg = DF::MsgFile(std::move(buffer)).CreateMsg();
     
-    [self.msgView setString:[NSString stringWithUTF8String:msg.GetMessage(0).c_str()]];
+    self.msgView.message = [Msg createForMsg:msg];
     self.preview = self.msgView;
 }
 

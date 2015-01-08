@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		890B72BA1A5E1D6400133F4F /* BitmapView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72B91A5E1D6400133F4F /* BitmapView.mm */; };
+		890B72BE1A5E25CC00133F4F /* MsgView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72BD1A5E25CC00133F4F /* MsgView.mm */; };
+		890B72C11A5E26D000133F4F /* LabeledCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72C01A5E26D000133F4F /* LabeledCell.mm */; };
+		890B72C41A5E281500133F4F /* Msg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72C31A5E281500133F4F /* Msg.mm */; };
 		89ABBD701A54D93F00B72E36 /* libgober.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 89ABBD6C1A54D8E000B72E36 /* libgober.a */; };
 		89ABBD771A54F11C00B72E36 /* GobController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89ABBD761A54F11C00B72E36 /* GobController.mm */; };
 		89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE931A55DE61002F95FF /* PreviewViewController.mm */; };
@@ -49,6 +52,12 @@
 /* Begin PBXFileReference section */
 		890B72B81A5E1D6400133F4F /* BitmapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapView.h; sourceTree = "<group>"; };
 		890B72B91A5E1D6400133F4F /* BitmapView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BitmapView.mm; sourceTree = "<group>"; };
+		890B72BC1A5E25CC00133F4F /* MsgView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MsgView.h; sourceTree = "<group>"; };
+		890B72BD1A5E25CC00133F4F /* MsgView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MsgView.mm; sourceTree = "<group>"; };
+		890B72BF1A5E26D000133F4F /* LabeledCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabeledCell.h; sourceTree = "<group>"; };
+		890B72C01A5E26D000133F4F /* LabeledCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LabeledCell.mm; sourceTree = "<group>"; };
+		890B72C21A5E281500133F4F /* Msg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Msg.h; sourceTree = "<group>"; };
+		890B72C31A5E281500133F4F /* Msg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Msg.mm; sourceTree = "<group>"; };
 		8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libgober.xcodeproj; path = libgober/libgober.xcodeproj; sourceTree = "<group>"; };
 		89A3BC991A45718200B26F8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89ABBD711A54D98900B72E36 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -150,6 +159,8 @@
 				89F452691A43F49B00A20C49 /* Images.xcassets */,
 				89F4526B1A43F49B00A20C49 /* MainMenu.xib */,
 				89F452621A43F49B00A20C49 /* Supporting Files */,
+				890B72BC1A5E25CC00133F4F /* MsgView.h */,
+				890B72BD1A5E25CC00133F4F /* MsgView.mm */,
 				890B72B81A5E1D6400133F4F /* BitmapView.h */,
 				890B72B91A5E1D6400133F4F /* BitmapView.mm */,
 				89F452831A43F57E00A20C49 /* BmView.h */,
@@ -164,6 +175,10 @@
 				89E621F61A5B9D3000E75E01 /* PalView.mm */,
 				89E621F91A5BAD4A00E75E01 /* Pal.h */,
 				89E621FA1A5BAD4A00E75E01 /* Pal.mm */,
+				890B72BF1A5E26D000133F4F /* LabeledCell.h */,
+				890B72C01A5E26D000133F4F /* LabeledCell.mm */,
+				890B72C21A5E281500133F4F /* Msg.h */,
+				890B72C31A5E281500133F4F /* Msg.mm */,
 			);
 			path = draw;
 			sourceTree = "<group>";
@@ -289,12 +304,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				890B72C41A5E281500133F4F /* Msg.mm in Sources */,
+				890B72BE1A5E25CC00133F4F /* MsgView.mm in Sources */,
 				89F452681A43F49B00A20C49 /* main.m in Sources */,
 				89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */,
 				89E621F71A5B9D3000E75E01 /* PalView.mm in Sources */,
 				89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */,
 				89E621FB1A5BAD4A00E75E01 /* Pal.mm in Sources */,
 				89ABBD771A54F11C00B72E36 /* GobController.mm in Sources */,
+				890B72C11A5E26D000133F4F /* LabeledCell.mm in Sources */,
 				89F452851A43F57E00A20C49 /* BmView.mm in Sources */,
 				890B72BA1A5E1D6400133F4F /* BitmapView.mm in Sources */,
 			);

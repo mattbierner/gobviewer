@@ -328,7 +328,6 @@ void f(void *info, const void *data, size_t size)
     }
 }
 
-
 - (void) update
 {
     if ([self.animations count] > 0)

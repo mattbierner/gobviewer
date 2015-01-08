@@ -1,6 +1,8 @@
 #import "GobController.h"
 
+#import "LabeledCell.h"
 #import "PreviewViewController.h"
+
 #include <gober/MsgFile.h>
 
 #include <iostream>
@@ -15,28 +17,6 @@ DF::GobFile open(const char* file)
     }
     return { };
 }
-
-@interface GobFileCell : NSView
-@property (nonatomic, strong) NSTextField* textField;
-@end
-
-
-@implementation GobFileCell
-
-- (id) initWithFrame:(NSRect)frameRect
-{
-    if (self = [super initWithFrame:frameRect])
-    {
-        self.textField = [[NSTextField alloc] initWithFrame:self.bounds];
-        self.textField.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-        self.textField.bordered = false;
-        [self addSubview:self.textField];
-    }
-    
-    return self;
-}
-
-@end
 
 @interface GobController()
 - (void) selectedFileDidChange:(NSString*)file;
@@ -59,11 +39,12 @@ DF::GobFile open(const char* file)
     
     NSTableColumn* col = [[NSTableColumn alloc] initWithIdentifier:@"mainCol"];
     [col setEditable:NO];
+    [col setResizingMask:NSTableColumnAutoresizingMask];
     [self.contentsTable addTableColumn:col];
     
     self.tableContainer = [[NSScrollView alloc] initWithFrame:contentView.bounds];
-    [self.tableContainer setHasVerticalScroller:YES];
-    [self.tableContainer setDocumentView:self.contentsTable];
+    self.tableContainer.hasVerticalScroller = YES;
+    self.tableContainer.documentView = self.contentsTable;
     [contentView addSubview:self.tableContainer];
 
     self.previewViewController = [[PreviewViewController alloc] init];
@@ -174,10 +155,10 @@ DF::GobFile open(const char* file)
     viewForTableColumn:(NSTableColumn *)tableColumn
     row:(NSInteger)row
 {
-    GobFileCell* cell = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
+    LabeledCell* cell = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
     if (!cell)
     {
-        cell = [[GobFileCell alloc] initWithFrame:CGRectZero];
+        cell = [[LabeledCell alloc] initWithFrame:CGRectZero];
         cell.identifier = tableColumn.identifier;
     }
     std::string fileName = gob->GetFilename(row);

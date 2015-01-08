@@ -1,6 +1,8 @@
 #pragma once
 
 #include <map>
+#include <string>
+#include <vector>
 
 namespace DF
 {
@@ -32,6 +34,26 @@ public:
     {
         auto found = m_messages.find(index);
         return (found != std::end(m_messages));
+    }
+    
+    std::vector<message_index_t> GetKeys() const
+    {
+        std::vector<message_index_t> keys;
+        std::transform(
+            std::begin(m_messages),
+            std::end(m_messages),
+            std::back_inserter(keys),
+            [](const auto& pair) { return pair.first; });
+        return keys;
+    }
+    
+    
+    /**
+     
+    */
+    size_t GetNumberMessages() const
+    {
+        return m_messages.size();
     }
 
     /**

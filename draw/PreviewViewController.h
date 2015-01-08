@@ -5,6 +5,7 @@
 
 @class BmView;
 @class PalView;
+@class MsgView;
 
 @interface PreviewViewController : NSViewController
 {
@@ -13,7 +14,7 @@
 @property (nonatomic, strong) NSView* preview;
 @property (nonatomic, strong) BmView* bmView;
 @property (nonatomic, strong) PalView* palView;
-@property (nonatomic, strong) NSTextView* msgView;
+@property (nonatomic, strong) MsgView* msgView;
 
 
 - (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
