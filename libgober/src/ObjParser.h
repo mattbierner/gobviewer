@@ -57,6 +57,14 @@ struct ObjParser : grammar<Iterator, ResultType>
             omit[element(name, int_)] >> *item);
     }
 
+    /**
+    */
+    template<typename Value>
+    auto value(Value value)
+    {
+        return boost::proto::deep_copy(
+            omit[*blank] >> value);
+    }
 
     template <typename Start>
     ObjParser(Start&& start) : ObjParser::base_type(std::forward<Start>(start))
@@ -71,7 +79,7 @@ struct ObjParser : grammar<Iterator, ResultType>
         
         identifier = +char_("_a-zA-Z0-9");
         
-        filename = +char_("_:.\\a-zA-Z0-9");
+        filename = +('-' | char_(R"charset(_:.\a-zA-Z0-9)charset"));
     }
     
     rule<Iterator> comment;
