@@ -16,6 +16,8 @@
 		89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE931A55DE61002F95FF /* PreviewViewController.mm */; };
 		89C4CE961A55DE62002F95FF /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89C4CE941A55DE61002F95FF /* PreviewViewController.xib */; };
 		89C4CE9A1A5617C1002F95FF /* GobViewWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89C4CE991A5617C1002F95FF /* GobViewWindow.xib */; };
+		89D9238A1A630FEB00D29C8B /* TdoView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89D923891A630FEB00D29C8B /* TdoView.mm */; };
+		89D9238D1A6312DE00D29C8B /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D9238C1A6312DE00D29C8B /* SceneKit.framework */; };
 		89E621F71A5B9D3000E75E01 /* PalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89E621F61A5B9D3000E75E01 /* PalView.mm */; };
 		89E621FB1A5BAD4A00E75E01 /* Pal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89E621FA1A5BAD4A00E75E01 /* Pal.mm */; };
 		89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89F452651A43F49B00A20C49 /* AppDelegate.mm */; };
@@ -68,6 +70,9 @@
 		89C4CE941A55DE61002F95FF /* PreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreviewViewController.xib; sourceTree = "<group>"; };
 		89C4CE971A55FD2C002F95FF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		89C4CE991A5617C1002F95FF /* GobViewWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GobViewWindow.xib; sourceTree = "<group>"; };
+		89D923881A630FEB00D29C8B /* TdoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TdoView.h; sourceTree = "<group>"; };
+		89D923891A630FEB00D29C8B /* TdoView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TdoView.mm; sourceTree = "<group>"; };
+		89D9238C1A6312DE00D29C8B /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		89E621F51A5B9D3000E75E01 /* PalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PalView.h; sourceTree = "<group>"; };
 		89E621F61A5B9D3000E75E01 /* PalView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PalView.mm; sourceTree = "<group>"; };
 		89E621F91A5BAD4A00E75E01 /* Pal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pal.h; sourceTree = "<group>"; };
@@ -90,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89D9238D1A6312DE00D29C8B /* SceneKit.framework in Frameworks */,
 				89ABBD701A54D93F00B72E36 /* libgober.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -132,6 +138,7 @@
 		89F4523F1A42A24000A20C49 = {
 			isa = PBXGroup;
 			children = (
+				89D9238C1A6312DE00D29C8B /* SceneKit.framework */,
 				89C4CE971A55FD2C002F95FF /* README.md */,
 				89ABBD711A54D98900B72E36 /* LICENSE */,
 				8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */,
@@ -179,6 +186,8 @@
 				890B72C01A5E26D000133F4F /* LabeledCell.mm */,
 				890B72C21A5E281500133F4F /* Msg.h */,
 				890B72C31A5E281500133F4F /* Msg.mm */,
+				89D923881A630FEB00D29C8B /* TdoView.h */,
+				89D923891A630FEB00D29C8B /* TdoView.mm */,
 			);
 			path = draw;
 			sourceTree = "<group>";
@@ -310,6 +319,7 @@
 				89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */,
 				89E621F71A5B9D3000E75E01 /* PalView.mm in Sources */,
 				89F452661A43F49B00A20C49 /* AppDelegate.mm in Sources */,
+				89D9238A1A630FEB00D29C8B /* TdoView.mm in Sources */,
 				89E621FB1A5BAD4A00E75E01 /* Pal.mm in Sources */,
 				89ABBD771A54F11C00B72E36 /* GobController.mm in Sources */,
 				890B72C11A5E26D000133F4F /* LabeledCell.mm in Sources */,

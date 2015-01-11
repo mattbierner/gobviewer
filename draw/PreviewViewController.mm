@@ -4,6 +4,7 @@
 #import "Msg.h"
 #import "MsgView.h"
 #import "PalView.h"
+#import "TdoView.h"
 
 #include <gober/Msg.h>
 #include <gober/MsgFile.h>
@@ -66,6 +67,9 @@
 
     self.msgView = [[MsgView alloc] init];
     self.msgView.translatesAutoresizingMaskIntoConstraints = NO;
+
+    self.tdoView = [[TdoView alloc] initWithFrame:self.view.bounds];
+    self.tdoView.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
@@ -109,7 +113,7 @@
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
    DF::TdoFile(std::move(buffer)).CreateTdo();
-
+    self.preview = self.tdoView;
 }
 
 - (void) loadPal:(DF::GobFile*)gob named:(const char*)filename

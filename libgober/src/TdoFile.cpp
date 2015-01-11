@@ -3,6 +3,8 @@
 #include <gober/Tdo.h>
 #include "ObjParser.h"
 
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/boost_tuple.hpp>
 #include <boost/spirit/home/qi.hpp>
 #include <boost/phoenix.hpp>
@@ -39,34 +41,38 @@ struct transform_attribute<DF::TdoShadingType, std::string, qi::domain>
 
 }}} // boost::sprint::trains
 
+BOOST_FUSION_ADAPT_STRUCT(
+    DF::TdoVertex,
+    (DF::tdo_coordinate, x)
+    (DF::tdo_coordinate, y)
+    (DF::tdo_coordinate, z));
+
+BOOST_FUSION_ADAPT_STRUCT(
+    DF::TdoTextureVertex,
+    (DF::tdo_texture_coordinate, x)
+    (DF::tdo_texture_coordinate, y));
+
+BOOST_FUSION_ADAPT_STRUCT(
+    DF::TdoQuad,
+    (DF::tdo_vertex_index, a)
+    (DF::tdo_vertex_index, b)
+    (DF::tdo_vertex_index, c)
+    (DF::tdo_vertex_index, d)
+    (DF::tdo_color_index, color)
+    (DF::TdoShadingType, fill));
 
 namespace DF
 {
 
-/**
-*/
 using Texture = std::string;
 
 using Textures = std::vector<Texture>;
-
-using Vertex = boost::tuple<float, float, float>;
-
-using Verticies = std::vector<Vertex>;
-
-using Quad = boost::tuple<size_t, size_t, size_t, size_t, size_t, TdoShadingType>;
-
-using Quads = std::vector<Quad>;
-
-using TextureVertex = boost::tuple<float, float>;
-
-using TextureVerticies = std::vector<TextureVertex>;
 
 using TextureQuad = boost::tuple<size_t, size_t, size_t, size_t>;
 
 using TextureQuads = std::vector<TextureQuad>;
 
-
-using ObjectDefinition = boost::tuple<Verticies, Quads, TextureVerticies, TextureQuads>;
+using ObjectDefinition = boost::tuple<TdoVerticies, TdoQuads, TdoTextureVerticies, TextureQuads>;
 
 using Object = boost::tuple<int, ObjectDefinition>;
 
@@ -182,14 +188,14 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
     rule<Iterator, ObjectDefinition()> objectBody;
 
 // Verticies
-    rule<Iterator, Verticies()> verticies;
-    rule<Iterator, Vertex()> vertex;
+    rule<Iterator, TdoVerticies()> verticies;
+    rule<Iterator, TdoVertex()> vertex;
     
     rule<Iterator, float()> point;
     
 // Quads
-    rule<Iterator, Quads()> quads;
-    rule<Iterator, Quad()> quad;
+    rule<Iterator, TdoQuads()> quads;
+    rule<Iterator, TdoQuad()> quad;
     
     rule<Iterator, unsigned()> index;
     rule<Iterator, TdoShadingType()> fill;
@@ -197,8 +203,8 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
 // Triangle
 
 // Texture Verticies
-    rule<Iterator, TextureVerticies()> textureVerticies;
-    rule<Iterator, TextureVertex()> textureVertex;
+    rule<Iterator, TdoTextureVerticies()> textureVerticies;
+    rule<Iterator, TdoTextureVertex()> textureVertex;
     
 // Texture Quads
     rule<Iterator, TextureQuads()> textureQuads;

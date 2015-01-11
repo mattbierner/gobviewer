@@ -11,7 +11,7 @@ struct TdoObject
 {
     tdo_texture_index texture;
     
-    std::vector<TdoVertex> verticies;
+    TdoVerticies verticies;
     std::vector<TdoTextureVertex> textureVerticies;
 
     std::vector<TdoTriangle> triangles;
@@ -24,10 +24,16 @@ struct TdoObject
 class Tdo
 {
 public:
+    Tdo() { }
 
+    Tdo(TdoTextures&& textures, std::vector<TdoObject>&& objects) :
+        m_textures(std::move(textures)),
+        m_objects(std::move(objects))
+    { }
+    
 private:
-    std::vector<std::string> textures;
-    std::vector<TdoObject> objects;
+    TdoTextures m_textures;
+    std::vector<TdoObject> m_objects;
 };
 
 } // DF

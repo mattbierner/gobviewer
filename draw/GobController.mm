@@ -135,9 +135,15 @@ DF::GobFile open(const char* file)
         break;
         
     case DF::FileType::Tdo:
+    {
+        size_t size = gob->GetFileSize(filename);
+        DF::Buffer buffer = DF::Buffer::Create(size);
+        gob->ReadFile(filename, buffer.GetW(0), 0, size);
+        std::cout << std::string(buffer.GetObjR<char>(), size);
+
         [self.previewViewController loadTdo:gob.get() named:filename.c_str()];
-       // break;
-    
+        break;
+    }
     default:
     {
         size_t size = gob->GetFileSize(filename);

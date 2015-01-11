@@ -64,6 +64,8 @@ using tdo_texture_vertex_index = unsigned;
 
 /**
     Index into the texture table.
+    
+    -1 indicates no texture is used.
 */
 using tdo_texture_index = int;
 
@@ -91,12 +93,22 @@ struct TdoVertex
 };
 
 /**
+    Collection of verticies.
+*/
+using TdoVerticies = std::vector<TdoVertex>;
+
+/**
     2D texture position.
 */
 struct TdoTextureVertex
 {
     tdo_texture_coordinate x, y;
 };
+
+/**
+    Collection of texture verticies.
+*/
+using TdoTextureVerticies = std::vector<TdoTextureVertex>;
 
 /**
     Triangle.
@@ -119,11 +131,19 @@ struct TdoQuad
 };
 
 /**
+    Collection of quads.
+*/
+using TdoQuads = std::vector<TdoQuad>;
+
+/**
     Texturing quad.
 */
 struct TdoTextureQuad
 {
     tdo_texture_vertex_index a, b, c, d;
 };
+
+using TdoTexture = std::string;
+using TdoTextures = std::vector<std::string>;
 
 } // DF
