@@ -119,7 +119,9 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
         
         objectBody
             %= verticies
-            >> -quads;
+            >> -quads
+            >> -textureVerticies
+            >> -textureQuads;
         
         objects %= +object;
         
@@ -138,6 +140,16 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
         quad %= base::attributeElement(omit[int_], boost::proto::deep_copy(index >> index >> index >> index >> index >> fill));
         
         quads %= base::list("QUADS", boost::proto::deep_copy(quad));
+        
+        // Texture Verticies
+        textureVertex %= base::attributeElement(omit[int_], boost::proto::deep_copy(point >> point));
+        
+        textureVerticies %= base::list("TEXTURE VERTICES", boost::proto::deep_copy(textureVertex));
+        
+        // Texture Quads
+        textureQuad %= base::attributeElement(omit[int_], boost::proto::deep_copy(index >> index >> index >> index));
+        
+        textureQuads %= base::list("TEXTURE QUADS", boost::proto::deep_copy(textureQuad));
         
         //
         start
@@ -181,6 +193,16 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
     
     rule<Iterator, unsigned()> index;
     rule<Iterator, TdoShadingType()> fill;
+
+// Triangle
+
+// Texture Verticies
+    rule<Iterator, TextureVerticies()> textureVerticies;
+    rule<Iterator, TextureVertex()> textureVertex;
+    
+// Texture Quads
+    rule<Iterator, TextureQuads()> textureQuads;
+    rule<Iterator, TextureQuad()> textureQuad;
 };
 
 Tdo TdoFile::CreateTdo() const
@@ -195,10 +217,14 @@ Tdo TdoFile::CreateTdo() const
     
     auto x = boost::get<0>(messages);
     auto y = boost::get<1>(messages);
+    auto s = y.size();
     if (!y.empty())
     {
         auto verts = boost::get<0>(boost::get<1>(y[0]));
         auto quads = boost::get<1>(boost::get<1>(y[0]));
+        auto textVert = boost::get<2>(boost::get<1>(y[0]));
+        auto textQuads = boost::get<3>(boost::get<1>(y[0]));
+
         (void) quads;
     }
     std::cout << result << std::endl;
