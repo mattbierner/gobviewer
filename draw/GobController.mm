@@ -133,7 +133,10 @@ DF::GobFile open(const char* file)
      case DF::FileType::Pal:
         [self.previewViewController loadPal:gob.get() named:filename.c_str()];
         break;
-    
+        
+    case DF::FileType::Tdo:
+        [self.previewViewController loadTdo:gob.get() named:filename.c_str()];
+       // break;
     
     default:
     {

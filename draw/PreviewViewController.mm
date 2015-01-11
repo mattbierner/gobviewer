@@ -5,8 +5,10 @@
 #import "MsgView.h"
 #import "PalView.h"
 
-#include <gober/MsgFile.h>
 #include <gober/Msg.h>
+#include <gober/MsgFile.h>
+#include <gober/Tdo.h>
+#include <gober/TdoFile.h>
 
 
 @interface PreviewViewController ()
@@ -96,6 +98,18 @@
     
     self.msgView.message = [Msg createForMsg:msg];
     self.preview = self.msgView;
+}
+
+- (void) loadTdo:(DF::GobFile*)gob named:(const char*)filename
+{
+    std::string file(filename);
+    size_t size = gob->GetFileSize(file);
+    
+    DF::Buffer buffer = DF::Buffer::Create(size);
+    gob->ReadFile(file, buffer.GetW(0), 0, size);
+    
+   DF::TdoFile(std::move(buffer)).CreateTdo();
+
 }
 
 - (void) loadPal:(DF::GobFile*)gob named:(const char*)filename

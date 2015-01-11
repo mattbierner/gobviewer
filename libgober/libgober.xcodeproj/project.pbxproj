@@ -51,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		8918A65A1A54D1810033DDFE /* libgober.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libgober.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		892245561A61EC9900CBF2D9 /* ObjParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ObjParser.h; path = src/ObjParser.h; sourceTree = "<group>"; };
 		892AB86C1A59D41500E092A9 /* Cell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cell.cpp; path = src/Cell.cpp; sourceTree = "<group>"; };
 		892AB86F1A59D58B00E092A9 /* Bm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Bm.cpp; path = src/Bm.cpp; sourceTree = "<group>"; };
 		892AB8721A59DB9E00E092A9 /* Wax.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Wax.cpp; path = src/Wax.cpp; sourceTree = "<group>"; };
@@ -187,6 +188,7 @@
 				89D40DE11A54D22600B71D68 /* CompressedBuffer.h */,
 				897D8C5A1A573630009C35ED /* Bitmap.h */,
 				897561BA1A5798DE006A242F /* Common.h */,
+				892245561A61EC9900CBF2D9 /* ObjParser.h */,
 			);
 			name = src;
 			sourceTree = "<group>";

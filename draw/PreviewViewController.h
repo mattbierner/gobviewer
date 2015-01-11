@@ -22,6 +22,7 @@
 - (void) loadWax:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal ;
 
 - (void) loadMsg:(DF::GobFile*)gob named:(const char*)filename;
+- (void) loadTdo:(DF::GobFile*)gob named:(const char*)filename;
 
 - (void) loadPal:(DF::GobFile*)gob named:(const char*)filename;
 

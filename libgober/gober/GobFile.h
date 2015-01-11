@@ -20,7 +20,7 @@ enum class FileType
     Bm,
     Fme,
     Wax,
-    ThreeDO,
+    Tdo,
     Vue,
     Pal,
     Cmp,

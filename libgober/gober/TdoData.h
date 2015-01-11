@@ -11,7 +11,7 @@ namespace DF
 /**
     Type of shader used to render the 3DO.
 */
-enum TdoShadingType : unsigned
+enum class TdoShadingType : unsigned
 {
     Unknown,
     

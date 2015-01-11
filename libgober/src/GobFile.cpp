@@ -8,7 +8,7 @@ namespace DF
     {"BM", FileType::Bm},
     {"FME", FileType::Fme},
     {"WAX", FileType::Wax},
-    {"3DO", FileType::ThreeDO},
+    {"3DO", FileType::Tdo},
     {"VUE", FileType::Vue},
     {"PAL", FileType::Pal},
     {"CMP", FileType::Cmp},

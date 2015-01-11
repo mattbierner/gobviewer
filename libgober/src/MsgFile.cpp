@@ -1,11 +1,11 @@
 #include "MsgFile.h"
+
 #include <gober/Msg.h>
+#include "ObjParser.h"
 
 #include <boost/fusion/include/boost_tuple.hpp>
 #include <boost/spirit/home/qi.hpp>
 #include <boost/spirit/include/lex_lexertl.hpp>
-
-namespace lex = boost::spirit::lex;
 
 using namespace boost::spirit::qi;
 
@@ -25,49 +25,25 @@ using message_list = std::vector<message>;
     MSG file format parser.
 */
 template <typename Iterator>
-struct msg_parser : grammar<Iterator, message_list()>
+struct msg_parser : ObjParser<Iterator, message_list()>
 {
-    template<typename Name, typename Value>
-    static auto element(Name name, Value value)
-    {
-        return name >> omit[+space] >> value;
-    }
-    
-    template<typename Name, typename Attribute>
-    static auto attributedElement(Name name, Attribute attr)
-    {
-        return name >> omit[+space] >> attr;
-    }
-    
-    template<typename Name, typename Value>
-    static auto attribute(Name name, Value&& value)
-    {
-        return boost::proto::deep_copy(name >> ':' >> omit[*space] >> value);
-    }
+    using base = ObjParser<Iterator, message_list()>;
 
-    msg_parser() : msg_parser::base_type(start)
+    msg_parser() : base(start)
     {
-        real_parser<float, strict_ureal_policies<float>> version_number;
-
-        quoted_string %= lexeme['"' >> +(~char_('"')) >> '"'];
+        version = base::element("MSG", base::version_number);
         
-        version = element("MSG", version_number) >> eol;
+        count = base::element("MSGS", int_);
         
-        count = element("MSGS", int_) >> eol;
-       
-        comment %= "#" >> *(char_ - eol) >> eol;
+        message %= base::element(int_, base::attribute(int_, +base::quoted_string));
         
-        comment_or_space = (comment | +space);
+        contents %= *base::token(boost::proto::deep_copy(message));
         
-        message %= int_ >> omit[+space] >> attribute(int_, +quoted_string);
-        
-        contents %= *comment_or_space >> *(message >> *comment_or_space);
-        
-        end %= lit("END") >> *space;
+        end %= lit("END");
         
         start
             %= omit[version]
-            >> omit[*comment_or_space]
+            >> omit[*base::comment_or_space]
             >> omit[count]
             >> contents
             >> omit[end];
@@ -76,11 +52,8 @@ struct msg_parser : grammar<Iterator, message_list()>
     rule<Iterator, message_list()> start;
     rule<Iterator, float()> version;
     rule<Iterator, size_t()> count;
-    rule<Iterator, std::string()> quoted_string;
     rule<Iterator, message_list()> contents;
     rule<Iterator, message()> message;
-    rule<Iterator> comment;
-    rule<Iterator> comment_or_space;
     rule<Iterator> end;
 };
     
@@ -95,7 +68,7 @@ Msg MsgFile::CreateMsg() const
     bool result = parse(start, end, p, messages);
     
     Msg messageObject = { };
-    if (result && (start == end)) // only accept fully valid files
+    if (result)
     {
         for (const auto& message : messages)
             messageObject.AddMessage(

@@ -1,5 +1,7 @@
 #include "TdoFile.h"
+
 #include <gober/Tdo.h>
+#include "ObjParser.h"
 
 #include <boost/fusion/include/boost_tuple.hpp>
 #include <boost/spirit/home/qi.hpp>
@@ -11,61 +13,109 @@ namespace DF
 
 /**
 */
-using message = boost::tuple<size_t, size_t, std::string>;
+using Texture = std::string;
+
+using Textures = std::vector<Texture>;
+
+using Vertex = boost::tuple<float, float, float>;
+
+using Verticies = std::vector<Vertex>;
+
+using Quad = boost::tuple<size_t, size_t, size_t, size_t, size_t, std::string>;
+
+using Quads = std::vector<Quad>;
+
+using TextureVertex = boost::tuple<float, float>;
+
+using TextureVerticies = std::vector<TextureVertex>;
+
+using TextureQuad = boost::tuple<size_t, size_t, size_t, size_t>;
+
+using TextureQuads = std::vector<TextureQuad>;
 
 /**
 */
-using message_list = std::vector<message>;
+using Object = boost::tuple<std::size_t, unsigned, Verticies, Quads, TextureVerticies, TextureQuads>;
+
+/**
+*/
+using Objects = std::vector<Object>;
+
+using TdoFileData = boost::tuple<Textures, Objects>;
 
 /**
     MSG file format parser.
 */
 template <typename Iterator>
-struct msg_parser : grammar<Iterator, message_list()>
+struct tdo_parser : ObjParser<Iterator, TdoFileData()>
 {
+    using base = ObjParser<Iterator, TdoFileData()>;
 
-    msg_parser() : msg_parser::base_type(start)
+    tdo_parser() : base(start)
     {
-        real_parser<float, strict_ureal_policies<float>> version_number;
+        version = base::element("3DO", base::version_number);
+        
+        name = base::element("3DONAME", omit[+base::identifier]);
 
-        quoted_string %= lexeme['"' >> +(~char_('"')) >> '"'];
+        objectsCount = base::element("OBJECTS", int_);
+
+        verticiesCount = base::element("VERTICES", int_);
         
-        version = "MSG" >> omit[+space] >> version_number >> eol;
+        polygonsCount = base::element("POLYGONS", int_);
+
+        palette = base::element("PALETTE", boost::proto::deep_copy(base::filename));
+
+        header
+            %= version
+            >> name
+            >> objectsCount
+            >> verticiesCount
+            >> polygonsCount
+            >> palette;
         
-        count = "MSGS" >> omit[+space] >> int_ >> eol;
-       
-        comment %= "#" >> *(char_ - eol) >> eol;
-        
-        comment_or_space = (comment | +space);
-        
-        message %= int_ >> omit[+space] >> int_ >> ':' >> omit[*space] >> +quoted_string;
-        
-        contents %= *comment_or_space >> *(message >> *comment_or_space);
-        
-        end %= lit("END") >> *space;
-        
+        texture %= base::attributeElement("TEXTURE", boost::proto::deep_copy(base::filename));
+
+        textures %= base::list("TEXTURES", boost::proto::deep_copy(texture));
+
         start
-            %= omit[version]
-            >> omit[*comment_or_space]
-            >> omit[count]
-            >> contents
-            >> omit[end];
+            %= omit[header]
+            >> textures;
     }
     
-    rule<Iterator, message_list()> start;
-    rule<Iterator, float()> version;
-    rule<Iterator, size_t()> count;
-    rule<Iterator, std::string()> quoted_string;
-    rule<Iterator, message_list()> contents;
-    rule<Iterator, message()> message;
-    rule<Iterator> comment;
-    rule<Iterator> comment_or_space;
-    rule<Iterator> end;
-};
+    rule<Iterator, TdoFileData()> start;
+    rule<Iterator, TdoFileData()> contents;
     
+// Header
+    rule<Iterator> header;
+    rule<Iterator> version;
+    rule<Iterator> name;
+    rule<Iterator> objectsCount;
+    rule<Iterator> verticiesCount;
+    rule<Iterator> polygonsCount;
+    rule<Iterator> palette;
+
+// Textures
+    rule<Iterator, Textures()> textures;
+    rule<Iterator, Texture()> texture;
+
+// Verticies
+    rule<Iterator, Verticies()> verticies;
+    rule<Iterator, Vertex()> vertex;
+};
+
 Tdo TdoFile::CreateTdo() const
 {
-   return { };
+    static const tdo_parser<const char*> p = { };
+
+    const char* start = m_data.GetObjR<char>(0);
+    const char* end = m_data.GetObjR<char>(m_data.GetDataSize() - 1);
+    std::string data(start, m_data.GetDataSize() - 1);
+    TdoFileData messages;
+    bool result = parse(start, end, p, messages);
+    
+    auto x = boost::get<0>(messages);
+    std::cout << result << std::endl;
+    return { };
 }
 
 } // DF
