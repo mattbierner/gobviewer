@@ -77,7 +77,7 @@ struct ObjParser : grammar<Iterator, ResultType>
         
         end_of_line = *blank >> (comment | eol);
         
-        identifier = +char_("_a-zA-Z0-9");
+        identifier = +('-' | char_("_a-zA-Z0-9"));
         
         filename = +('-' | char_(R"charset(_:.\a-zA-Z0-9)charset"));
     }

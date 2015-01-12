@@ -156,7 +156,6 @@ struct TdoTextureQuad
 using TdoTextureQuads = std::vector<TdoTextureQuad>;
 
 
-
 using TdoTexture = std::string;
 using TdoTextures = std::vector<std::string>;
 

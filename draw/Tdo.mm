@@ -4,6 +4,8 @@
 
 #import "Pal.h"
 
+#include <numeric>
+
 SCNVector3 operator-(const SCNVector3& a, const SCNVector3& b)
 {
     return {
@@ -57,10 +59,10 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 + (SCNGeometrySource*) createNormalsForTriangles:(const DF::TdoObject&)obj;
 
 + (SCNGeometrySource*) createVertexSource:(const DF::TdoObject&)obj;
++ (SCNGeometrySource*) createQuadVertexSource:(const DF::TdoObject&)obj;
++ (SCNGeometrySource*) createTriangleVertexSource:(const DF::TdoObject&)obj;
 
 + (SCNGeometryElement*) createElement:(const DF::TdoObject&)obj;
-+ (SCNGeometryElement*) createElementForQuads:(const DF::TdoObject&)obj;
-+ (SCNGeometryElement*) createElementForTriangles:(const DF::TdoObject&)obj;
 
 @end
 
@@ -69,15 +71,46 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 
 + (SCNGeometrySource*) createVertexSource:(const DF::TdoObject&)obj
 {
+    if (!obj.geometry.quads.empty())
+        return [Tdo createQuadVertexSource:obj];
+    else
+        return [Tdo createTriangleVertexSource:obj];
+}
+
++ (SCNGeometrySource*) createQuadVertexSource:(const DF::TdoObject&)obj
+{
     auto verts = obj.geometry.verticies;
-    size_t size = verts.size();
     
-    std::vector<SCNVector3> data(size);
-    for (unsigned i = 0; i < size; ++i)
-        data[i] = dfToScn(verts[i]);
+    std::vector<SCNVector3> data;
+    data.reserve(6 * obj.geometry.quads.size());
+    for (const auto& quad : obj.geometry.quads)
+    {
+        data.push_back(dfToScn(verts[quad.c]));
+        data.push_back(dfToScn(verts[quad.b]));
+        data.push_back(dfToScn(verts[quad.a]));
+        
+        data.push_back(dfToScn(verts[quad.a]));
+        data.push_back(dfToScn(verts[quad.d]));
+        data.push_back(dfToScn(verts[quad.c]));
+    }
     
-    SCNGeometrySource* source = [SCNGeometrySource geometrySourceWithVertices:&data[0] count:size];
-    return source;
+    return [SCNGeometrySource geometrySourceWithVertices:&data[0] count:data.size()];
+}
+
++ (SCNGeometrySource*) createTriangleVertexSource:(const DF::TdoObject&)obj
+{
+    const auto& verts = obj.geometry.verticies;
+    
+    std::vector<SCNVector3> data;
+    data.reserve(3 * obj.geometry.triangles.size());
+    for (const auto& triangle : obj.geometry.triangles)
+    {
+        data.push_back(dfToScn(verts[triangle.a]));
+        data.push_back(dfToScn(verts[triangle.b]));
+        data.push_back(dfToScn(verts[triangle.c]));
+    }
+    
+    return [SCNGeometrySource geometrySourceWithVertices:&data[0] count:data.size()];
 }
 
 + (SCNGeometrySource*) createNormalsSource:(const DF::TdoObject&)obj
@@ -86,113 +119,60 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         return [Tdo createNormalsForQuads: obj];
     else
         return [Tdo createNormalsForTriangles: obj];
-
 }
 
 + (SCNGeometrySource*) createNormalsForQuads:(const DF::TdoObject&)obj
 {
-    auto verts = obj.geometry.verticies;
-    size_t size = verts.size();
+    const auto& verts = obj.geometry.verticies;
     
-    auto quadIndicies = obj.geometry.quads;
-    size_t numQuads = quadIndicies.size();
-    
-    std::vector<SCNVector3> data(size);
-    for (unsigned i = 0; i < numQuads; ++i)
+    std::vector<SCNVector3> data(obj.geometry.quads.size() * 6);
+    auto it = std::begin(data);
+    for (const auto& quad : obj.geometry.quads)
     {
-        auto quad = quadIndicies[i];
-        
         auto a = dfToScn(verts[quad.a]);
         auto b = dfToScn(verts[quad.b]);
         auto c = dfToScn(verts[quad.c]);
 
-        auto norm1 = getNormal(c, b, a);
-        data[quad.a] = data[quad.b] = data[quad.c] = data[quad.d] = norm1;
+        std::fill_n(it, 6, getNormal(c, b, a));
+        it += 6;
     }
-    SCNGeometrySource* source = [SCNGeometrySource geometrySourceWithNormals:&data[0] count:size];
-    return source;
+    return [SCNGeometrySource geometrySourceWithNormals:&data[0] count:data.size()];
 }
 
 + (SCNGeometrySource*) createNormalsForTriangles:(const DF::TdoObject&)obj
 {
-    auto verts = obj.geometry.verticies;
-    size_t size = verts.size();
+    const auto& verts = obj.geometry.verticies;
     
-    auto indicies = obj.geometry.triangles;
-    size_t numTriangles = indicies.size();
-    
-    std::vector<SCNVector3> data(size);
-    for (unsigned i = 0; i < numTriangles; ++i)
+    std::vector<SCNVector3> data(obj.geometry.triangles.size() * 3);
+    auto it = std::begin(data);
+    for (const auto& triangle : obj.geometry.triangles)
     {
-        auto triangle = indicies[i];
-        
         auto a = dfToScn(verts[triangle.a]);
         auto b = dfToScn(verts[triangle.b]);
         auto c = dfToScn(verts[triangle.c]);
-
-        auto norm1 = getNormal(a, b, c);
-        data[triangle.a] = data[triangle.b] = data[triangle.c] = norm1;
+        
+        std::fill_n(it, 3, getNormal(a, b, c));
+        it += 3;
     }
-    SCNGeometrySource* source = [SCNGeometrySource geometrySourceWithNormals:&data[0] count:size];
-    return source;
+    return [SCNGeometrySource geometrySourceWithNormals:&data[0] count:data.size()];
 }
 
 + (SCNGeometryElement*) createElement:(const DF::TdoObject&)obj
 {
-    if (!obj.geometry.quads.empty())
-        return [Tdo createElementForQuads: obj];
-    else
-        return [Tdo createElementForTriangles: obj];
-}
-
-+ (SCNGeometryElement*) createElementForQuads:(const DF::TdoObject&)obj
-{
-    auto quadIndicies = obj.geometry.quads;
-    size_t size = quadIndicies.size();
+    bool isTriangle = obj.geometry.quads.empty();
     
-    std::vector<unsigned> indices;
-    indices.reserve(size * 6);
-    for (unsigned i = 0; i < size; ++i)
-    {
-        auto quad = quadIndicies[i];
-        indices.push_back(quad.c);
-        indices.push_back(quad.b);
-        indices.push_back(quad.a);
-        
-        indices.push_back(quad.a);
-        indices.push_back(quad.d);
-        indices.push_back(quad.c);
-    }
-
-    NSData *indexData = [NSData dataWithBytes:&indices[0] length:indices.size() * sizeof(unsigned)];
-
-    return [SCNGeometryElement geometryElementWithData:indexData
-                                    primitiveType:SCNGeometryPrimitiveTypeTriangles
-                                     primitiveCount:size * 2
-                                      bytesPerIndex:sizeof(unsigned)];
-}
-
-+ (SCNGeometryElement*) createElementForTriangles:(const DF::TdoObject&)obj
-{
-    auto triangleIndicies = obj.geometry.triangles;
-    size_t size = triangleIndicies.size();
+    size_t numberPrimitives = (isTriangle ? obj.geometry.triangles.size() : obj.geometry.quads.size());
     
-    std::vector<unsigned> indices;
-    indices.reserve(size * 3);
-    for (unsigned i = 0; i < size; ++i)
-    {
-        auto triangle = triangleIndicies[i];
-        indices.push_back(triangle.a);
-        indices.push_back(triangle.b);
-        indices.push_back(triangle.c);
-    }
+    std::vector<unsigned> indices(numberPrimitives * (isTriangle ? 3 : 6));
+    std::iota(std::begin(indices), std::end(indices), 0);
+    
+    NSData* indexData = [NSData dataWithBytes:&indices[0] length:indices.size() * sizeof(unsigned)];
 
-    NSData *indexData = [NSData dataWithBytes:&indices[0] length:indices.size() * sizeof(unsigned)];
-
-    return [SCNGeometryElement geometryElementWithData:indexData
-                                    primitiveType:SCNGeometryPrimitiveTypeTriangles
-                                     primitiveCount:size
-                                      bytesPerIndex:sizeof(unsigned)];
+    return [SCNGeometryElement
+        geometryElementWithData:indexData
+        primitiveType:SCNGeometryPrimitiveTypeTriangles
+        primitiveCount:(isTriangle ? numberPrimitives : numberPrimitives * 2)
+        bytesPerIndex:sizeof(unsigned)];
 }
 
 + (Tdo*) createForTdo:(DF::Tdo)tdo
@@ -209,8 +189,8 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 
 - (SCNGeometry*) createObject:(NSUInteger)index
 {
-    auto object = _tdo.GetObject(index);
-    auto quads = object.geometry.quads;
+    const auto object = _tdo.GetObject(index);
+    const auto geometry = object.geometry;
     
     SCNGeometrySource* vertexSource = [[self class] createVertexSource:object];
     SCNGeometrySource* normalSource = [[self class] createNormalsSource:object];
@@ -223,11 +203,17 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 
     SCNMaterial* material = [SCNMaterial material];
     material.doubleSided = YES;
-    if (!quads.empty())
+    if (!geometry.quads.empty())
     {
-        auto quad = quads[0];
+        auto quad = geometry.quads[0];
         auto color = [self.pal getColor:quad.color];
-        material.diffuse.contents = [NSColor whiteColor];//color;
+        material.diffuse.contents = color;
+    }
+    else if (!geometry.triangles.empty())
+    {
+        auto triangle = geometry.triangles[0];
+        auto color = [self.pal getColor:triangle.color];
+        material.diffuse.contents = color;
     }
     [obj insertMaterial:material atIndex:0];
     
