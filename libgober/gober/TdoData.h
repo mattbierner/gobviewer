@@ -155,8 +155,46 @@ struct TdoTextureQuad
 */
 using TdoTextureQuads = std::vector<TdoTextureQuad>;
 
+/**
+    Texturing triangle.
+*/
+struct TdoTextureTriangle
+{
+    tdo_texture_vertex_index a, b, c;
+};
 
+/**
+    Collection of texture quads.
+*/
+using TdoTextureTriangles = std::vector<TdoTextureTriangle>;
+
+/**
+*/
 using TdoTexture = std::string;
+
+/**
+*/
 using TdoTextures = std::vector<std::string>;
+
+
+/**
+*/
+struct TdoGeometry
+{
+    TdoVerticies verticies;
+    TdoTriangles triangles;
+    TdoQuads quads;
+    TdoTextureVerticies textureVerticies;
+    TdoTextureQuads textureQuads;
+    TdoTextureTriangles textureTriangles;
+};
+
+/**
+*/
+struct TdoObject
+{
+    tdo_texture_index texture;
+    TdoGeometry geometry;
+};
 
 } // DF

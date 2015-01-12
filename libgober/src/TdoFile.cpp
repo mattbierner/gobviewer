@@ -77,12 +77,19 @@ BOOST_FUSION_ADAPT_STRUCT(
     (DF::tdo_texture_vertex_index, d));
 
 BOOST_FUSION_ADAPT_STRUCT(
+    DF::TdoTextureTriangle,
+    (DF::tdo_texture_vertex_index, a)
+    (DF::tdo_texture_vertex_index, b)
+    (DF::tdo_texture_vertex_index, c));
+
+BOOST_FUSION_ADAPT_STRUCT(
     DF::TdoGeometry,
     (DF::TdoVerticies, verticies)
     (DF::TdoTriangles, triangles)
     (DF::TdoQuads, quads)
     (DF::TdoTextureVerticies, textureVerticies)
-    (DF::TdoTextureQuads, textureQuads));
+    (DF::TdoTextureQuads, textureQuads)
+    (DF::TdoTextureTriangles, textureTriangles));
 
 BOOST_FUSION_ADAPT_STRUCT(
     DF::TdoObject,
@@ -148,7 +155,8 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
             >> -triangles
             >> -quads
             >> -textureVerticies
-            >> -textureQuads;
+            >> -textureQuads
+            >> -textureTriangles;
         
         objects %= +object;
         
@@ -188,10 +196,22 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
                 boost::proto::deep_copy(textureVertex));
         
         // Texture Quads
-        textureQuad %= base::attributeElement(omit[int_],
-            boost::proto::deep_copy(index >> index >> index >> index));
+        textureQuad %=
+            base::attributeElement(omit[int_],
+                boost::proto::deep_copy(index >> index >> index >> index));
         
-        textureQuads %= base::list("TEXTURE QUADS", boost::proto::deep_copy(textureQuad));
+        textureQuads %=
+            base::list("TEXTURE QUADS",
+                boost::proto::deep_copy(textureQuad));
+        
+        // Texture Triangles
+        textureTriangle %=
+            base::attributeElement(omit[int_],
+                boost::proto::deep_copy(index >> index >> index));
+        
+        textureTriangles %=
+            base::list("TEXTURE TRIANGLES",
+                boost::proto::deep_copy(textureTriangle));
         
         //
         start
@@ -246,6 +266,10 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
 // Texture Quads
     rule<Iterator, TdoTextureQuads()> textureQuads;
     rule<Iterator, TdoTextureQuad()> textureQuad;
+
+// Texture Triangles
+    rule<Iterator, TdoTextureTriangles()> textureTriangles;
+    rule<Iterator, TdoTextureTriangle()> textureTriangle;
 };
 
 Tdo TdoFile::CreateTdo() const

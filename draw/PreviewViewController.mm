@@ -78,6 +78,7 @@
 {
     _pal = pal;
     self.bmView.pal = pal;
+    self.tdoView.pal = pal;
 }
 
 - (void) loadBM:(DF::GobFile*) gob named:(const char*)filename
@@ -120,7 +121,8 @@
     DF::Buffer buffer = DF::Buffer::Create(size);
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
-    Tdo* tdo = [Tdo createForTdo:DF::TdoFile(std::move(buffer)).CreateTdo()];
+    auto tdoFile = DF::TdoFile(std::move(buffer)).CreateTdo();
+    Tdo* tdo = [Tdo createForTdo:tdoFile];
     tdo.pal = self.pal;
     self.tdoView.tdo = tdo;
     self.preview = self.tdoView;

@@ -8,20 +8,17 @@
 {
     if (self = [super initWithFrame:frameRect options:nil])
     {
-        self.scene = [SCNScene scene];
-        
-        self.scene = self.scene;
         self.allowsCameraControl = YES;
         self.autoenablesDefaultLighting = YES;
     }
     return self;
 }
 
-- (void) setTdo:(Tdo *)tdo
+- (void) setTdo:(Tdo*)tdo
 {
     _tdo = tdo;
-    for (SCNNode* child in self.scene.rootNode.childNodes)
-        [child removeFromParentNode];
+    
+    self.scene = [SCNScene scene];
     
     for (SCNGeometry* obj in [tdo createObjects])
     {

@@ -2,6 +2,43 @@
 
 #import "Pal.h"
 
+#include <gober/Bm.h>
+#include <gober/BmFile.h>
+
+
+@implementation NSImage (Rotated)
+ 
+- (NSImage *)imageRotated:(float)degrees {
+ 
+    degrees = fmod(degrees, 360.);
+    if (0 == degrees) {
+        return self;
+    }
+    NSSize size = [self size];
+    NSSize maxSize;
+    if (90. == degrees || 270. == degrees || -90. == degrees || -270. == degrees) {
+        maxSize = NSMakeSize(size.height, size.width);
+    } else if (180. == degrees || -180. == degrees) {
+        maxSize = size;
+    } else {
+        maxSize = NSMakeSize(20+MAX(size.width, size.height), 20+MAX(size.width, size.height));
+    }
+    NSAffineTransform *rot = [NSAffineTransform transform];
+    [rot rotateByDegrees:degrees];
+    NSAffineTransform *center = [NSAffineTransform transform];
+    [center translateXBy:maxSize.width / 2. yBy:maxSize.height / 2.];
+    [rot appendTransform:center];
+    NSImage *image = [[NSImage alloc] initWithSize:maxSize];
+    [image lockFocus];
+    [rot concat];
+    NSRect rect = NSMakeRect(0, 0, size.width, size.height);
+    NSPoint corner = NSMakePoint(-size.width / 2., -size.height / 2.);
+    [self drawAtPoint:corner fromRect:rect operation:NSCompositeCopy fraction:1.0];
+    [image unlockFocus];
+    return image;
+}
+@end
+
 RGB* BmDataToRgb(const DF::IReadableBuffer& buffer, Pal* pal, bool trans)
 {
     size_t size = buffer.GetDataSize();
@@ -58,6 +95,17 @@ void freeRGB(void *info, const void *data, size_t size)
 
 
 @implementation Bitmap
+
++ (Bitmap*) createFormGob:(DF::GobFile*)gob name:(const char*)filename pal:(Pal*)pal
+{
+    std::string file(filename);
+    size_t size = gob->GetFileSize(file);
+    DF::Buffer buffer = DF::Buffer::Create(size);
+    gob->ReadFile(file, buffer.GetW(0), 0, size);
+    
+    auto bm = DF::Bm::CreateFromFile(DF::BmFile(std::move(buffer)));
+    return [Bitmap createForBitmap:bm.GetBitmap(0) pal:pal];
+}
 
 + (Bitmap*) createForBitmap:(std::shared_ptr<DF::Bitmap>) bitmap pal:(Pal*)pal
 {

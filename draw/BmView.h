@@ -2,10 +2,7 @@
 
 #include "BitmapView.h"
 
-#include <gober/Common.h>
-#include <gober/BmFile.h>
 #include <gober/GobFile.h>
-#include <gober/PalFile.h>
 
 @class Pal;
 
@@ -45,9 +42,11 @@
 
 @property (nonatomic, strong) NSMutableArray* animations;
 @property (nonatomic, strong) NSTimer* animationTimer;
-@property (nonatomic, strong) Pal* pal;
 
-- (id) initWithFrame:(NSRect)frameRect;
+/**
+    Palette used to render images.
+*/
+@property (nonatomic, strong) Pal* pal;
 
 - (void) loadBM:(DF::GobFile*)gob named:(const char*)filename;
 - (void) loadFme:(DF::GobFile*)gob named:(const char*)filename;

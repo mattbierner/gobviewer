@@ -4,20 +4,7 @@
 #import "Pal.h" 
 #import "PreviewViewController.h"
 
-#include <gober/MsgFile.h>
-
 #include <iostream>
-
-DF::GobFile open(const char* file)
-{
-    std::ifstream fs;
-    fs.open(file, std::ifstream::binary | std::ifstream::in);
-    if (fs.is_open())
-    {
-        return DF::GobFile::CreateFromFile(std::move(fs));
-    }
-    return { };
-}
 
 @interface GobController()
 - (void) selectedFileDidChange:(NSString*)file;
@@ -83,18 +70,7 @@ DF::GobFile open(const char* file)
 
 - (void) loadPal:(NSString*)name fromGob:(NSString*)gobFile
 {
-    DF::GobFile gob = open([gobFile UTF8String]);
-    
-    std::string file([name UTF8String]);
-    size_t size = gob.GetFileSize(file);
-    DF::Buffer buffer = DF::Buffer::Create(size);
-    gob.ReadFile(file, buffer.GetW(0), 0, size);
-    DF::PalFile p(std::move(buffer));
-    
-    DF::PalFileData pal;
-    p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
-    
-    self.pal = [Pal createForPal:pal];
+    self.pal = [Pal createFromGob:gobFile named:name];
     self.previewViewController.pal = self.pal;
 }
 

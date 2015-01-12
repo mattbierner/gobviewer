@@ -2,9 +2,11 @@
 
 #import <SceneKit/SceneKit.h>
 
+#import "Bitmap.h"
 #import "Pal.h"
 
 #include <numeric>
+#include <fstream>
 
 SCNVector3 operator-(const SCNVector3& a, const SCNVector3& b)
 {
@@ -44,6 +46,11 @@ SCNVector3 dfToScn(const DF::TdoVertex& vec)
     return { vec.x, vec.y, vec.z };
 }
 
+CGPoint dfToScn(const DF::TdoTextureVertex& vec)
+{
+    return { vec.y, vec.x }; // Note: flipped here
+}
+
 SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 {
 	SCNVector3 u =  b - a;
@@ -61,6 +68,10 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 + (SCNGeometrySource*) createVertexSource:(const DF::TdoObject&)obj;
 + (SCNGeometrySource*) createQuadVertexSource:(const DF::TdoObject&)obj;
 + (SCNGeometrySource*) createTriangleVertexSource:(const DF::TdoObject&)obj;
+
++ (SCNGeometrySource*) createTextureSource:(const DF::TdoObject&)obj;
++ (SCNGeometrySource*) createQuadTextureSource:(const DF::TdoObject&)obj;
++ (SCNGeometrySource*) createTriangleTextureSource:(const DF::TdoObject&)obj;
 
 + (SCNGeometryElement*) createElement:(const DF::TdoObject&)obj;
 
@@ -105,20 +116,69 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
     data.reserve(3 * obj.geometry.triangles.size());
     for (const auto& triangle : obj.geometry.triangles)
     {
-        data.push_back(dfToScn(verts[triangle.a]));
-        data.push_back(dfToScn(verts[triangle.b]));
         data.push_back(dfToScn(verts[triangle.c]));
+        data.push_back(dfToScn(verts[triangle.b]));
+        data.push_back(dfToScn(verts[triangle.a]));
     }
     
     return [SCNGeometrySource geometrySourceWithVertices:&data[0] count:data.size()];
 }
 
++ (SCNGeometrySource*) createTextureSource:(const DF::TdoObject&)obj
+{
+    if (!obj.geometry.textureQuads.empty())
+        return [Tdo createQuadTextureSource:obj];
+    else if (!obj.geometry.textureTriangles.empty())
+        return [Tdo createTriangleTextureSource:obj];
+    else
+        return nil;
+}
+
++ (SCNGeometrySource*) createQuadTextureSource:(const DF::TdoObject&)obj
+{
+    auto verts = obj.geometry.textureVerticies;
+    
+    std::vector<CGPoint> data;
+    data.reserve(6 * obj.geometry.textureQuads.size());
+    for (const auto& quad : obj.geometry.textureQuads)
+    {
+        data.push_back(dfToScn(verts[quad.c]));
+        data.push_back(dfToScn(verts[quad.b]));
+        data.push_back(dfToScn(verts[quad.a]));
+        
+        data.push_back(dfToScn(verts[quad.a]));
+        data.push_back(dfToScn(verts[quad.d]));
+        data.push_back(dfToScn(verts[quad.c]));
+    }
+    
+    return [SCNGeometrySource geometrySourceWithTextureCoordinates:&data[0] count:data.size()];
+}
+
++ (SCNGeometrySource*) createTriangleTextureSource:(const DF::TdoObject&)obj
+{
+    const auto& verts = obj.geometry.textureVerticies;
+    
+    std::vector<CGPoint> data;
+    data.reserve(3 * obj.geometry.textureTriangles.size());
+    for (const auto& triangle : obj.geometry.textureTriangles)
+    {
+        data.push_back(dfToScn(verts[triangle.c]));
+        data.push_back(dfToScn(verts[triangle.b]));
+        data.push_back(dfToScn(verts[triangle.a]));
+    }
+    
+    return [SCNGeometrySource geometrySourceWithTextureCoordinates:&data[0] count:data.size()];
+}
+
+
 + (SCNGeometrySource*) createNormalsSource:(const DF::TdoObject&)obj
 {
     if (!obj.geometry.quads.empty())
         return [Tdo createNormalsForQuads: obj];
-    else
+    else if (!obj.geometry.triangles.empty())
         return [Tdo createNormalsForTriangles: obj];
+    else
+        return nil;
 }
 
 + (SCNGeometrySource*) createNormalsForQuads:(const DF::TdoObject&)obj
@@ -151,7 +211,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         auto b = dfToScn(verts[triangle.b]);
         auto c = dfToScn(verts[triangle.c]);
         
-        std::fill_n(it, 3, getNormal(a, b, c));
+        std::fill_n(it, 3, getNormal(c, b, a));
         it += 3;
     }
     return [SCNGeometrySource geometrySourceWithNormals:&data[0] count:data.size()];
@@ -186,6 +246,18 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
    return self;
 }
 
+DF::GobFile openGob(const char* file)
+{
+    std::ifstream fs;
+    fs.open(file, std::ifstream::binary | std::ifstream::in);
+    if (fs.is_open())
+    {
+        return DF::GobFile::CreateFromFile(std::move(fs));
+    }
+    return { };
+}
+
+
 - (SCNGeometry*) createObject:(NSUInteger)index
 {
     const auto object = _tdo.GetObject(index);
@@ -193,16 +265,23 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
     
     SCNGeometrySource* vertexSource = [[self class] createVertexSource:object];
     SCNGeometrySource* normalSource = [[self class] createNormalsSource:object];
+    SCNGeometrySource* textureSource = [[self class] createTextureSource:object];
 
     SCNGeometryElement* element = [[self class] createElement:object];
 
-    SCNGeometry* obj = [SCNGeometry geometryWithSources:@[vertexSource, normalSource] elements:@[element]];
+    NSMutableArray* sources = [NSMutableArray arrayWithObject:vertexSource];
+    if (normalSource)
+        [sources addObject:normalSource];
+    if (textureSource)
+        [sources addObject:textureSource];
     
-    auto quadIndicies = object.geometry.quads;
-
+    SCNGeometry* obj = [SCNGeometry geometryWithSources:sources elements:@[element]];
+    
     SCNMaterial* material = [SCNMaterial material];
     material.doubleSided = YES;
-    if (!geometry.quads.empty())
+    material.locksAmbientWithDiffuse = YES;
+    material.transparencyMode = SCNTransparencyModeAOne;
+   /* if (!geometry.quads.empty())
     {
         auto quad = geometry.quads[0];
         auto color = [self.pal getColor:quad.color];
@@ -213,7 +292,15 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         auto triangle = geometry.triangles[0];
         auto color = [self.pal getColor:triangle.color];
         material.diffuse.contents = color;
+    }*/
+    if (object.texture >= 0)
+    {
+        DF::GobFile gob = openGob("TEXTURES.GOB");
+        Bitmap* bitmap = [Bitmap createFormGob:&gob name:_tdo.GetTexture(object.texture).c_str() pal:self.pal];
+        NSImage* img = [bitmap getImage];//[NSImage imageNamed:@"check.jpg"];
+        material.diffuse.contents = img;
     }
+    material.ambient.contents = [NSColor whiteColor];
     [obj insertMaterial:material atIndex:0];
     
     return obj;
@@ -221,8 +308,9 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 
 - (NSArray*) createObjects
 {
-    NSMutableArray* objs = [NSMutableArray array];
-    for (unsigned i = 0; i < _tdo.GetObjectsCount(); ++i)
+    size_t numObjects = _tdo.GetObjectsCount();
+    NSMutableArray* objs = [NSMutableArray arrayWithCapacity:numObjects];
+    for (unsigned i = 0; i < numObjects; ++i)
         [objs addObject:[self createObject:i]];
     return objs;
 }

@@ -11,10 +11,14 @@
     DF::PalFileData _pal;
 }
 
+/**
+    Create a pal from a gob.
+*/
++ (Pal*) createFromGob:(NSString*)gob named:(NSString*)name;
 
+/**
+*/
 + (Pal*) createForPal:(DF::PalFileData)pal;
-
-- (id) initWithPal:(DF::PalFileData)pal;
 
 /**
     Create a 1d image from the PAL.
