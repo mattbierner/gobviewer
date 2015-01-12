@@ -186,7 +186,6 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
    return self;
 }
 
-
 - (SCNGeometry*) createObject:(NSUInteger)index
 {
     const auto object = _tdo.GetObject(index);

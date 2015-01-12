@@ -20,10 +20,12 @@
 - (id) initWithTdo:(DF::Tdo)tdo;
 
 /**
+    Create the Scenekit geometry associated with an object.
 */
 - (SCNGeometry*) createObject:(NSUInteger)index;
 
 /**
+    Get an array of all geometry associated with the object.
 */
 - (NSArray*) createObjects;
 

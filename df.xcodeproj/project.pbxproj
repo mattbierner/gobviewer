@@ -11,6 +11,7 @@
 		890B72BE1A5E25CC00133F4F /* MsgView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72BD1A5E25CC00133F4F /* MsgView.mm */; };
 		890B72C11A5E26D000133F4F /* LabeledCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72C01A5E26D000133F4F /* LabeledCell.mm */; };
 		890B72C41A5E281500133F4F /* Msg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72C31A5E281500133F4F /* Msg.mm */; };
+		8919720E1A6365BA00F9B72B /* Bitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8919720D1A6365BA00F9B72B /* Bitmap.mm */; };
 		89ABBD701A54D93F00B72E36 /* libgober.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 89ABBD6C1A54D8E000B72E36 /* libgober.a */; };
 		89ABBD771A54F11C00B72E36 /* GobController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89ABBD761A54F11C00B72E36 /* GobController.mm */; };
 		89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE931A55DE61002F95FF /* PreviewViewController.mm */; };
@@ -61,6 +62,9 @@
 		890B72C01A5E26D000133F4F /* LabeledCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LabeledCell.mm; sourceTree = "<group>"; };
 		890B72C21A5E281500133F4F /* Msg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Msg.h; sourceTree = "<group>"; };
 		890B72C31A5E281500133F4F /* Msg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Msg.mm; sourceTree = "<group>"; };
+		8919720C1A6365BA00F9B72B /* Bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bitmap.h; sourceTree = "<group>"; };
+		8919720D1A6365BA00F9B72B /* Bitmap.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bitmap.mm; sourceTree = "<group>"; };
+		891972101A63685800F9B72B /* DfColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DfColor.h; sourceTree = "<group>"; };
 		8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libgober.xcodeproj; path = libgober/libgober.xcodeproj; sourceTree = "<group>"; };
 		89A3BC991A45718200B26F8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89ABBD711A54D98900B72E36 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -193,6 +197,9 @@
 				89D923891A630FEB00D29C8B /* TdoView.mm */,
 				89D9238E1A63152B00D29C8B /* Tdo.h */,
 				89D9238F1A63152B00D29C8B /* Tdo.mm */,
+				8919720C1A6365BA00F9B72B /* Bitmap.h */,
+				8919720D1A6365BA00F9B72B /* Bitmap.mm */,
+				891972101A63685800F9B72B /* DfColor.h */,
 			);
 			path = draw;
 			sourceTree = "<group>";
@@ -328,6 +335,7 @@
 				89E621FB1A5BAD4A00E75E01 /* Pal.mm in Sources */,
 				89D923901A63152B00D29C8B /* Tdo.mm in Sources */,
 				89ABBD771A54F11C00B72E36 /* GobController.mm in Sources */,
+				8919720E1A6365BA00F9B72B /* Bitmap.mm in Sources */,
 				890B72C11A5E26D000133F4F /* LabeledCell.mm in Sources */,
 				89F452851A43F57E00A20C49 /* BmView.mm in Sources */,
 				890B72BA1A5E1D6400133F4F /* BitmapView.mm in Sources */,

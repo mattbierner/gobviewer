@@ -1,5 +1,8 @@
 #import "BmView.h"
 
+#import "Bitmap.h"
+#import "DfColor.h"
+
 #include <iostream>
 
 #include <iostream>
@@ -18,10 +21,6 @@
 #include <gober/Cell.h>
 #include <gober/Wax.h>
 
-PACKED(struct RGB
-{
-    uint8_t r, g, b, a;
-});
 
 DF::BmFile loadBm(DF::GobFile* gob, const char* filename)
 {
@@ -51,40 +50,6 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
     return DF::WaxFile(std::move(buffer));
-}
-
-RGB* BmDataToRgb(const DF::IReadableBuffer& buffer, const DF::PalFileData& pal, bool trans)
-{
-    size_t size = buffer.GetDataSize();
-    RGB* imgData = new RGB[size];
-    RGB* dataWriter = imgData;
-    
-    const uint8_t* bmData = buffer.GetR(0);
-    const uint8_t* bmDataEnd = bmData + size;
-    while (bmData < bmDataEnd)
-    {
-        uint8_t entry = *(bmData++);
-        if (trans && entry == 0)
-        {
-            (*(dataWriter++)).a = 0;
-        }
-        else
-        {
-            auto palColors = pal.colors[entry];
-            (*(dataWriter++)) = {palColors.r, palColors.g, palColors.b, 255};
-        }
-    }
-    return imgData;
-}
-
-RGB* BmToRgb(const DF::Bitmap& bm, const DF::PalFileData& pal)
-{
-    return BmDataToRgb(bm, pal, (bm.GetTransparency() != DF::BmFileTransparency::Normal));
-}
-
-void f(void *info, const void *data, size_t size)
-{
-   delete[] ((RGB*)data);
 }
 
 @implementation BmCell
@@ -134,17 +99,7 @@ void f(void *info, const void *data, size_t size)
 
 @interface BmView()
 
-- (CGImageRef) createImage:(RGB*) data
-    size:(size_t) dataSize
-    width:(unsigned) width
-    height:(unsigned) height;
-
 - (void) addImage:(CGImageRef)img;
-
-- (void) addImage:(RGB*) data
-    size:(size_t) dataSize
-    width:(unsigned) width
-    height:(unsigned) height;
 
 @end
 
@@ -161,44 +116,11 @@ void f(void *info, const void *data, size_t size)
     return self;
 }
 
-- (CGImageRef) createImage:(RGB*) imgData
-    size:(size_t) dataSize
-    width:(unsigned) width
-    height:(unsigned) height
-{
-    CGDataProviderRef imageData = CGDataProviderCreateWithData(NULL, imgData, dataSize, f);
-    CGImageRef img = CGImageCreate(
-        width,
-        height,
-        8,
-        8 * 4,
-        4 * width,
-        CGColorSpaceCreateDeviceRGB(),
-        kCGBitmapByteOrderDefault | kCGImageAlphaLast,
-        imageData,
-        NULL,
-        NO,
-        kCGRenderingIntentDefault);
-    
-    CGDataProviderRelease(imageData);
-    return img;
-}
-
 - (void) addImage:(CGImageRef)img
 {
     NSImage* image = [[NSImage alloc] initWithCGImage:img size:CGSizeZero];
     BmAnimation* animation = [BmAnimation animationForImage:image];
     [self.animations addObject:animation];
-}
-
-- (void) addImage:(RGB*) imgData
-    size:(size_t) imgDataSize
-    width:(unsigned) width
-    height:(unsigned) height
-{
-    CGImageRef img = [self createImage:imgData size:imgDataSize width:width height:height];
-    [self addImage:img];
-    CGImageRelease(img);
 }
 
 - (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
@@ -210,27 +132,12 @@ void f(void *info, const void *data, size_t size)
     
     for (unsigned i = 0; i < subCount; ++i)
     {
-        unsigned width = bm.GetWidth(i);
-        unsigned height = bm.GetHeight(i);
-        size_t imgDataSize = bm.GetDataSize(i) * 32;
-        
-        RGB* imgData = BmToRgb(*(bm.GetBitmap(i)), *pal);
-        
-        CGImageRef imgRef = [self createImage:imgData size: imgDataSize width:height height:width];
-        NSImage* img = [[NSImage alloc] initWithCGImage:imgRef size:CGSizeZero];
-        CGImageRelease(imgRef);
+        Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap(i)];
+        NSImage* img = [bitmap getImage:pal];
         [animation.frames addObject:[BmCell cellForImage:img flipped:NO]];
     }
     
-    if (bm.IsSwitch())
-    {
-        animation.frameRate = 1;
-    }
-    else
-    {
-        animation.frameRate = 1.0f / bm.GetFrameRate();
-    }
-    
+    animation.frameRate = (bm.IsSwitch() ? 1 : 1.0 / bm.GetFrameRate());
     self.animations = [NSMutableArray arrayWithObject:animation];
 
     animationIndex = 0;
@@ -242,16 +149,12 @@ void f(void *info, const void *data, size_t size)
 {
     DF::Cell bm = DF::Cell::CreateFromFile(loadFme(gob, filename));
 
-    unsigned width = bm.GetWidth();
-    unsigned height = bm.GetHeight();
-    size_t imgDataSize = bm.GetDataSize() * 32;
+    Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap()];
     
-    RGB* imgData = BmToRgb(*bm.GetBitmap(), *pal);
+    NSImage* image = [bitmap getImage:pal];
+    BmAnimation* animation = [BmAnimation animationForImage:image];
+    self.animations = [NSMutableArray arrayWithObject:animation];
     
-    self.animations = [NSMutableArray arrayWithCapacity:1];
-    [self addImage:imgData size:imgDataSize width:height height:width];
-    
-    [self setFrameRate:0];
     animationIndex = 0;
     imageIndex = 0;
     [self update];
@@ -265,7 +168,7 @@ void f(void *info, const void *data, size_t size)
 
     // Since waxes reuse a lot of image data, make a cache so we avoid creating
     // duplicate CGImages.
-    std::map<std::shared_ptr<DF::Bitmap>, CGImageRef> imageDatas;
+    std::map<std::shared_ptr<DF::Bitmap>, NSImage*> imageDatas;
     
     for (size_t waxIndex : w.GetActions())
     {
@@ -283,32 +186,25 @@ void f(void *info, const void *data, size_t size)
             for (size_t frame = 0; frame < numFrames; ++frame)
             {
                 DF::Cell bm = seq.GetFrame(frame);
-                const auto found = imageDatas.find(bm.GetBitmap());
-                CGImageRef img;
+                auto bitmap = bm.GetBitmap();
+                const auto found = imageDatas.find(bitmap);
+                NSImage* img = nil;
                 if (found != std::end(imageDatas))
                 {
                     img = found->second;
                 }
                 else
                 {
-                    unsigned width = bm.GetWidth();
-                    unsigned height = bm.GetHeight();
-                    size_t imgDataSize = bm.GetDataSize() * 32;
-                    auto bitmap = bm.GetBitmap();
-                    RGB* imgData = BmToRgb(*bitmap, *pal);
-                    img = [self createImage:imgData size:imgDataSize width:height height:width];
+                    Bitmap* bitmapObj = [Bitmap createForBitmap:bitmap];
+                    img = [bitmapObj getImage:pal];
                     imageDatas[bitmap] = img;
                 }
                 [animation.frames addObject:
-                    [BmCell cellForImage:[[NSImage alloc] initWithCGImage:img size:CGSizeZero]
-                        flipped:bm.IsFlipped()]];
+                    [BmCell cellForImage:img flipped:bm.IsFlipped()]];
             }
             [self.animations addObject:animation];
         }
     }
-    
-    for (const auto& pair : imageDatas)
-        CGImageRelease(pair.second);
     
     animationIndex = 0;
     imageIndex = 0;
