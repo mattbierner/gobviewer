@@ -2,6 +2,7 @@
 
 #import "Bitmap.h"
 #import "DfColor.h"
+#import "Pal.h"
 
 #include <iostream>
 
@@ -123,7 +124,7 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     [self.animations addObject:animation];
 }
 
-- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
+- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename
 {
     DF::Bm bm = DF::Bm::CreateFromFile(loadBm(gob, filename));
     size_t subCount = bm.GetCountSubBms();
@@ -132,8 +133,8 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     
     for (unsigned i = 0; i < subCount; ++i)
     {
-        Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap(i)];
-        NSImage* img = [bitmap getImage:pal];
+        Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap(i) pal:self.pal];
+        NSImage* img = [bitmap getImage];
         [animation.frames addObject:[BmCell cellForImage:img flipped:NO]];
     }
     
@@ -145,13 +146,13 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     [self update];
 }
 
-- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
+- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename
 {
     DF::Cell bm = DF::Cell::CreateFromFile(loadFme(gob, filename));
 
-    Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap()];
+    Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap() pal:self.pal];
     
-    NSImage* image = [bitmap getImage:pal];
+    NSImage* image = [bitmap getImage];
     BmAnimation* animation = [BmAnimation animationForImage:image];
     self.animations = [NSMutableArray arrayWithObject:animation];
     
@@ -160,7 +161,7 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     [self update];
 }
 
-- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal
+- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename
 {
     DF::Wax w = DF::Wax::CreateFromFile(loadWax(gob, filename));
   
@@ -195,8 +196,8 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
                 }
                 else
                 {
-                    Bitmap* bitmapObj = [Bitmap createForBitmap:bitmap];
-                    img = [bitmapObj getImage:pal];
+                    Bitmap* bitmapObj = [Bitmap createForBitmap:bitmap pal:self.pal];
+                    img = [bitmapObj getImage];
                     imageDatas[bitmap] = img;
                 }
                 [animation.frames addObject:

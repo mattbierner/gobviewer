@@ -90,10 +90,18 @@ DF::GobFile open(const char* file)
     DF::Buffer buffer = DF::Buffer::Create(size);
     gob.ReadFile(file, buffer.GetW(0), 0, size);
     DF::PalFile p(std::move(buffer));
+    
+    DF::PalFileData pal;
     p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
     
     self.pal = [Pal createForPal:pal];
     self.previewViewController.pal = self.pal;
+}
+
+- (void) setPal:(Pal *)pal
+{
+    _pal = pal;
+    self.previewViewController.pal = pal;
 }
 
 - (void) loadFile:(NSURL*)path
@@ -120,14 +128,14 @@ DF::GobFile open(const char* file)
     switch (gob->GetFileType(filename))
     {
     case DF::FileType::Bm:
-        [self.previewViewController loadBM:gob.get() named:filename.c_str() withPal:&pal];
+        [self.previewViewController loadBM:gob.get() named:filename.c_str()];
         break;
     case DF::FileType::Fme:
-        [self.previewViewController loadFme:gob.get() named:filename.c_str() withPal:&pal];
+        [self.previewViewController loadFme:gob.get() named:filename.c_str()];
         break;
     
     case DF::FileType::Wax:
-        [self.previewViewController loadWax:gob.get() named:filename.c_str() withPal:&pal];
+        [self.previewViewController loadWax:gob.get() named:filename.c_str()];
         break;
     
     case DF::FileType::Msg:

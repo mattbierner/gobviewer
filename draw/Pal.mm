@@ -14,6 +14,11 @@
    return self;
 }
 
+- (DF::PalFileData) getData
+{
+    return _pal;
+}
+
 - (CGImageRef) createImage
 {
     const unsigned width = 1;

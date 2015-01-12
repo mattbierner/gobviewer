@@ -74,21 +74,27 @@
     self.tdoView.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
-- (void) loadBM:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
+- (void) setPal:(Pal*)pal
 {
-    [self.bmView loadBM:gob named:filename withPal:pal];
+    _pal = pal;
+    self.bmView.pal = pal;
+}
+
+- (void) loadBM:(DF::GobFile*) gob named:(const char*)filename
+{
+    [self.bmView loadBM:gob named:filename];
     self.preview = self.bmView;
 }
 
-- (void) loadFme:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
+- (void) loadFme:(DF::GobFile*) gob named:(const char*)filename
 {
-    [self.bmView loadFme:gob named:filename withPal:pal];
+    [self.bmView loadFme:gob named:filename];
     self.preview = self.bmView;
 }
 
-- (void) loadWax:(DF::GobFile*) gob named:(const char*)filename withPal:(DF::PalFileData*)pal
+- (void) loadWax:(DF::GobFile*) gob named:(const char*)filename
 {
-    [self.bmView loadWax:gob named:filename withPal:pal];
+    [self.bmView loadWax:gob named:filename];
     self.preview = self.bmView;
 }
 

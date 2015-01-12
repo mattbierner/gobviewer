@@ -11,6 +11,7 @@
     DF::PalFileData _pal;
 }
 
+
 + (Pal*) createForPal:(DF::PalFileData)pal;
 
 - (id) initWithPal:(DF::PalFileData)pal;
@@ -20,9 +21,11 @@
 */
 - (CGImageRef) createImage;
 
-
 /**
 */
 - (NSColor*) getColor:(NSUInteger)index;
+
+
+- (DF::PalFileData) getData;
 
 @end

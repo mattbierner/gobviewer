@@ -1,11 +1,14 @@
 #import "Bitmap.h"
 
+#import "Pal.h"
 
-RGB* BmDataToRgb(const DF::IReadableBuffer& buffer, const DF::PalFileData& pal, bool trans)
+RGB* BmDataToRgb(const DF::IReadableBuffer& buffer, Pal* pal, bool trans)
 {
     size_t size = buffer.GetDataSize();
     RGB* imgData = new RGB[size];
     RGB* dataWriter = imgData;
+    
+    auto palData = [pal getData];
     
     const uint8_t* bmData = buffer.GetR(0);
     const uint8_t* bmDataEnd = bmData + size;
@@ -18,14 +21,14 @@ RGB* BmDataToRgb(const DF::IReadableBuffer& buffer, const DF::PalFileData& pal, 
         }
         else
         {
-            auto palColors = pal.colors[entry];
+            auto palColors = palData.colors[entry];
             (*(dataWriter++)) = {palColors.r, palColors.g, palColors.b, 255};
         }
     }
     return imgData;
 }
 
-RGB* BmToRgb(const DF::Bitmap& bm, const DF::PalFileData& pal)
+RGB* BmToRgb(const DF::Bitmap& bm, Pal* pal)
 {
     return BmDataToRgb(bm, pal, (bm.GetTransparency() != DF::BmFileTransparency::Normal));
 }
@@ -36,16 +39,35 @@ void freeRGB(void *info, const void *data, size_t size)
 }
 
 
+@interface Bitmap()
+
+/**
+    Create an CGImage from a RGB array.
+*/
++ (CGImageRef) createImage:(RGB*)imgData
+    size:(size_t)dataSize
+    width:(unsigned)width
+    height:(unsigned)height;
+
+/**
+    Create a new NSImage from the bitmap data.
+*/
+- (NSImage*) createImage;
+
+@end
+
+
 @implementation Bitmap
 
-+ (Bitmap*) createForBitmap:(std::shared_ptr<DF::Bitmap>) bitmap
++ (Bitmap*) createForBitmap:(std::shared_ptr<DF::Bitmap>) bitmap pal:(Pal*)pal
 {
     Bitmap* t = [[Bitmap alloc] init];
     t->_bitmap = bitmap;
+    t.pal = pal;
     return t;
 }
 
-+ (CGImageRef) createImage:(RGB*) imgData
++ (CGImageRef) createImage:(RGB*)imgData
     size:(size_t) dataSize
     width:(unsigned) width
     height:(unsigned) height
@@ -68,13 +90,13 @@ void freeRGB(void *info, const void *data, size_t size)
     return img;
 }
 
-- (NSImage*) createImage:(DF::PalFileData*)pal
+- (NSImage*) createImage
 {
     unsigned width = _bitmap->GetWidth();
     unsigned height = _bitmap->GetHeight();
     size_t imgDataSize = _bitmap->GetDataSize() * 32;
         
-    RGB* imgData = BmToRgb(*_bitmap, *pal);
+    RGB* imgData = BmToRgb(*_bitmap, self.pal);
     
     CGImageRef imageRef = [Bitmap createImage:imgData size: imgDataSize width:height height:width];
     NSImage* img = [[NSImage alloc] initWithCGImage:imageRef size:CGSizeZero];
@@ -82,12 +104,11 @@ void freeRGB(void *info, const void *data, size_t size)
     return img;
 }
 
-- (NSImage*) getImage:(DF::PalFileData*)pal
+- (NSImage*) getImage
 {
-    if (_image)
-        return _image;
-    else
-        return [self createImage:pal];
+    if (!_image)
+        _image = [self createImage];
+    return _image;
 }
 
 

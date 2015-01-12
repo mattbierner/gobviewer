@@ -7,6 +7,8 @@
 #include <gober/GobFile.h>
 #include <gober/PalFile.h>
 
+@class Pal;
+
 /**
 */
 @interface BmCell : NSObject
@@ -43,12 +45,13 @@
 
 @property (nonatomic, strong) NSMutableArray* animations;
 @property (nonatomic, strong) NSTimer* animationTimer;
+@property (nonatomic, strong) Pal* pal;
 
 - (id) initWithFrame:(NSRect)frameRect;
 
-- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
-- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
-- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
+- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename;
+- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename;
+- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename;
 
 - (void) setFrameRate:(NSTimeInterval)frameRate;
 

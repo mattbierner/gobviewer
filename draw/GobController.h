@@ -11,8 +11,6 @@
     NSTableViewDelegate>
 {
     std::shared_ptr<DF::GobFile> gob;
-        
-    DF::PalFileData pal;
 }
 
 @property (nonatomic, strong) NSTableView* contentsTable;

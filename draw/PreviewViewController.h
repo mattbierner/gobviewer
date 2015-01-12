@@ -10,8 +10,6 @@
 @class TdoView;
 
 @interface PreviewViewController : NSViewController
-{
-}
 
 @property (nonatomic, strong) NSView* preview;
 @property (nonatomic, strong) BmView* bmView;
@@ -20,9 +18,9 @@
 @property (nonatomic, strong) TdoView* tdoView;
 @property (nonatomic, strong) Pal* pal;
 
-- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
-- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
-- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal ;
+- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename;
+- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename;
+- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename ;
 
 - (void) loadMsg:(DF::GobFile*)gob named:(const char*)filename;
 - (void) loadTdo:(DF::GobFile*)gob named:(const char*)filename;
