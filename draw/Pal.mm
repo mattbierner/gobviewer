@@ -46,4 +46,14 @@
     return imgRef;
 }
 
+- (NSColor*) getColor:(NSUInteger)index
+{
+    auto entry = _pal.colors[index];
+    return [NSColor
+        colorWithRed:entry.r / 255.0f
+        green:entry.g / 255.0f
+        blue:entry.b / 255.0f
+        alpha:1.0f];
+}
+
 @end

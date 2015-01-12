@@ -4,6 +4,8 @@
 #pragma once
 
 #include <map>
+#include <string>
+#include <vector>
 
 namespace DF
 {
@@ -121,6 +123,11 @@ struct TdoTriangle
 };
 
 /**
+    Collection of quads.
+*/
+using TdoTriangles = std::vector<TdoTriangle>;
+
+/**
     Quad.
 */
 struct TdoQuad
@@ -142,6 +149,13 @@ struct TdoTextureQuad
 {
     tdo_texture_vertex_index a, b, c, d;
 };
+
+/**
+    Collection of texture quads.
+*/
+using TdoTextureQuads = std::vector<TdoTextureQuad>;
+
+
 
 using TdoTexture = std::string;
 using TdoTextures = std::vector<std::string>;

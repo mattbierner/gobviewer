@@ -1,6 +1,7 @@
 #import "GobController.h"
 
 #import "LabeledCell.h"
+#import "Pal.h" 
 #import "PreviewViewController.h"
 
 #include <gober/MsgFile.h>
@@ -90,6 +91,9 @@ DF::GobFile open(const char* file)
     gob.ReadFile(file, buffer.GetW(0), 0, size);
     DF::PalFile p(std::move(buffer));
     p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
+    
+    self.pal = [Pal createForPal:pal];
+    self.previewViewController.pal = self.pal;
 }
 
 - (void) loadFile:(NSURL*)path

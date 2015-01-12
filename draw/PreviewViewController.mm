@@ -3,7 +3,9 @@
 #import "BmView.h"
 #import "Msg.h"
 #import "MsgView.h"
+#import "Pal.h"
 #import "PalView.h"
+#import "Tdo.h"
 #import "TdoView.h"
 
 #include <gober/Msg.h>
@@ -112,7 +114,9 @@
     DF::Buffer buffer = DF::Buffer::Create(size);
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
-   DF::TdoFile(std::move(buffer)).CreateTdo();
+    Tdo* tdo = [Tdo createForTdo:DF::TdoFile(std::move(buffer)).CreateTdo()];
+    tdo.pal = self.pal;
+    self.tdoView.tdo = tdo;
     self.preview = self.tdoView;
 }
 

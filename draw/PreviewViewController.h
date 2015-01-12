@@ -4,8 +4,9 @@
 #include <gober/PalFile.h>
 
 @class BmView;
-@class PalView;
 @class MsgView;
+@class Pal;
+@class PalView;
 @class TdoView;
 
 @interface PreviewViewController : NSViewController
@@ -17,7 +18,7 @@
 @property (nonatomic, strong) PalView* palView;
 @property (nonatomic, strong) MsgView* msgView;
 @property (nonatomic, strong) TdoView* tdoView;
-
+@property (nonatomic, strong) Pal* pal;
 
 - (void) loadBM:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;
 - (void) loadFme:(DF::GobFile*)gob named:(const char*)filename withPal:(DF::PalFileData*)pal;

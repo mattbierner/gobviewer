@@ -53,6 +53,14 @@ BOOST_FUSION_ADAPT_STRUCT(
     (DF::tdo_texture_coordinate, y));
 
 BOOST_FUSION_ADAPT_STRUCT(
+    DF::TdoTriangle,
+    (DF::tdo_vertex_index, a)
+    (DF::tdo_vertex_index, b)
+    (DF::tdo_vertex_index, c)
+    (DF::tdo_color_index, color)
+    (DF::TdoShadingType, fill));
+
+BOOST_FUSION_ADAPT_STRUCT(
     DF::TdoQuad,
     (DF::tdo_vertex_index, a)
     (DF::tdo_vertex_index, b)
@@ -61,6 +69,26 @@ BOOST_FUSION_ADAPT_STRUCT(
     (DF::tdo_color_index, color)
     (DF::TdoShadingType, fill));
 
+BOOST_FUSION_ADAPT_STRUCT(
+    DF::TdoTextureQuad,
+    (DF::tdo_texture_vertex_index, a)
+    (DF::tdo_texture_vertex_index, b)
+    (DF::tdo_texture_vertex_index, c)
+    (DF::tdo_texture_vertex_index, d));
+
+BOOST_FUSION_ADAPT_STRUCT(
+    DF::TdoGeometry,
+    (DF::TdoVerticies, verticies)
+    (DF::TdoTriangles, triangles)
+    (DF::TdoQuads, quads)
+    (DF::TdoTextureVerticies, textureVerticies)
+    (DF::TdoTextureQuads, textureQuads));
+
+BOOST_FUSION_ADAPT_STRUCT(
+    DF::TdoObject,
+    (DF::tdo_texture_index, texture)
+    (DF::TdoGeometry, geometry));
+
 namespace DF
 {
 
@@ -68,15 +96,7 @@ using Texture = std::string;
 
 using Textures = std::vector<Texture>;
 
-using TextureQuad = boost::tuple<size_t, size_t, size_t, size_t>;
-
-using TextureQuads = std::vector<TextureQuad>;
-
-using ObjectDefinition = boost::tuple<TdoVerticies, TdoQuads, TdoTextureVerticies, TextureQuads>;
-
-using Object = boost::tuple<int, ObjectDefinition>;
-
-using Objects = std::vector<Object>;
+using Objects = std::vector<TdoObject>;
 
 using TdoFileData = boost::tuple<Textures, Objects>;
 
@@ -125,6 +145,7 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
         
         objectBody
             %= verticies
+            >> -triangles
             >> -quads
             >> -textureVerticies
             >> -textureQuads;
@@ -134,26 +155,41 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
         // Verticies
         point %= base::value(float_);
         
-        vertex %= base::attributeElement(int_, boost::proto::deep_copy(point >> point >> point));
+        vertex %=
+            base::attributeElement(omit[int_],
+                boost::proto::deep_copy(point >> point >> point));
         
         verticies %= base::list("VERTICES", boost::proto::deep_copy(vertex));
         
-        // Quads
+      
         index %= base::value(uint_);
         
         fill %= base::value(boost::proto::deep_copy(qi::attr_cast(base::identifier)));
+        
+        // Triangles
+        triangle %=
+            base::attributeElement(omit[int_],
+                boost::proto::deep_copy(index >> index >> index >> index >> fill));
+        
+        triangles %= base::list("TRIANGLES", boost::proto::deep_copy(triangle));
 
-        quad %= base::attributeElement(omit[int_], boost::proto::deep_copy(index >> index >> index >> index >> index >> fill));
+        // Quads
+        quad %=
+            base::attributeElement(omit[int_],
+                boost::proto::deep_copy(index >> index >> index >> index >> index >> fill));
         
         quads %= base::list("QUADS", boost::proto::deep_copy(quad));
         
         // Texture Verticies
         textureVertex %= base::attributeElement(omit[int_], boost::proto::deep_copy(point >> point));
         
-        textureVerticies %= base::list("TEXTURE VERTICES", boost::proto::deep_copy(textureVertex));
+        textureVerticies %=
+            base::list("TEXTURE VERTICES",
+                boost::proto::deep_copy(textureVertex));
         
         // Texture Quads
-        textureQuad %= base::attributeElement(omit[int_], boost::proto::deep_copy(index >> index >> index >> index));
+        textureQuad %= base::attributeElement(omit[int_],
+            boost::proto::deep_copy(index >> index >> index >> index));
         
         textureQuads %= base::list("TEXTURE QUADS", boost::proto::deep_copy(textureQuad));
         
@@ -183,32 +219,33 @@ struct tdo_parser : ObjParser<Iterator, TdoFileData()>
 
 // Object
     rule<Iterator, Objects()> objects;
-    rule<Iterator, Object()> object;
+    rule<Iterator, TdoObject()> object;
     rule<Iterator, unsigned()> objectHeader;
-    rule<Iterator, ObjectDefinition()> objectBody;
+    rule<Iterator, TdoGeometry()> objectBody;
 
 // Verticies
     rule<Iterator, TdoVerticies()> verticies;
     rule<Iterator, TdoVertex()> vertex;
     
     rule<Iterator, float()> point;
+    rule<Iterator, unsigned()> index;
+    rule<Iterator, TdoShadingType()> fill;
+    
+// Triangle
+    rule<Iterator, TdoTriangles()> triangles;
+    rule<Iterator, TdoTriangle()> triangle;
     
 // Quads
     rule<Iterator, TdoQuads()> quads;
     rule<Iterator, TdoQuad()> quad;
-    
-    rule<Iterator, unsigned()> index;
-    rule<Iterator, TdoShadingType()> fill;
-
-// Triangle
 
 // Texture Verticies
     rule<Iterator, TdoTextureVerticies()> textureVerticies;
     rule<Iterator, TdoTextureVertex()> textureVertex;
     
 // Texture Quads
-    rule<Iterator, TextureQuads()> textureQuads;
-    rule<Iterator, TextureQuad()> textureQuad;
+    rule<Iterator, TdoTextureQuads()> textureQuads;
+    rule<Iterator, TdoTextureQuad()> textureQuad;
 };
 
 Tdo TdoFile::CreateTdo() const
@@ -221,20 +258,10 @@ Tdo TdoFile::CreateTdo() const
     TdoFileData messages;
     bool result = parse(start, end, p, messages);
     
-    auto x = boost::get<0>(messages);
-    auto y = boost::get<1>(messages);
-    auto s = y.size();
-    if (!y.empty())
-    {
-        auto verts = boost::get<0>(boost::get<1>(y[0]));
-        auto quads = boost::get<1>(boost::get<1>(y[0]));
-        auto textVert = boost::get<2>(boost::get<1>(y[0]));
-        auto textQuads = boost::get<3>(boost::get<1>(y[0]));
-
-        (void) quads;
-    }
     std::cout << result << std::endl;
-    return { };
+    return Tdo(
+        std::move(boost::get<0>(messages)),
+        std::move(boost::get<1>(messages)));
 }
 
 } // DF

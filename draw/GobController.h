@@ -3,6 +3,7 @@
 #include <gober/GobFile.h>
 #include <gober/PalFile.h>
 
+@class Pal;
 @class PreviewViewController;
 
 @interface GobController : NSWindowController<
@@ -17,7 +18,7 @@
 @property (nonatomic, strong) NSTableView* contentsTable;
 @property (nonatomic, strong) NSScrollView* tableContainer;
 @property (nonatomic, strong) PreviewViewController* previewViewController;
-
+@property (nonatomic, strong) Pal* pal;
 
 - (void) loadPal:(NSString*)name fromGob:(NSString*)file;
 
