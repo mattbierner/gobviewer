@@ -12,6 +12,7 @@
 		890B72C11A5E26D000133F4F /* LabeledCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72C01A5E26D000133F4F /* LabeledCell.mm */; };
 		890B72C41A5E281500133F4F /* Msg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72C31A5E281500133F4F /* Msg.mm */; };
 		8919720E1A6365BA00F9B72B /* Bitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8919720D1A6365BA00F9B72B /* Bitmap.mm */; };
+		896AF5D51A64C55600012936 /* libgober.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 896AF5641A64C34F00012936 /* libgober.a */; };
 		89ABBD771A54F11C00B72E36 /* GobController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89ABBD761A54F11C00B72E36 /* GobController.mm */; };
 		89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE931A55DE61002F95FF /* PreviewViewController.mm */; };
 		89C4CE961A55DE62002F95FF /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89C4CE941A55DE61002F95FF /* PreviewViewController.xib */; };
@@ -101,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				896AF5D51A64C55600012936 /* libgober.a in Frameworks */,
 				89D9238D1A6312DE00D29C8B /* SceneKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -398,7 +400,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)/libgober",
+					"$(SRCROOT)/libgob",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -442,7 +444,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)/libgober",
+					"$(SRCROOT)/libgob",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
