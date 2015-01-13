@@ -1,6 +1,7 @@
 #import "MsgView.h"
 
 #import "LabeledCell.h"
+#import "Msg.h"
 
 @implementation MsgView
 
@@ -14,7 +15,6 @@
         self.table.headerView = nil;
         self.table.gridStyleMask = NSTableViewSolidHorizontalGridLineMask;
     
-         
         NSTableColumn* col = [[NSTableColumn alloc] initWithIdentifier:@"mainCol"];
         [col setEditable:NO];
         [col setResizingMask:NSTableColumnAutoresizingMask];

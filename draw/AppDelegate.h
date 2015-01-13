@@ -2,10 +2,12 @@
 
 @class GobController;
 
+/**
+    GobViewer main application delegate.
+*/
 @interface AppDelegate : NSObject <
     NSApplicationDelegate,
-    NSOpenSavePanelDelegate,
-    NSUserInterfaceValidations>
+    NSOpenSavePanelDelegate>
 
 @property(strong) NSMutableArray* windows;
 

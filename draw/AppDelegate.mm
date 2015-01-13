@@ -4,8 +4,6 @@
 
 @interface AppDelegate ()
 
-@property (weak) IBOutlet NSWindow *window;
-
 - (NSArray*) getFilesToOpenAtLaunch;
 
 - (void) openGob:(NSURL*)path;
@@ -122,20 +120,6 @@
 {
     [window showWindow:NSApp];
     [self.windows addObject:window];
-}
-
-- (BOOL) validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem
-{
-    SEL action = [anItem action];
-    
-    NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
-    if (mainWindow)
-    {
-        GobController* controller = mainWindow.windowController;
-      //  if (controller)
-        //    return [controller validateUserInterfaceItem:anItem];
-    }
-    return YES;
 }
 
 @end

@@ -3,6 +3,9 @@
 #include <gob/Msg.h>
 #include <vector>
 
+/**
+    Objective-C wraper for a MSG object.
+*/
 @interface Msg : NSObject
 {
     Df::Msg _msg;

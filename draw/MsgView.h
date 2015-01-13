@@ -1,16 +1,20 @@
 #import <Cocoa/Cocoa.h>
 
-#import "Msg.h"
+@class Msg;
 
-#include <vector>
-
+/**
+    Previews the contents of a MSG file.
+*/
 @interface MsgView : NSView <
     NSTableViewDataSource,
     NSTableViewDelegate>
 
-@property (nonatomic, strong) Msg* message;
-
 @property (nonatomic, strong) NSScrollView* contentsView;
 @property (nonatomic, strong) NSTableView* table;
+
+/**
+    MSG to preview.
+*/
+@property (nonatomic, strong) Msg* message;
 
 @end

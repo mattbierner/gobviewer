@@ -17,6 +17,7 @@
 + (Pal*) createFromGob:(NSString*)gob named:(NSString*)name;
 
 /**
+    Create a PAL from some data.
 */
 + (Pal*) createForPal:(Df::PalFileData)pal;
 
@@ -26,10 +27,13 @@
 - (CGImageRef) createImage;
 
 /**
+    Lookup a color in the palette by index.
 */
 - (NSColor*) getColor:(NSUInteger)index;
 
-
+/**
+    @TODO: remove
+*/
 - (Df::PalFileData) getData;
 
 @end
