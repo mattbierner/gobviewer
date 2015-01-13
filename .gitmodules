@@ -1,0 +1,3 @@
+[submodule "libgob"]
+	path = libgob
+	url = https://github.com/mattbierner/libgob.git
