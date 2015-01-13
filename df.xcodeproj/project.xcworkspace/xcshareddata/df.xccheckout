@@ -12,6 +12,8 @@
 	<dict>
 		<key>49BE4EDBAFE2828D6AEC163533CB67F358BB7219</key>
 		<string>https://github.com/mattbierner/gober.git</string>
+		<key>AB9B22491082EBC978905042F6D43AC1E2F2D27D</key>
+		<string>https://github.com/mattbierner/libgob.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>df.xcodeproj</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>49BE4EDBAFE2828D6AEC163533CB67F358BB7219</key>
 		<string>../..</string>
+		<key>AB9B22491082EBC978905042F6D43AC1E2F2D27D</key>
+		<string>../../libgob</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/mattbierner/gober.git</string>
@@ -35,6 +39,14 @@
 			<string>49BE4EDBAFE2828D6AEC163533CB67F358BB7219</string>
 			<key>IDESourceControlWCCName</key>
 			<string>gob</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>AB9B22491082EBC978905042F6D43AC1E2F2D27D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>libgob</string>
 		</dict>
 	</array>
 </dict>
