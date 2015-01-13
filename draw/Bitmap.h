@@ -1,8 +1,8 @@
 #import <Cocoa/Cocoa.h>
 
-#include <gober/Bitmap.h>
-#include <gober/GobFile.h>
-#include <gober/PalFile.h>
+#include <gob/Bitmap.h>
+#include <gob/GobFile.h>
+#include <gob/PalFile.h>
 
 #import "DfColor.h"
 
@@ -13,7 +13,7 @@
 */
 @interface Bitmap : NSObject
 {
-    std::shared_ptr<DF::Bitmap> _bitmap;
+    std::shared_ptr<Df::Bitmap> _bitmap;
     
     NSImage* _image;
 }
@@ -21,11 +21,11 @@
 @property (nonatomic, strong) Pal* pal;
 
 /**
-    Create a bitmap from DF bitmap object.
+    Create a bitmap from Df bitmap object.
 */
-+ (Bitmap*) createForBitmap:(std::shared_ptr<DF::Bitmap>) bitmap pal:(Pal*)pal;
++ (Bitmap*) createForBitmap:(std::shared_ptr<Df::Bitmap>) bitmap pal:(Pal*)pal;
 
-+ (Bitmap*) createFormGob:(DF::GobFile*)gob name:(const char*)filename pal:(Pal*)pal;
++ (Bitmap*) createFormGob:(Df::GobFile*)gob name:(const char*)filename pal:(Pal*)pal;
 
 /**
     Get the current NSImage associated with the bitmap data.

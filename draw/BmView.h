@@ -2,7 +2,7 @@
 
 #include "BitmapView.h"
 
-#include <gober/GobFile.h>
+#include <gob/GobFile.h>
 
 @class Pal;
 
@@ -48,9 +48,9 @@
 */
 @property (nonatomic, strong) Pal* pal;
 
-- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename;
-- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename;
-- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename;
+- (void) loadBM:(Df::GobFile*)gob named:(const char*)filename;
+- (void) loadFme:(Df::GobFile*)gob named:(const char*)filename;
+- (void) loadWax:(Df::GobFile*)gob named:(const char*)filename;
 
 - (void) setFrameRate:(NSTimeInterval)frameRate;
 

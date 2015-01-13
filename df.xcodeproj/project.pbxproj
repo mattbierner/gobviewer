@@ -12,7 +12,6 @@
 		890B72C11A5E26D000133F4F /* LabeledCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72C01A5E26D000133F4F /* LabeledCell.mm */; };
 		890B72C41A5E281500133F4F /* Msg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72C31A5E281500133F4F /* Msg.mm */; };
 		8919720E1A6365BA00F9B72B /* Bitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8919720D1A6365BA00F9B72B /* Bitmap.mm */; };
-		89ABBD701A54D93F00B72E36 /* libgober.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 89ABBD6C1A54D8E000B72E36 /* libgober.a */; };
 		89ABBD771A54F11C00B72E36 /* GobController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89ABBD761A54F11C00B72E36 /* GobController.mm */; };
 		89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE931A55DE61002F95FF /* PreviewViewController.mm */; };
 		89C4CE961A55DE62002F95FF /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89C4CE941A55DE61002F95FF /* PreviewViewController.xib */; };
@@ -30,23 +29,23 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		8976F5F71A54D59600F7C1EE /* PBXContainerItemProxy */ = {
+		896AF5611A64C34F00012936 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */;
+			containerPortal = 896AF55C1A64C34F00012936 /* libgob.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 8918A65A1A54D1810033DDFE;
 			remoteInfo = gober;
 		};
-		89ABBD6B1A54D8E000B72E36 /* PBXContainerItemProxy */ = {
+		896AF5631A64C34F00012936 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */;
+			containerPortal = 896AF55C1A64C34F00012936 /* libgob.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 89ABBD5B1A54D8BC00B72E36;
-			remoteInfo = libgober;
+			remoteInfo = gober.a;
 		};
-		89ABBD6E1A54D93A00B72E36 /* PBXContainerItemProxy */ = {
+		896AF5651A64C35400012936 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */;
+			containerPortal = 896AF55C1A64C34F00012936 /* libgob.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 89ABBD5A1A54D8BC00B72E36;
 			remoteInfo = gober.a;
@@ -65,7 +64,7 @@
 		8919720C1A6365BA00F9B72B /* Bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bitmap.h; sourceTree = "<group>"; };
 		8919720D1A6365BA00F9B72B /* Bitmap.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bitmap.mm; sourceTree = "<group>"; };
 		891972101A63685800F9B72B /* DfColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DfColor.h; sourceTree = "<group>"; };
-		8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libgober.xcodeproj; path = libgober/libgober.xcodeproj; sourceTree = "<group>"; };
+		896AF55C1A64C34F00012936 /* libgob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libgob.xcodeproj; path = libgob/libgob.xcodeproj; sourceTree = "<group>"; };
 		89A3BC991A45718200B26F8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89ABBD711A54D98900B72E36 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		89ABBD751A54F11C00B72E36 /* GobController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobController.h; sourceTree = "<group>"; };
@@ -103,18 +102,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				89D9238D1A6312DE00D29C8B /* SceneKit.framework in Frameworks */,
-				89ABBD701A54D93F00B72E36 /* libgober.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8976F5F41A54D59500F7C1EE /* Products */ = {
+		896AF55D1A64C34F00012936 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8976F5F81A54D59600F7C1EE /* libgober.dylib */,
-				89ABBD6C1A54D8E000B72E36 /* libgober.a */,
+				896AF5621A64C34F00012936 /* libgober.dylib */,
+				896AF5641A64C34F00012936 /* libgober.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -145,10 +143,10 @@
 		89F4523F1A42A24000A20C49 = {
 			isa = PBXGroup;
 			children = (
+				896AF55C1A64C34F00012936 /* libgob.xcodeproj */,
 				89D9238C1A6312DE00D29C8B /* SceneKit.framework */,
 				89C4CE971A55FD2C002F95FF /* README.md */,
 				89ABBD711A54D98900B72E36 /* LICENSE */,
-				8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */,
 				89F452611A43F49B00A20C49 /* draw */,
 				89F452751A43F49B00A20C49 /* drawTests */,
 				89A3BC971A45718200B26F8F /* DFTests */,
@@ -244,7 +242,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				89ABBD6F1A54D93A00B72E36 /* PBXTargetDependency */,
+				896AF5661A64C35400012936 /* PBXTargetDependency */,
 			);
 			name = gobviewer;
 			productName = draw;
@@ -278,8 +276,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 8976F5F41A54D59500F7C1EE /* Products */;
-					ProjectRef = 8976F5F31A54D59500F7C1EE /* libgober.xcodeproj */;
+					ProductGroup = 896AF55D1A64C34F00012936 /* Products */;
+					ProjectRef = 896AF55C1A64C34F00012936 /* libgob.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -290,18 +288,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		8976F5F81A54D59600F7C1EE /* libgober.dylib */ = {
+		896AF5621A64C34F00012936 /* libgober.dylib */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.dylib";
 			path = libgober.dylib;
-			remoteRef = 8976F5F71A54D59600F7C1EE /* PBXContainerItemProxy */;
+			remoteRef = 896AF5611A64C34F00012936 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		89ABBD6C1A54D8E000B72E36 /* libgober.a */ = {
+		896AF5641A64C34F00012936 /* libgober.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libgober.a;
-			remoteRef = 89ABBD6B1A54D8E000B72E36 /* PBXContainerItemProxy */;
+			remoteRef = 896AF5631A64C34F00012936 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -345,10 +343,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		89ABBD6F1A54D93A00B72E36 /* PBXTargetDependency */ = {
+		896AF5661A64C35400012936 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = gober.a;
-			targetProxy = 89ABBD6E1A54D93A00B72E36 /* PBXContainerItemProxy */;
+			targetProxy = 896AF5651A64C35400012936 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

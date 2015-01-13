@@ -89,7 +89,7 @@
     
     std::ifstream fs;
     fs.open(filename, std::ifstream::binary | std::ifstream::in);
-    gob = std::make_shared<DF::GobFile>(DF::GobFile::CreateFromFile(std::move(fs)));
+    gob = std::make_shared<Df::GobFile>(Df::GobFile::CreateFromFile(std::move(fs)));
     
     self.window.title = [path.path lastPathComponent];
     [self.contentsTable reloadData];
@@ -103,29 +103,29 @@
     
     switch (gob->GetFileType(filename))
     {
-    case DF::FileType::Bm:
+    case Df::FileType::Bm:
         [self.previewViewController loadBM:gob.get() named:filename.c_str()];
         break;
-    case DF::FileType::Fme:
+    case Df::FileType::Fme:
         [self.previewViewController loadFme:gob.get() named:filename.c_str()];
         break;
     
-    case DF::FileType::Wax:
+    case Df::FileType::Wax:
         [self.previewViewController loadWax:gob.get() named:filename.c_str()];
         break;
     
-    case DF::FileType::Msg:
+    case Df::FileType::Msg:
         [self.previewViewController loadMsg:gob.get() named:filename.c_str()];
         break;
     
-     case DF::FileType::Pal:
+     case Df::FileType::Pal:
         [self.previewViewController loadPal:gob.get() named:filename.c_str()];
         break;
         
-    case DF::FileType::Tdo:
+    case Df::FileType::Tdo:
     {
         size_t size = gob->GetFileSize(filename);
-        DF::Buffer buffer = DF::Buffer::Create(size);
+        Df::Buffer buffer = Df::Buffer::Create(size);
         gob->ReadFile(filename, buffer.GetW(0), 0, size);
         std::cout << std::string(buffer.GetObjR<char>(), size);
 
@@ -135,7 +135,7 @@
     default:
     {
         size_t size = gob->GetFileSize(filename);
-        DF::Buffer buffer = DF::Buffer::Create(size);
+        Df::Buffer buffer = Df::Buffer::Create(size);
         gob->ReadFile(filename, buffer.GetW(0), 0, size);
         std::cout << std::string(buffer.GetObjR<char>(), size);
         break;

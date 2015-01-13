@@ -11,46 +11,46 @@
 #include <vector>
 #include <iomanip>
 
-#include <gober/GobFileData.h>
-#include <gober/GobFile.h>
-#include <gober/BmFile.h>
-#include <gober/FmeFile.h>
-#include <gober/PalFile.h>
-#include <gober/WaxFile.h>
-#include <gober/Buffer.h>
-#include <gober/Bm.h>
-#include <gober/Cell.h>
-#include <gober/Wax.h>
+#include <gob/GobFileData.h>
+#include <gob/GobFile.h>
+#include <gob/BmFile.h>
+#include <gob/FmeFile.h>
+#include <gob/PalFile.h>
+#include <gob/WaxFile.h>
+#include <gob/Buffer.h>
+#include <gob/Bm.h>
+#include <gob/Cell.h>
+#include <gob/Wax.h>
 
 
-DF::BmFile loadBm(DF::GobFile* gob, const char* filename)
+Df::BmFile loadBm(Df::GobFile* gob, const char* filename)
 {
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
-    DF::Buffer buffer = DF::Buffer::Create(size);
+    Df::Buffer buffer = Df::Buffer::Create(size);
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
-    return DF::BmFile(std::move(buffer));
+    return Df::BmFile(std::move(buffer));
 }
 
-DF::FmeFile loadFme(DF::GobFile* gob, const char* filename)
+Df::FmeFile loadFme(Df::GobFile* gob, const char* filename)
 {
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
-    DF::Buffer buffer = DF::Buffer::Create(size);
+    Df::Buffer buffer = Df::Buffer::Create(size);
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
-    return DF::FmeFile(std::move(buffer));
+    return Df::FmeFile(std::move(buffer));
 }
 
-DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
+Df::WaxFile loadWax(Df::GobFile* gob, const char* filename)
 {
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
-    DF::Buffer buffer = DF::Buffer::Create(size);
+    Df::Buffer buffer = Df::Buffer::Create(size);
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
-    return DF::WaxFile(std::move(buffer));
+    return Df::WaxFile(std::move(buffer));
 }
 
 @implementation BmCell
@@ -124,9 +124,9 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     [self.animations addObject:animation];
 }
 
-- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename
+- (void) loadBM:(Df::GobFile*)gob named:(const char*)filename
 {
-    DF::Bm bm = DF::Bm::CreateFromFile(loadBm(gob, filename));
+    Df::Bm bm = Df::Bm::CreateFromFile(loadBm(gob, filename));
     size_t subCount = bm.GetCountSubBms();
 
     BmAnimation* animation = [[BmAnimation alloc] init];
@@ -146,9 +146,9 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     [self update];
 }
 
-- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename
+- (void) loadFme:(Df::GobFile*)gob named:(const char*)filename
 {
-    DF::Cell bm = DF::Cell::CreateFromFile(loadFme(gob, filename));
+    Df::Cell bm = Df::Cell::CreateFromFile(loadFme(gob, filename));
 
     Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap() pal:self.pal];
     
@@ -161,24 +161,24 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
     [self update];
 }
 
-- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename
+- (void) loadWax:(Df::GobFile*)gob named:(const char*)filename
 {
-    DF::Wax w = DF::Wax::CreateFromFile(loadWax(gob, filename));
+    Df::Wax w = Df::Wax::CreateFromFile(loadWax(gob, filename));
   
     self.animations = [NSMutableArray arrayWithCapacity:0];
 
     // Since waxes reuse a lot of image data, make a cache so we avoid creating
     // duplicate CGImages.
-    std::map<std::shared_ptr<DF::Bitmap>, NSImage*> imageDatas;
+    std::map<std::shared_ptr<Df::Bitmap>, NSImage*> imageDatas;
     
     for (size_t waxIndex : w.GetActions())
     {
-        DF::WaxAction wax = w.GetAction(waxIndex);
+        Df::WaxAction wax = w.GetAction(waxIndex);
     
         size_t numSeqs = wax.GetSequencesCount();
         for (size_t sequenceIndex = 0; sequenceIndex < numSeqs; ++sequenceIndex)
         {
-            DF::WaxActionSequence seq = wax.GetSequence(sequenceIndex);
+            Df::WaxActionSequence seq = wax.GetSequence(sequenceIndex);
             
             size_t numFrames = seq.GetFramesCount();
             BmAnimation* animation = [[BmAnimation alloc] init];
@@ -186,7 +186,7 @@ DF::WaxFile loadWax(DF::GobFile* gob, const char* filename)
             
             for (size_t frame = 0; frame < numFrames; ++frame)
             {
-                DF::Cell bm = seq.GetFrame(frame);
+                Df::Cell bm = seq.GetFrame(frame);
                 auto bitmap = bm.GetBitmap();
                 const auto found = imageDatas.find(bitmap);
                 NSImage* img = nil;

@@ -2,8 +2,8 @@
 
 #import "Pal.h"
 
-#include <gober/Bm.h>
-#include <gober/BmFile.h>
+#include <gob/Bm.h>
+#include <gob/BmFile.h>
 
 
 @implementation NSImage (Rotated)
@@ -39,7 +39,7 @@
 }
 @end
 
-RGB* BmDataToRgb(const DF::IReadableBuffer& buffer, Pal* pal, bool trans)
+RGB* BmDataToRgb(const Df::IReadableBuffer& buffer, Pal* pal, bool trans)
 {
     size_t size = buffer.GetDataSize();
     RGB* imgData = new RGB[size];
@@ -65,9 +65,9 @@ RGB* BmDataToRgb(const DF::IReadableBuffer& buffer, Pal* pal, bool trans)
     return imgData;
 }
 
-RGB* BmToRgb(const DF::Bitmap& bm, Pal* pal)
+RGB* BmToRgb(const Df::Bitmap& bm, Pal* pal)
 {
-    return BmDataToRgb(bm, pal, (bm.GetTransparency() != DF::BmFileTransparency::Normal));
+    return BmDataToRgb(bm, pal, (bm.GetTransparency() != Df::BmFileTransparency::Normal));
 }
 
 void freeRGB(void *info, const void *data, size_t size)
@@ -96,18 +96,18 @@ void freeRGB(void *info, const void *data, size_t size)
 
 @implementation Bitmap
 
-+ (Bitmap*) createFormGob:(DF::GobFile*)gob name:(const char*)filename pal:(Pal*)pal
++ (Bitmap*) createFormGob:(Df::GobFile*)gob name:(const char*)filename pal:(Pal*)pal
 {
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
-    DF::Buffer buffer = DF::Buffer::Create(size);
+    Df::Buffer buffer = Df::Buffer::Create(size);
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
-    auto bm = DF::Bm::CreateFromFile(DF::BmFile(std::move(buffer)));
+    auto bm = Df::Bm::CreateFromFile(Df::BmFile(std::move(buffer)));
     return [Bitmap createForBitmap:bm.GetBitmap(0) pal:pal];
 }
 
-+ (Bitmap*) createForBitmap:(std::shared_ptr<DF::Bitmap>) bitmap pal:(Pal*)pal
++ (Bitmap*) createForBitmap:(std::shared_ptr<Df::Bitmap>) bitmap pal:(Pal*)pal
 {
     Bitmap* t = [[Bitmap alloc] init];
     t->_bitmap = bitmap;

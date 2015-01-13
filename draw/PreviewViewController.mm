@@ -8,10 +8,10 @@
 #import "Tdo.h"
 #import "TdoView.h"
 
-#include <gober/Msg.h>
-#include <gober/MsgFile.h>
-#include <gober/Tdo.h>
-#include <gober/TdoFile.h>
+#include <gob/Msg.h>
+#include <gob/MsgFile.h>
+#include <gob/Tdo.h>
+#include <gob/TdoFile.h>
 
 
 @interface PreviewViewController ()
@@ -81,63 +81,63 @@
     self.tdoView.pal = pal;
 }
 
-- (void) loadBM:(DF::GobFile*) gob named:(const char*)filename
+- (void) loadBM:(Df::GobFile*) gob named:(const char*)filename
 {
     [self.bmView loadBM:gob named:filename];
     self.preview = self.bmView;
 }
 
-- (void) loadFme:(DF::GobFile*) gob named:(const char*)filename
+- (void) loadFme:(Df::GobFile*) gob named:(const char*)filename
 {
     [self.bmView loadFme:gob named:filename];
     self.preview = self.bmView;
 }
 
-- (void) loadWax:(DF::GobFile*) gob named:(const char*)filename
+- (void) loadWax:(Df::GobFile*) gob named:(const char*)filename
 {
     [self.bmView loadWax:gob named:filename];
     self.preview = self.bmView;
 }
 
-- (void) loadMsg:(DF::GobFile*)gob named:(const char*)filename
+- (void) loadMsg:(Df::GobFile*)gob named:(const char*)filename
 {
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
     
-    DF::Buffer buffer = DF::Buffer::Create(size);
+    Df::Buffer buffer = Df::Buffer::Create(size);
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
-    DF::Msg msg = DF::MsgFile(std::move(buffer)).CreateMsg();
+    Df::Msg msg = Df::MsgFile(std::move(buffer)).CreateMsg();
     
     self.msgView.message = [Msg createForMsg:msg];
     self.preview = self.msgView;
 }
 
-- (void) loadTdo:(DF::GobFile*)gob named:(const char*)filename
+- (void) loadTdo:(Df::GobFile*)gob named:(const char*)filename
 {
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
     
-    DF::Buffer buffer = DF::Buffer::Create(size);
+    Df::Buffer buffer = Df::Buffer::Create(size);
     gob->ReadFile(file, buffer.GetW(0), 0, size);
     
-    auto tdoFile = DF::TdoFile(std::move(buffer)).CreateTdo();
+    auto tdoFile = Df::TdoFile(std::move(buffer)).CreateTdo();
     Tdo* tdo = [Tdo createForTdo:tdoFile];
     tdo.pal = self.pal;
     self.tdoView.tdo = tdo;
     self.preview = self.tdoView;
 }
 
-- (void) loadPal:(DF::GobFile*)gob named:(const char*)filename
+- (void) loadPal:(Df::GobFile*)gob named:(const char*)filename
 {
     std::string file(filename);
     size_t size = gob->GetFileSize(file);
-    DF::Buffer buffer = DF::Buffer::Create(size);
+    Df::Buffer buffer = Df::Buffer::Create(size);
     gob->ReadFile(file, buffer.GetW(0), 0, size);
 
-    DF::PalFileData pal;
-    DF::PalFile p(std::move(buffer));
-    p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(DF::PalFileData));
+    Df::PalFileData pal;
+    Df::PalFile p(std::move(buffer));
+    p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(Df::PalFileData));
     
     self.palView.pal = [Pal createForPal:pal];
     self.preview = self.palView;

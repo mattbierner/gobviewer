@@ -1,18 +1,18 @@
 #import "Pal.h"
 
-#include <gober/Buffer.h>
-#include <gober/GobFile.h>
-#include <gober/PalFile.h>
+#include <gob/Buffer.h>
+#include <gob/GobFile.h>
+#include <gob/PalFile.h>
 
 #include <iostream>
 
-DF::GobFile open(const char* file)
+Df::GobFile open(const char* file)
 {
     std::ifstream fs;
     fs.open(file, std::ifstream::binary | std::ifstream::in);
     if (fs.is_open())
     {
-        return DF::GobFile::CreateFromFile(std::move(fs));
+        return Df::GobFile::CreateFromFile(std::move(fs));
     }
     return { };
 }
@@ -22,28 +22,28 @@ DF::GobFile open(const char* file)
 + (Pal*) createFromGob:(NSString*)gobFile named:(NSString*)name;
 {
 
-    DF::GobFile gob = open([gobFile UTF8String]);
+    Df::GobFile gob = open([gobFile UTF8String]);
     
     std::string file([name UTF8String]);
     size_t size = gob.GetFileSize(file);
-    DF::Buffer buffer = DF::Buffer::Create(size);
+    Df::Buffer buffer = Df::Buffer::Create(size);
     gob.ReadFile(file, buffer.GetW(0), 0, size);
-    DF::PalFile p(std::move(buffer));
+    Df::PalFile p(std::move(buffer));
     
-    DF::PalFileData data;
-    p.Read(reinterpret_cast<uint8_t*>(&data), 0, sizeof(DF::PalFileData));
+    Df::PalFileData data;
+    p.Read(reinterpret_cast<uint8_t*>(&data), 0, sizeof(Df::PalFileData));
     
     return [Pal createForPal:data];
 }
 
-+ (Pal*) createForPal:(DF::PalFileData)p
++ (Pal*) createForPal:(Df::PalFileData)p
 {
     Pal* pal = [[Pal alloc] init];
     pal->_pal = p;
     return pal;
 }
 
-- (DF::PalFileData) getData
+- (Df::PalFileData) getData
 {
     return _pal;
 }

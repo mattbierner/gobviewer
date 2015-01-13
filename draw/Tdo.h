@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-#include <gober/Tdo.h>
+#include <gob/Tdo.h>
 
 @class SCNGeometry;
 @class Pal;
@@ -10,14 +10,14 @@
 */
 @interface Tdo : NSObject
 {
-    DF::Tdo _tdo;
+    Df::Tdo _tdo;
 }
 
 @property (nonatomic, strong) Pal* pal;
 
-+ (Tdo*) createForTdo:(DF::Tdo)tdo;
++ (Tdo*) createForTdo:(Df::Tdo)tdo;
 
-- (id) initWithTdo:(DF::Tdo)tdo;
+- (id) initWithTdo:(Df::Tdo)tdo;
 
 /**
     Create the Scenekit geometry associated with an object.

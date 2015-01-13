@@ -41,12 +41,12 @@ SCNVector3 average(const SCNVector3& a, const SCNVector3& b)
         (a.z + b.z) / 2.0f };
 }
 
-SCNVector3 dfToScn(const DF::TdoVertex& vec)
+SCNVector3 dfToScn(const Df::TdoVertex& vec)
 {
     return { vec.x, vec.y, vec.z };
 }
 
-CGPoint dfToScn(const DF::TdoTextureVertex& vec)
+CGPoint dfToScn(const Df::TdoTextureVertex& vec)
 {
     return { vec.y, vec.x }; // Note: flipped here
 }
@@ -61,26 +61,26 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 
 @interface Tdo()
 
-+ (SCNGeometrySource*) createNormalsSource:(const DF::TdoObject&)obj;
-+ (SCNGeometrySource*) createNormalsForQuads:(const DF::TdoObject&)obj;
-+ (SCNGeometrySource*) createNormalsForTriangles:(const DF::TdoObject&)obj;
++ (SCNGeometrySource*) createNormalsSource:(const Df::TdoObject&)obj;
++ (SCNGeometrySource*) createNormalsForQuads:(const Df::TdoObject&)obj;
++ (SCNGeometrySource*) createNormalsForTriangles:(const Df::TdoObject&)obj;
 
-+ (SCNGeometrySource*) createVertexSource:(const DF::TdoObject&)obj;
-+ (SCNGeometrySource*) createQuadVertexSource:(const DF::TdoObject&)obj;
-+ (SCNGeometrySource*) createTriangleVertexSource:(const DF::TdoObject&)obj;
++ (SCNGeometrySource*) createVertexSource:(const Df::TdoObject&)obj;
++ (SCNGeometrySource*) createQuadVertexSource:(const Df::TdoObject&)obj;
++ (SCNGeometrySource*) createTriangleVertexSource:(const Df::TdoObject&)obj;
 
-+ (SCNGeometrySource*) createTextureSource:(const DF::TdoObject&)obj;
-+ (SCNGeometrySource*) createQuadTextureSource:(const DF::TdoObject&)obj;
-+ (SCNGeometrySource*) createTriangleTextureSource:(const DF::TdoObject&)obj;
++ (SCNGeometrySource*) createTextureSource:(const Df::TdoObject&)obj;
++ (SCNGeometrySource*) createQuadTextureSource:(const Df::TdoObject&)obj;
++ (SCNGeometrySource*) createTriangleTextureSource:(const Df::TdoObject&)obj;
 
-+ (SCNGeometryElement*) createElement:(const DF::TdoObject&)obj;
++ (SCNGeometryElement*) createElement:(const Df::TdoObject&)obj;
 
 @end
 
 
 @implementation Tdo
 
-+ (SCNGeometrySource*) createVertexSource:(const DF::TdoObject&)obj
++ (SCNGeometrySource*) createVertexSource:(const Df::TdoObject&)obj
 {
     if (!obj.geometry.quads.empty())
         return [Tdo createQuadVertexSource:obj];
@@ -88,7 +88,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         return [Tdo createTriangleVertexSource:obj];
 }
 
-+ (SCNGeometrySource*) createQuadVertexSource:(const DF::TdoObject&)obj
++ (SCNGeometrySource*) createQuadVertexSource:(const Df::TdoObject&)obj
 {
     auto verts = obj.geometry.verticies;
     
@@ -108,7 +108,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
     return [SCNGeometrySource geometrySourceWithVertices:&data[0] count:data.size()];
 }
 
-+ (SCNGeometrySource*) createTriangleVertexSource:(const DF::TdoObject&)obj
++ (SCNGeometrySource*) createTriangleVertexSource:(const Df::TdoObject&)obj
 {
     const auto& verts = obj.geometry.verticies;
     
@@ -124,7 +124,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
     return [SCNGeometrySource geometrySourceWithVertices:&data[0] count:data.size()];
 }
 
-+ (SCNGeometrySource*) createTextureSource:(const DF::TdoObject&)obj
++ (SCNGeometrySource*) createTextureSource:(const Df::TdoObject&)obj
 {
     if (!obj.geometry.textureQuads.empty())
         return [Tdo createQuadTextureSource:obj];
@@ -134,7 +134,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         return nil;
 }
 
-+ (SCNGeometrySource*) createQuadTextureSource:(const DF::TdoObject&)obj
++ (SCNGeometrySource*) createQuadTextureSource:(const Df::TdoObject&)obj
 {
     auto verts = obj.geometry.textureVerticies;
     
@@ -154,7 +154,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
     return [SCNGeometrySource geometrySourceWithTextureCoordinates:&data[0] count:data.size()];
 }
 
-+ (SCNGeometrySource*) createTriangleTextureSource:(const DF::TdoObject&)obj
++ (SCNGeometrySource*) createTriangleTextureSource:(const Df::TdoObject&)obj
 {
     const auto& verts = obj.geometry.textureVerticies;
     
@@ -171,7 +171,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 }
 
 
-+ (SCNGeometrySource*) createNormalsSource:(const DF::TdoObject&)obj
++ (SCNGeometrySource*) createNormalsSource:(const Df::TdoObject&)obj
 {
     if (!obj.geometry.quads.empty())
         return [Tdo createNormalsForQuads: obj];
@@ -181,7 +181,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         return nil;
 }
 
-+ (SCNGeometrySource*) createNormalsForQuads:(const DF::TdoObject&)obj
++ (SCNGeometrySource*) createNormalsForQuads:(const Df::TdoObject&)obj
 {
     const auto& verts = obj.geometry.verticies;
     
@@ -199,7 +199,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
     return [SCNGeometrySource geometrySourceWithNormals:&data[0] count:data.size()];
 }
 
-+ (SCNGeometrySource*) createNormalsForTriangles:(const DF::TdoObject&)obj
++ (SCNGeometrySource*) createNormalsForTriangles:(const Df::TdoObject&)obj
 {
     const auto& verts = obj.geometry.verticies;
     
@@ -217,7 +217,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
     return [SCNGeometrySource geometrySourceWithNormals:&data[0] count:data.size()];
 }
 
-+ (SCNGeometryElement*) createElement:(const DF::TdoObject&)obj
++ (SCNGeometryElement*) createElement:(const Df::TdoObject&)obj
 {
     bool isTriangle = obj.geometry.quads.empty();
     
@@ -235,24 +235,24 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         bytesPerIndex:sizeof(unsigned)];
 }
 
-+ (Tdo*) createForTdo:(DF::Tdo)tdo
++ (Tdo*) createForTdo:(Df::Tdo)tdo
 {
     return [[Tdo alloc] initWithTdo:tdo];
 }
 
-- (id) initWithTdo:(DF::Tdo)tdo
+- (id) initWithTdo:(Df::Tdo)tdo
 {
    _tdo = tdo;
    return self;
 }
 
-DF::GobFile openGob(const char* file)
+Df::GobFile openGob(const char* file)
 {
     std::ifstream fs;
     fs.open(file, std::ifstream::binary | std::ifstream::in);
     if (fs.is_open())
     {
-        return DF::GobFile::CreateFromFile(std::move(fs));
+        return Df::GobFile::CreateFromFile(std::move(fs));
     }
     return { };
 }
@@ -295,7 +295,7 @@ DF::GobFile openGob(const char* file)
     }*/
     if (object.texture >= 0)
     {
-        DF::GobFile gob = openGob("TEXTURES.GOB");
+        Df::GobFile gob = openGob("TEXTURES.GOB");
         Bitmap* bitmap = [Bitmap createFormGob:&gob name:_tdo.GetTexture(object.texture).c_str() pal:self.pal];
         NSImage* img = [bitmap getImage];//[NSImage imageNamed:@"check.jpg"];
         material.diffuse.contents = img;

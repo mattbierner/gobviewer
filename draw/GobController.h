@@ -1,7 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
-#include <gober/GobFile.h>
-#include <gober/PalFile.h>
+#include <gob/GobFile.h>
+#include <gob/PalFile.h>
 
 @class Pal;
 @class PreviewViewController;
@@ -13,7 +13,7 @@
     NSTableViewDataSource,
     NSTableViewDelegate>
 {
-    std::shared_ptr<DF::GobFile> gob;
+    std::shared_ptr<Df::GobFile> gob;
 }
 
 @property (nonatomic, strong) NSTableView* contentsTable;

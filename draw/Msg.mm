@@ -2,7 +2,7 @@
 
 @implementation Msg
 
-+ (Msg*) createForMsg:(DF::Msg)msg
++ (Msg*) createForMsg:(Df::Msg)msg
 {
     Msg* msgObj = [[Msg alloc] init];
     msgObj->_msg = msg;

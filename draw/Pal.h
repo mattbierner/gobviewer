@@ -1,14 +1,14 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
-#include <gober/PalFileData.h>
+#include <gob/PalFileData.h>
 
 /**
     Objective-C PAL file wrapper.
 */
 @interface Pal : NSObject
 {
-    DF::PalFileData _pal;
+    Df::PalFileData _pal;
 }
 
 /**
@@ -18,7 +18,7 @@
 
 /**
 */
-+ (Pal*) createForPal:(DF::PalFileData)pal;
++ (Pal*) createForPal:(Df::PalFileData)pal;
 
 /**
     Create a 1d image from the PAL.
@@ -30,6 +30,6 @@
 - (NSColor*) getColor:(NSUInteger)index;
 
 
-- (DF::PalFileData) getData;
+- (Df::PalFileData) getData;
 
 @end

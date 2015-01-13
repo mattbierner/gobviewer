@@ -1,7 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
-#include <gober/GobFile.h>
-#include <gober/PalFile.h>
+#include <gob/GobFile.h>
+#include <gob/PalFile.h>
 
 @class BmView;
 @class MsgView;
@@ -18,13 +18,13 @@
 @property (nonatomic, strong) TdoView* tdoView;
 @property (nonatomic, strong) Pal* pal;
 
-- (void) loadBM:(DF::GobFile*)gob named:(const char*)filename;
-- (void) loadFme:(DF::GobFile*)gob named:(const char*)filename;
-- (void) loadWax:(DF::GobFile*)gob named:(const char*)filename ;
+- (void) loadBM:(Df::GobFile*)gob named:(const char*)filename;
+- (void) loadFme:(Df::GobFile*)gob named:(const char*)filename;
+- (void) loadWax:(Df::GobFile*)gob named:(const char*)filename ;
 
-- (void) loadMsg:(DF::GobFile*)gob named:(const char*)filename;
-- (void) loadTdo:(DF::GobFile*)gob named:(const char*)filename;
+- (void) loadMsg:(Df::GobFile*)gob named:(const char*)filename;
+- (void) loadTdo:(Df::GobFile*)gob named:(const char*)filename;
 
-- (void) loadPal:(DF::GobFile*)gob named:(const char*)filename;
+- (void) loadPal:(Df::GobFile*)gob named:(const char*)filename;
 
 @end
