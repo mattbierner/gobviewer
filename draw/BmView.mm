@@ -2,6 +2,7 @@
 
 #import "Bitmap.h"
 #import "DfColor.h"
+#import "Gob.h"
 #import "Pal.h"
 
 #include <iostream>
@@ -22,36 +23,16 @@
 #include <gob/Cell.h>
 #include <gob/Wax.h>
 
+@interface BmView()
 
-Df::BmFile loadBm(Df::GobFile* gob, const char* filename)
-{
-    std::string file(filename);
-    size_t size = gob->GetFileSize(file);
-    Df::Buffer buffer = Df::Buffer::Create(size);
-    gob->ReadFile(file, buffer.GetW(0), 0, size);
-    
-    return Df::BmFile(std::move(buffer));
-}
 
-Df::FmeFile loadFme(Df::GobFile* gob, const char* filename)
-{
-    std::string file(filename);
-    size_t size = gob->GetFileSize(file);
-    Df::Buffer buffer = Df::Buffer::Create(size);
-    gob->ReadFile(file, buffer.GetW(0), 0, size);
-    
-    return Df::FmeFile(std::move(buffer));
-}
++ (Df::BmFile) loadBm:(Gob*)gob named:(NSString*)filename;
 
-Df::WaxFile loadWax(Df::GobFile* gob, const char* filename)
-{
-    std::string file(filename);
-    size_t size = gob->GetFileSize(file);
-    Df::Buffer buffer = Df::Buffer::Create(size);
-    gob->ReadFile(file, buffer.GetW(0), 0, size);
-    
-    return Df::WaxFile(std::move(buffer));
-}
++ (Df::FmeFile) loadFme:(Gob*)gob named:(NSString*)filename;
+
++ (Df::WaxFile) loadWax:(Gob*)gob named:(NSString*)filename;
+
+@end
 
 @implementation BmCell
 
@@ -107,6 +88,24 @@ Df::WaxFile loadWax(Df::GobFile* gob, const char* filename)
 
 @implementation BmView
 
++ (Df::BmFile) loadBm:(Gob*)gob named:(NSString*)filename
+{
+    auto buffer = [gob readFileToBuffer:filename];
+    return Df::BmFile(std::move(buffer));
+}
+
++ (Df::FmeFile) loadFme:(Gob*)gob named:(NSString*)filename;
+{
+    auto buffer = [gob readFileToBuffer:filename];
+    return Df::FmeFile(std::move(buffer));
+}
+
++ (Df::WaxFile) loadWax:(Gob*)gob named:(NSString*)filename;
+{
+    auto buffer = [gob readFileToBuffer:filename];
+    return Df::WaxFile(std::move(buffer));
+}
+
 - (id) initWithFrame:(NSRect)frameRect
 {
     if (self = [super initWithFrame:frameRect])
@@ -124,11 +123,12 @@ Df::WaxFile loadWax(Df::GobFile* gob, const char* filename)
     [self.animations addObject:animation];
 }
 
-- (void) loadBM:(Df::GobFile*)gob named:(const char*)filename
+- (void) loadBM:(Gob*)gob named:(NSString*)filename
 {
-    Df::Bm bm = Df::Bm::CreateFromFile(loadBm(gob, filename));
+    auto bmFile = [[self class] loadBm:gob named:filename];
+    Df::Bm bm = Df::Bm::CreateFromFile(bmFile);
+    
     size_t subCount = bm.GetCountSubBms();
-
     BmAnimation* animation = [[BmAnimation alloc] init];
     
     for (unsigned i = 0; i < subCount; ++i)
@@ -146,9 +146,10 @@ Df::WaxFile loadWax(Df::GobFile* gob, const char* filename)
     [self update];
 }
 
-- (void) loadFme:(Df::GobFile*)gob named:(const char*)filename
+- (void) loadFme:(Gob*)gob named:(NSString*)filename
 {
-    Df::Cell bm = Df::Cell::CreateFromFile(loadFme(gob, filename));
+    auto fmeFile = [[self class] loadFme:gob named:filename];
+    Df::Cell bm = Df::Cell::CreateFromFile(fmeFile);
 
     Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap() pal:self.pal];
     
@@ -161,9 +162,10 @@ Df::WaxFile loadWax(Df::GobFile* gob, const char* filename)
     [self update];
 }
 
-- (void) loadWax:(Df::GobFile*)gob named:(const char*)filename
+- (void) loadWax:(Gob*)gob named:(NSString*)filename
 {
-    Df::Wax w = Df::Wax::CreateFromFile(loadWax(gob, filename));
+    auto waxFile = [[self class] loadWax:gob named:filename];
+    Df::Wax w = Df::Wax::CreateFromFile(waxFile);
   
     self.animations = [NSMutableArray arrayWithCapacity:0];
 

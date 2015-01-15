@@ -5,9 +5,16 @@
 #import "PreviewViewController.h"
 
 #include <iostream>
+#include <string>
 
 @interface GobController()
+
 - (void) selectedFileDidChange:(NSString*)file;
+
+- (void) saveFile:(NSString*)filename to:(NSURL*)path;
+
+- (void) printFile:(NSString*)filename;
+
 @end
 
 @implementation GobController
@@ -80,73 +87,61 @@
     self.previewViewController.pal = pal;
 }
 
+- (Gob*) gob
+{
+    return _gob;
+}
+
 - (void) loadFile:(NSURL*)path
 {
     // TODO: move to settings
     [self loadPal:@"SECBASE.PAL" fromGob:@"DARK.GOB"];
     
-    std::string filename([path.path UTF8String]);
-    
-    std::ifstream fs;
-    fs.open(filename, std::ifstream::binary | std::ifstream::in);
-    gob = std::make_shared<Df::GobFile>(Df::GobFile::CreateFromFile(std::move(fs)));
-    
+    _gob = [Gob createFromFile:path];
+
     self.window.title = [path.path lastPathComponent];
     [self.contentsTable reloadData];
 }
 
 - (void) selectedFileDidChange:(NSString*)file
 {
-    if (!gob) return;
-    
-    std::string filename = [file UTF8String];
-    
-    switch (gob->GetFileType(filename))
+    switch ([self.gob getFileType:file])
     {
     case Df::FileType::Bm:
-        [self.previewViewController loadBM:gob.get() named:filename.c_str()];
+        [self.previewViewController loadBM:self.gob named:file];
         break;
+        
     case Df::FileType::Fme:
-        [self.previewViewController loadFme:gob.get() named:filename.c_str()];
+        [self.previewViewController loadFme:self.gob named:file];
         break;
     
     case Df::FileType::Wax:
-        [self.previewViewController loadWax:gob.get() named:filename.c_str()];
+        [self.previewViewController loadWax:self.gob named:file];
         break;
     
     case Df::FileType::Msg:
-        [self.previewViewController loadMsg:gob.get() named:filename.c_str()];
+        [self.previewViewController loadMsg:self.gob named:file];
         break;
     
      case Df::FileType::Pal:
-        [self.previewViewController loadPal:gob.get() named:filename.c_str()];
+        [self.previewViewController loadPal:self.gob named:file];
         break;
         
     case Df::FileType::Tdo:
-    {
-        size_t size = gob->GetFileSize(filename);
-        Df::Buffer buffer = Df::Buffer::Create(size);
-        gob->ReadFile(filename, buffer.GetW(0), 0, size);
-        std::cout << std::string(buffer.GetObjR<char>(), size);
-
-        [self.previewViewController loadTdo:gob.get() named:filename.c_str()];
+        [self printFile:file];
+        [self.previewViewController loadTdo:self.gob named:file];
         break;
-    }
+        
     default:
-    {
-        size_t size = gob->GetFileSize(filename);
-        Df::Buffer buffer = Df::Buffer::Create(size);
-        gob->ReadFile(filename, buffer.GetW(0), 0, size);
-        std::cout << std::string(buffer.GetObjR<char>(), size);
+        [self printFile:file];
         break;
-    }
     }
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-    if (gob)
-        return gob->GetFilenames().size();
+    if (self.gob)
+        return [self.gob getNumberOfFiles];
     else
         return 0;
 }
@@ -161,8 +156,7 @@
         cell = [[LabeledCell alloc] initWithFrame:CGRectZero];
         cell.identifier = tableColumn.identifier;
     }
-    std::string fileName = gob->GetFilename(row);
-    cell.textField.stringValue = [NSString stringWithUTF8String:fileName.c_str()];
+    cell.textField.stringValue = [self.gob getFilename:row];
     return cell;
 }
 
@@ -170,10 +164,52 @@
 {
     NSInteger selectedRow = [self.contentsTable selectedRow];
     if (selectedRow >= 0)
+        [self selectedFileDidChange:[self.gob getFilename:selectedRow]];
+}
+
+- (BOOL) validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item
+{
+    SEL action = [item action];
+    if (action == @selector(saveToFile:))
     {
-        std::string filename = gob->GetFilename(selectedRow);
-        [self selectedFileDidChange:[NSString stringWithUTF8String:filename.c_str()]];
+        return (self.contentsTable.selectedRow >= 0);
     }
+    
+    return YES;
+}
+
+- (IBAction) saveToFile:(id)sender
+{
+    GobController* controller = [[NSApplication sharedApplication] mainWindow].windowController;
+    if (controller)
+    {
+        NSInteger selectedRow = self.contentsTable.selectedRow;
+        NSString* filename = [self.gob getFilename:selectedRow];
+        
+        NSSavePanel* panel = [NSSavePanel savePanel];
+        panel.canCreateDirectories = YES;
+        panel.delegate = self;
+        panel.treatsFilePackagesAsDirectories = YES;
+        panel.nameFieldStringValue = filename;
+        
+        NSInteger clicked = [panel runModal];
+        if (clicked == NSFileHandlingPanelOKButton)
+        {
+            [self saveFile:filename to:panel.URL];
+        }
+    }
+}
+
+- (void) saveFile:(NSString*)file to:(NSURL*)path
+{
+    NSData* data = [self.gob readFile:file];
+    [data writeToURL:path atomically:NO];
+}
+
+- (void) printFile:(NSString*)file
+{
+   NSData* data = [self.gob readFile:file];
+   NSLog(@"%@", data);
 }
 
 @end

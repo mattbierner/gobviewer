@@ -1,7 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-#include <gob/GobFile.h>
-#include <gob/PalFile.h>
+#import "Gob.h"
 
 @class Pal;
 @class PreviewViewController;
@@ -11,9 +10,12 @@
 */
 @interface GobController : NSWindowController<
     NSTableViewDataSource,
-    NSTableViewDelegate>
+    NSTableViewDelegate,
+    NSUserInterfaceValidations,
+    NSApplicationDelegate,
+    NSOpenSavePanelDelegate>
 {
-    std::shared_ptr<Df::GobFile> gob;
+    Gob* _gob;
 }
 
 @property (nonatomic, strong) NSTableView* contentsTable;
@@ -21,9 +23,18 @@
 @property (nonatomic, strong) PreviewViewController* previewViewController;
 
 /**
+    Gob being viewed.
+*/
+@property (nonatomic, readonly) Gob* gob;
+
+/**
     Palette used to render images.
 */
 @property (nonatomic, strong) Pal* pal;
+
+/**
+*/
+- (IBAction) saveToFile:(id)sender;
 
 - (void) loadPal:(NSString*)name fromGob:(NSString*)file;
 

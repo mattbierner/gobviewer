@@ -85,7 +85,7 @@
                             <menuItem title="Save to File" id="NwF-bI-ONg" userLabel="Save to File">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="saveToFile:" target="Voe-Tx-rLC" id="DPm-YH-xTF"/>
+                                    <action selector="saveToFile:" target="-1" id="Ug6-vv-M6f"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VxR-xW-gaQ"/>

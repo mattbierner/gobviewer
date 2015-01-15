@@ -4,6 +4,7 @@
 
 #include <gob/GobFile.h>
 
+@class Gob;
 @class Pal;
 
 /**
@@ -48,9 +49,9 @@
 */
 @property (nonatomic, strong) Pal* pal;
 
-- (void) loadBM:(Df::GobFile*)gob named:(const char*)filename;
-- (void) loadFme:(Df::GobFile*)gob named:(const char*)filename;
-- (void) loadWax:(Df::GobFile*)gob named:(const char*)filename;
+- (void) loadBM:(Gob*)gob named:(NSString*)filename;
+- (void) loadFme:(Gob*)gob named:(NSString*)filename;
+- (void) loadWax:(Gob*)gob named:(NSString*)filename;
 
 - (void) setFrameRate:(NSTimeInterval)frameRate;
 

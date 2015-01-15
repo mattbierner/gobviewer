@@ -4,6 +4,7 @@
 #include <gob/PalFile.h>
 
 @class BmView;
+@class Gob;
 @class MsgView;
 @class Pal;
 @class PalView;
@@ -18,13 +19,13 @@
 @property (nonatomic, strong) TdoView* tdoView;
 @property (nonatomic, strong) Pal* pal;
 
-- (void) loadBM:(Df::GobFile*)gob named:(const char*)filename;
-- (void) loadFme:(Df::GobFile*)gob named:(const char*)filename;
-- (void) loadWax:(Df::GobFile*)gob named:(const char*)filename ;
+- (void) loadBM:(Gob*)gob named:(NSString*)filename;
+- (void) loadFme:(Gob*)gob named:(NSString*)filename;
+- (void) loadWax:(Gob*)gob named:(NSString*)filename;
 
-- (void) loadMsg:(Df::GobFile*)gob named:(const char*)filename;
-- (void) loadTdo:(Df::GobFile*)gob named:(const char*)filename;
+- (void) loadMsg:(Gob*)gob named:(NSString*)filename;
+- (void) loadTdo:(Gob*)gob named:(NSString*)filename;
 
-- (void) loadPal:(Df::GobFile*)gob named:(const char*)filename;
+- (void) loadPal:(Gob*)gob named:(NSString*)filename;
 
 @end

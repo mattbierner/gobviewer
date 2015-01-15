@@ -15,9 +15,6 @@
 */
 - (IBAction) openDocument:(id)sender;
 
-/**
-*/
-- (IBAction) saveToFile:(id)sender;
 
 // NSOpenSavePanelDelegate
 - (BOOL) panel:(id)sender
