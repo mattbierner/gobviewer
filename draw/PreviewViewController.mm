@@ -2,6 +2,7 @@
 
 #import "BmView.h"
 #import "Cmp.h"
+#import "CmpView.h"
 #import "Gob.h"
 #import "Msg.h"
 #import "MsgView.h"
@@ -13,6 +14,7 @@
 #include <gob/CmpFile.h>
 #include <gob/Msg.h>
 #include <gob/MsgFile.h>
+#include <gob/Pal.h>
 #include <gob/Tdo.h>
 #include <gob/TdoFile.h>
 
@@ -75,6 +77,9 @@
 
     self.tdoView = [[TdoView alloc] initWithFrame:self.view.bounds];
     self.tdoView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.cmpView = [[CmpView alloc] initWithFrame:self.view.bounds];
+    self.cmpView.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
 - (void) setPal:(Pal*)pal
@@ -82,6 +87,7 @@
     _pal = pal;
     self.bmView.pal = pal;
     self.tdoView.pal = pal;
+    self.cmpView.pal = pal;
 }
 
 - (void) setCmp:(Cmp*)cmp
@@ -132,12 +138,8 @@
 - (void) loadPal:(Gob*)gob named:(NSString*)filename
 {
     auto buffer = [gob readFileToBuffer:filename];
-
-    Df::PalFileData pal;
-    Df::PalFile p(std::move(buffer));
-    p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(Df::PalFileData));
     
-    self.palView.pal = [Pal createForPal:pal];
+    self.palView.pal = [Pal createForPal:Df::PalFile(std::move(buffer))];
     self.preview = self.palView;
 }
 
@@ -146,10 +148,12 @@
     auto buffer = [gob readFileToBuffer:filename];
     auto size = buffer.GetDataSize();
     
-    Df::CmpFileData pal;
+
     Df::CmpFile p(std::move(buffer));
-    p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(Df::PalFileData));
-    1;
+    
+    self.cmpView.cmp = [Cmp createForCmp:p];
+    self.preview = self.cmpView;
+
 }
 
 

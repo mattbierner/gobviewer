@@ -13,6 +13,7 @@
 		890B72C41A5E281500133F4F /* Msg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 890B72C31A5E281500133F4F /* Msg.mm */; };
 		8919720E1A6365BA00F9B72B /* Bitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8919720D1A6365BA00F9B72B /* Bitmap.mm */; };
 		894C66621A6785D500F4AF80 /* Cmp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 894C66611A6785D500F4AF80 /* Cmp.mm */; };
+		894C66661A67910B00F4AF80 /* CmpView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 894C66651A67910B00F4AF80 /* CmpView.mm */; };
 		896AF5D51A64C55600012936 /* libgob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 896AF5641A64C34F00012936 /* libgob.a */; };
 		89ABBD771A54F11C00B72E36 /* GobController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89ABBD761A54F11C00B72E36 /* GobController.mm */; };
 		89C4CE951A55DE62002F95FF /* PreviewViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 89C4CE931A55DE61002F95FF /* PreviewViewController.mm */; };
@@ -69,6 +70,8 @@
 		891972101A63685800F9B72B /* DfColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DfColor.h; sourceTree = "<group>"; };
 		894C66601A6785D500F4AF80 /* Cmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cmp.h; sourceTree = "<group>"; };
 		894C66611A6785D500F4AF80 /* Cmp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Cmp.mm; sourceTree = "<group>"; };
+		894C66641A67910B00F4AF80 /* CmpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CmpView.h; sourceTree = "<group>"; };
+		894C66651A67910B00F4AF80 /* CmpView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CmpView.mm; sourceTree = "<group>"; };
 		896AF55C1A64C34F00012936 /* libgob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libgob.xcodeproj; path = libgob/libgob.xcodeproj; sourceTree = "<group>"; };
 		89A3BC991A45718200B26F8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89ABBD711A54D98900B72E36 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -210,6 +213,8 @@
 				89CD4DAE1A6775A60077D7BF /* Gob.mm */,
 				894C66601A6785D500F4AF80 /* Cmp.h */,
 				894C66611A6785D500F4AF80 /* Cmp.mm */,
+				894C66641A67910B00F4AF80 /* CmpView.h */,
+				894C66651A67910B00F4AF80 /* CmpView.mm */,
 			);
 			path = draw;
 			sourceTree = "<group>";
@@ -345,6 +350,7 @@
 				89CD4DAF1A6775A60077D7BF /* Gob.mm in Sources */,
 				89D9238A1A630FEB00D29C8B /* TdoView.mm in Sources */,
 				89E621FB1A5BAD4A00E75E01 /* Pal.mm in Sources */,
+				894C66661A67910B00F4AF80 /* CmpView.mm in Sources */,
 				89D923901A63152B00D29C8B /* Tdo.mm in Sources */,
 				89ABBD771A54F11C00B72E36 /* GobController.mm in Sources */,
 				8919720E1A6365BA00F9B72B /* Bitmap.mm in Sources */,

@@ -1,13 +1,16 @@
 #import <Cocoa/Cocoa.h>
 
-#include <gob/CmpFileData.h>
+#include <gob/Cmp.h>
+#include <gob/CmpFile.h>
+
+@class Pal;
 
 /**
     Objective-C PAL file wrapper.
 */
 @interface Cmp : NSObject
 {
-    Df::CmpFileData _cmp;
+    Df::Cmp _cmp;
 }
 
 /**
@@ -18,11 +21,16 @@
 /**
     Create a Cmp from some data.
 */
-+ (Cmp*) createForCmp:(Df::CmpFileData)Cmp;
++ (Cmp*) createForCmp:(Df::CmpFile)Cmp;
+
+- (const uint8_t*) getData;
 
 /**
-    @TODO: remove
 */
-- (Df::CmpFileData) getData;
+- (CGImageRef) createImageForPal:(Pal*)pal;
+
+/**
+*/
+- (CGImageRef) createImage;
 
 @end

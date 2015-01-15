@@ -5,6 +5,7 @@
 
 @class BmView;
 @class Cmp;
+@class CmpView;
 @class Gob;
 @class MsgView;
 @class Pal;
@@ -15,9 +16,11 @@
 
 @property (nonatomic, strong) NSView* preview;
 @property (nonatomic, strong) BmView* bmView;
+@property (nonatomic, strong) CmpView* cmpView;
 @property (nonatomic, strong) PalView* palView;
 @property (nonatomic, strong) MsgView* msgView;
 @property (nonatomic, strong) TdoView* tdoView;
+
 @property (nonatomic, strong) Pal* pal;
 @property (nonatomic, strong) Cmp* cmp;
 

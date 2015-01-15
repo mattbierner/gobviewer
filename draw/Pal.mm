@@ -1,6 +1,7 @@
 #import "Pal.h"
 
-#include "Gob.h"
+#import "Gob.h"
+#import "DfColor.h"
 
 #include <gob/Buffer.h>
 #include <gob/GobFile.h>
@@ -16,22 +17,19 @@
     auto buffer = [gob readFileToBuffer:name];
 
     Df::PalFile p(std::move(buffer));
-    Df::PalFileData data;
-    p.Read(reinterpret_cast<uint8_t*>(&data), 0, sizeof(Df::PalFileData));
-    
-    return [Pal createForPal:data];
+    return [Pal createForPal:p];
 }
 
-+ (Pal*) createForPal:(Df::PalFileData)p
++ (Pal*) createForPal:(Df::PalFile)p
 {
     Pal* pal = [[Pal alloc] init];
-    pal->_pal = p;
+    pal->_pal = Df::Pal::CreateFromFile(p);
     return pal;
 }
 
-- (Df::PalFileData) getData
+- (const Df::PalFileColor*) getData
 {
-    return _pal;
+    return _pal.GetColors();
 }
 
 - (CGImageRef) createImage
@@ -41,8 +39,8 @@
 
     CGDataProviderRef imageData = CGDataProviderCreateWithData(
         NULL,
-        _pal.colors,
-        sizeof(_pal.colors),
+        _pal.GetColors(),
+        sizeof(_pal.GetDataSize()),
         NULL);
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -68,12 +66,18 @@
 
 - (NSColor*) getColor:(NSUInteger)index
 {
-    auto entry = _pal.colors[index];
+    auto entry = _pal[index];
     return [NSColor
         colorWithRed:entry.r / 255.0f
         green:entry.g / 255.0f
         blue:entry.b / 255.0f
         alpha:1.0f];
+}
+
+- (RGB) getRgb:(NSUInteger)index
+{
+    auto color = _pal[index];
+    return {color.r, color.g, color.b, 255};
 }
 
 @end

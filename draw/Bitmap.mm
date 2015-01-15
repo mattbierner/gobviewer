@@ -31,10 +31,10 @@ RGB* BmDataToRgb(const Df::IReadableBuffer& buffer, Pal* pal, Cmp* cmp, bool tra
             if (cmp)
             {
                 // TODO: placeholder fullbright
-                index = cmpData.colorMaps[32].colors[entry];
+                //index = cmpData.colorMaps[31].colors[entry];
             }
-            auto palColors = palData.colors[index];
-            (*(dataWriter++)) = {palColors.r, palColors.g, palColors.b, 255};
+            auto finalColor = palData[index];
+            (*(dataWriter++)) = {finalColor.r, finalColor.g, finalColor.b, 255};
         }
     }
     return imgData;

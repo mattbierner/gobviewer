@@ -76,6 +76,8 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
 
 + (SCNGeometryElement*) createElement:(const Df::TdoObject&)obj;
 
+- (SCNMaterial*) createMaterial:(const Df::TdoObject&)obj;
+
 @end
 
 
@@ -247,6 +249,41 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
    return self;
 }
 
+- (SCNMaterial*) createMaterial:(const Df::TdoObject&)obj
+{
+    SCNMaterial* material = [SCNMaterial material];
+    material.doubleSided = YES;
+    material.locksAmbientWithDiffuse = YES;
+    material.transparencyMode = SCNTransparencyModeAOne;
+    
+    if (obj.texture >= 0)
+    {
+        NSString* textureName = [NSString stringWithUTF8String:_tdo.GetTexture(obj.texture).c_str()];
+        
+        Gob* gob = [Gob createFromFile:[NSURL URLWithString:@"TEXTURES.GOB"]];
+        Bitmap* bitmap = [Bitmap createFromGob:gob name:textureName pal:self.pal cmp:nil];
+        NSImage* img = [bitmap getImage];//[NSImage imageNamed:@"check.jpg"];
+        material.diffuse.contents = img;
+    }
+    else
+    {
+        const auto geometry = obj.geometry;
+        if (!geometry.quads.empty())
+        {
+            auto quad = geometry.quads[0];
+            auto color = [self.pal getColor:quad.color];
+            material.diffuse.contents = color;
+        }
+        else if (!geometry.triangles.empty())
+        {
+            auto triangle = geometry.triangles[0];
+            auto color = [self.pal getColor:triangle.color];
+            material.diffuse.contents = color;
+        }
+    }
+    return material;
+}
+
 
 - (SCNGeometry*) createObject:(NSUInteger)index
 {
@@ -267,34 +304,8 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
     
     SCNGeometry* obj = [SCNGeometry geometryWithSources:sources elements:@[element]];
     
-    SCNMaterial* material = [SCNMaterial material];
-    material.doubleSided = YES;
-    material.locksAmbientWithDiffuse = YES;
-    material.transparencyMode = SCNTransparencyModeAOne;
-   /* if (!geometry.quads.empty())
-    {
-        auto quad = geometry.quads[0];
-        auto color = [self.pal getColor:quad.color];
-        material.diffuse.contents = color;
-    }
-    else if (!geometry.triangles.empty())
-    {
-        auto triangle = geometry.triangles[0];
-        auto color = [self.pal getColor:triangle.color];
-        material.diffuse.contents = color;
-    }*/
-    if (object.texture >= 0)
-    {
-        NSString* textureName = [NSString stringWithUTF8String:_tdo.GetTexture(object.texture).c_str()];
-        
-        Gob* gob = [Gob createFromFile:[NSURL URLWithString:@"TEXTURES.GOB"]];
-        Bitmap* bitmap = [Bitmap createFromGob:gob name:textureName pal:self.pal cmp:nil];
-        NSImage* img = [bitmap getImage];//[NSImage imageNamed:@"check.jpg"];
-        material.diffuse.contents = img;
-    }
-    material.ambient.contents = [NSColor whiteColor];
+    SCNMaterial* material = [self createMaterial:object];
     [obj insertMaterial:material atIndex:0];
-    
     return obj;
 }
 
