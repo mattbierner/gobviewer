@@ -209,7 +209,8 @@
 - (void) printFile:(NSString*)file
 {
    NSData* data = [self.gob readFile:file];
-   NSLog(@"%@", data);
+   NSString* output = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+   NSLog(@"%@", output);
 }
 
 @end

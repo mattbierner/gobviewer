@@ -3,6 +3,7 @@
 #import <SceneKit/SceneKit.h>
 
 #import "Bitmap.h"
+#import "Gob.h"
 #import "Pal.h"
 
 #include <numeric>
@@ -246,17 +247,6 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
    return self;
 }
 
-Df::GobFile openGob(const char* file)
-{
-    std::ifstream fs;
-    fs.open(file, std::ifstream::binary | std::ifstream::in);
-    if (fs.is_open())
-    {
-        return Df::GobFile::CreateFromFile(std::move(fs));
-    }
-    return { };
-}
-
 
 - (SCNGeometry*) createObject:(NSUInteger)index
 {
@@ -295,8 +285,10 @@ Df::GobFile openGob(const char* file)
     }*/
     if (object.texture >= 0)
     {
-        Df::GobFile gob = openGob("TEXTURES.GOB");
-        Bitmap* bitmap = [Bitmap createFormGob:&gob name:_tdo.GetTexture(object.texture).c_str() pal:self.pal];
+        NSString* textureName = [NSString stringWithUTF8String:_tdo.GetTexture(object.texture).c_str()];
+        
+        Gob* gob = [Gob createFromFile:[NSURL URLWithString:@"TEXTURES.GOB"]];
+        Bitmap* bitmap = [Bitmap createFromGob:gob name:textureName pal:self.pal];
         NSImage* img = [bitmap getImage];//[NSImage imageNamed:@"check.jpg"];
         material.diffuse.contents = img;
     }

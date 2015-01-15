@@ -1,15 +1,14 @@
 #import <Cocoa/Cocoa.h>
 
 #include <gob/Bitmap.h>
-#include <gob/GobFile.h>
-#include <gob/PalFile.h>
 
 #import "DfColor.h"
 
-
+@class Gob;
 @class Pal;
 
 /**
+    Generic bitmap object.
 */
 @interface Bitmap : NSObject
 {
@@ -25,7 +24,10 @@
 */
 + (Bitmap*) createForBitmap:(std::shared_ptr<Df::Bitmap>) bitmap pal:(Pal*)pal;
 
-+ (Bitmap*) createFormGob:(Df::GobFile*)gob name:(const char*)filename pal:(Pal*)pal;
+/**
+    Create a bitmap from a file stored in a gob.
+*/
++ (Bitmap*) createFromGob:(Gob*)gob name:(NSString*)filename pal:(Pal*)pal;
 
 /**
     Get the current NSImage associated with the bitmap data.

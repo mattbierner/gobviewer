@@ -1,5 +1,6 @@
 #import "Bitmap.h"
 
+#import "Gob.h"
 #import "Pal.h"
 
 #include <gob/Bm.h>
@@ -96,13 +97,9 @@ void freeRGB(void *info, const void *data, size_t size)
 
 @implementation Bitmap
 
-+ (Bitmap*) createFormGob:(Df::GobFile*)gob name:(const char*)filename pal:(Pal*)pal
++ (Bitmap*) createFromGob:(Gob*)gob name:(NSString*)filename pal:(Pal*)pal;
 {
-    std::string file(filename);
-    size_t size = gob->GetFileSize(file);
-    Df::Buffer buffer = Df::Buffer::Create(size);
-    gob->ReadFile(file, buffer.GetW(0), 0, size);
-    
+    auto buffer = [gob readFileToBuffer:filename];
     auto bm = Df::Bm::CreateFromFile(Df::BmFile(std::move(buffer)));
     return [Bitmap createForBitmap:bm.GetBitmap(0) pal:pal];
 }
