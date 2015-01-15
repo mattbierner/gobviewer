@@ -288,7 +288,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         NSString* textureName = [NSString stringWithUTF8String:_tdo.GetTexture(object.texture).c_str()];
         
         Gob* gob = [Gob createFromFile:[NSURL URLWithString:@"TEXTURES.GOB"]];
-        Bitmap* bitmap = [Bitmap createFromGob:gob name:textureName pal:self.pal];
+        Bitmap* bitmap = [Bitmap createFromGob:gob name:textureName pal:self.pal cmp:nil];
         NSImage* img = [bitmap getImage];//[NSImage imageNamed:@"check.jpg"];
         material.diffuse.contents = img;
     }

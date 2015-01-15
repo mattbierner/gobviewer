@@ -4,6 +4,7 @@
 #include <gob/PalFile.h>
 
 @class BmView;
+@class Cmp;
 @class Gob;
 @class MsgView;
 @class Pal;
@@ -18,6 +19,7 @@
 @property (nonatomic, strong) MsgView* msgView;
 @property (nonatomic, strong) TdoView* tdoView;
 @property (nonatomic, strong) Pal* pal;
+@property (nonatomic, strong) Cmp* cmp;
 
 - (void) loadBM:(Gob*)gob named:(NSString*)filename;
 - (void) loadFme:(Gob*)gob named:(NSString*)filename;
@@ -27,5 +29,6 @@
 - (void) loadTdo:(Gob*)gob named:(NSString*)filename;
 
 - (void) loadPal:(Gob*)gob named:(NSString*)filename;
+- (void) loadCmp:(Gob*)gob named:(NSString*)filename;
 
 @end

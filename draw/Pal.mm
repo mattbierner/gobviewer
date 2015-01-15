@@ -1,35 +1,21 @@
 #import "Pal.h"
 
+#include "Gob.h"
+
 #include <gob/Buffer.h>
 #include <gob/GobFile.h>
 #include <gob/PalFile.h>
 
 #include <iostream>
 
-Df::GobFile open(const char* file)
-{
-    std::ifstream fs;
-    fs.open(file, std::ifstream::binary | std::ifstream::in);
-    if (fs.is_open())
-    {
-        return Df::GobFile::CreateFromFile(std::move(fs));
-    }
-    return { };
-}
-
 @implementation Pal
 
 + (Pal*) createFromGob:(NSString*)gobFile named:(NSString*)name;
 {
+    Gob* gob = [Gob createFromFile:[NSURL URLWithString:gobFile]];
+    auto buffer = [gob readFileToBuffer:name];
 
-    Df::GobFile gob = open([gobFile UTF8String]);
-    
-    std::string file([name UTF8String]);
-    size_t size = gob.GetFileSize(file);
-    Df::Buffer buffer = Df::Buffer::Create(size);
-    gob.ReadFile(file, buffer.GetW(0), 0, size);
     Df::PalFile p(std::move(buffer));
-    
     Df::PalFileData data;
     p.Read(reinterpret_cast<uint8_t*>(&data), 0, sizeof(Df::PalFileData));
     

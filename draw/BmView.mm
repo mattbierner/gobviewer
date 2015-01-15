@@ -1,6 +1,7 @@
 #import "BmView.h"
 
 #import "Bitmap.h"
+#import "Cmp.h"
 #import "DfColor.h"
 #import "Gob.h"
 #import "Pal.h"
@@ -133,7 +134,7 @@
     
     for (unsigned i = 0; i < subCount; ++i)
     {
-        Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap(i) pal:self.pal];
+        Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap(i) pal:self.pal cmp:self.cmp];
         NSImage* img = [bitmap getImage];
         [animation.frames addObject:[BmCell cellForImage:img flipped:NO]];
     }
@@ -151,7 +152,7 @@
     auto fmeFile = [[self class] loadFme:gob named:filename];
     Df::Cell bm = Df::Cell::CreateFromFile(fmeFile);
 
-    Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap() pal:self.pal];
+    Bitmap* bitmap = [Bitmap createForBitmap:bm.GetBitmap() pal:self.pal cmp:self.cmp];
     
     NSImage* image = [bitmap getImage];
     BmAnimation* animation = [BmAnimation animationForImage:image];
@@ -198,7 +199,7 @@
                 }
                 else
                 {
-                    Bitmap* bitmapObj = [Bitmap createForBitmap:bitmap pal:self.pal];
+                    Bitmap* bitmapObj = [Bitmap createForBitmap:bitmap pal:self.pal cmp:self.cmp];
                     img = [bitmapObj getImage];
                     imageDatas[bitmap] = img;
                 }

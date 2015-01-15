@@ -2,6 +2,7 @@
 
 #import "Gob.h"
 
+@class Cmp;
 @class Pal;
 @class PreviewViewController;
 
@@ -26,6 +27,11 @@
     Gob being viewed.
 */
 @property (nonatomic, readonly) Gob* gob;
+
+/**
+    Color map used to render images.
+*/
+@property (nonatomic, strong) Cmp* cmp;
 
 /**
     Palette used to render images.

@@ -1,11 +1,10 @@
 #import "GobController.h"
 
+#import "Cmp.h"
 #import "LabeledCell.h"
 #import "Pal.h" 
 #import "PreviewViewController.h"
 
-#include <iostream>
-#include <string>
 
 @interface GobController()
 
@@ -78,13 +77,23 @@
 - (void) loadPal:(NSString*)name fromGob:(NSString*)gobFile
 {
     self.pal = [Pal createFromGob:gobFile named:name];
-    self.previewViewController.pal = self.pal;
+}
+
+- (void) loadCmp:(NSString*)name fromGob:(NSString*)gobFile
+{
+    self.cmp = [Cmp createFromGob:gobFile named:name];
 }
 
 - (void) setPal:(Pal *)pal
 {
     _pal = pal;
     self.previewViewController.pal = pal;
+}
+
+- (void) setCmp:(Cmp*)cmp
+{
+    _cmp = cmp;
+    self.previewViewController.cmp = cmp;
 }
 
 - (Gob*) gob
@@ -96,6 +105,7 @@
 {
     // TODO: move to settings
     [self loadPal:@"SECBASE.PAL" fromGob:@"DARK.GOB"];
+    [self loadCmp:@"SECBASE.CMP" fromGob:@"DARK.GOB"];
     
     _gob = [Gob createFromFile:path];
 
@@ -125,6 +135,10 @@
     
      case Df::FileType::Pal:
         [self.previewViewController loadPal:self.gob named:file];
+        break;
+        
+    case Df::FileType::Cmp:
+        [self.previewViewController loadCmp:self.gob named:file];
         break;
         
     case Df::FileType::Tdo:

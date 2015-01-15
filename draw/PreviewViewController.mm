@@ -1,6 +1,7 @@
 #import "PreviewViewController.h"
 
 #import "BmView.h"
+#import "Cmp.h"
 #import "Gob.h"
 #import "Msg.h"
 #import "MsgView.h"
@@ -9,6 +10,7 @@
 #import "Tdo.h"
 #import "TdoView.h"
 
+#include <gob/CmpFile.h>
 #include <gob/Msg.h>
 #include <gob/MsgFile.h>
 #include <gob/Tdo.h>
@@ -82,6 +84,12 @@
     self.tdoView.pal = pal;
 }
 
+- (void) setCmp:(Cmp*)cmp
+{
+    _cmp = cmp;
+    self.bmView.cmp = cmp;
+}
+
 - (void) loadBM:(Gob*)gob named:(NSString*)filename
 {
     [self.bmView loadBM:gob named:filename];
@@ -131,6 +139,17 @@
     
     self.palView.pal = [Pal createForPal:pal];
     self.preview = self.palView;
+}
+
+- (void) loadCmp:(Gob*)gob named:(NSString*)filename
+{
+    auto buffer = [gob readFileToBuffer:filename];
+    auto size = buffer.GetDataSize();
+    
+    Df::CmpFileData pal;
+    Df::CmpFile p(std::move(buffer));
+    p.Read(reinterpret_cast<uint8_t*>(&pal), 0, sizeof(Df::PalFileData));
+    1;
 }
 
 

@@ -4,6 +4,7 @@
 
 #include <gob/GobFile.h>
 
+@class Cmp;
 @class Gob;
 @class Pal;
 
@@ -43,6 +44,11 @@
 
 @property (nonatomic, strong) NSMutableArray* animations;
 @property (nonatomic, strong) NSTimer* animationTimer;
+
+/**
+    Color map used to render images.
+*/
+@property (nonatomic, strong) Cmp* cmp;
 
 /**
     Palette used to render images.

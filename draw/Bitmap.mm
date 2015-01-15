@@ -1,52 +1,20 @@
 #import "Bitmap.h"
 
+#import "Cmp.h"
 #import "Gob.h"
 #import "Pal.h"
 
 #include <gob/Bm.h>
 #include <gob/BmFile.h>
 
-
-@implementation NSImage (Rotated)
- 
-- (NSImage *)imageRotated:(float)degrees {
- 
-    degrees = fmod(degrees, 360.);
-    if (0 == degrees) {
-        return self;
-    }
-    NSSize size = [self size];
-    NSSize maxSize;
-    if (90. == degrees || 270. == degrees || -90. == degrees || -270. == degrees) {
-        maxSize = NSMakeSize(size.height, size.width);
-    } else if (180. == degrees || -180. == degrees) {
-        maxSize = size;
-    } else {
-        maxSize = NSMakeSize(20+MAX(size.width, size.height), 20+MAX(size.width, size.height));
-    }
-    NSAffineTransform *rot = [NSAffineTransform transform];
-    [rot rotateByDegrees:degrees];
-    NSAffineTransform *center = [NSAffineTransform transform];
-    [center translateXBy:maxSize.width / 2. yBy:maxSize.height / 2.];
-    [rot appendTransform:center];
-    NSImage *image = [[NSImage alloc] initWithSize:maxSize];
-    [image lockFocus];
-    [rot concat];
-    NSRect rect = NSMakeRect(0, 0, size.width, size.height);
-    NSPoint corner = NSMakePoint(-size.width / 2., -size.height / 2.);
-    [self drawAtPoint:corner fromRect:rect operation:NSCompositeCopy fraction:1.0];
-    [image unlockFocus];
-    return image;
-}
-@end
-
-RGB* BmDataToRgb(const Df::IReadableBuffer& buffer, Pal* pal, bool trans)
+RGB* BmDataToRgb(const Df::IReadableBuffer& buffer, Pal* pal, Cmp* cmp, bool trans)
 {
     size_t size = buffer.GetDataSize();
     RGB* imgData = new RGB[size];
     RGB* dataWriter = imgData;
     
     auto palData = [pal getData];
+    auto cmpData = [cmp getData];
     
     const uint8_t* bmData = buffer.GetR(0);
     const uint8_t* bmDataEnd = bmData + size;
@@ -59,16 +27,22 @@ RGB* BmDataToRgb(const Df::IReadableBuffer& buffer, Pal* pal, bool trans)
         }
         else
         {
-            auto palColors = palData.colors[entry];
+            auto index = entry;
+            if (cmp)
+            {
+                // TODO: placeholder fullbright
+                index = cmpData.colorMaps[32].colors[entry];
+            }
+            auto palColors = palData.colors[index];
             (*(dataWriter++)) = {palColors.r, palColors.g, palColors.b, 255};
         }
     }
     return imgData;
 }
 
-RGB* BmToRgb(const Df::Bitmap& bm, Pal* pal)
+RGB* BmToRgb(const Df::Bitmap& bm, Pal* pal, Cmp* cmp)
 {
-    return BmDataToRgb(bm, pal, (bm.GetTransparency() != Df::BmFileTransparency::Normal));
+    return BmDataToRgb(bm, pal, cmp, (bm.GetTransparency() != Df::BmFileTransparency::Normal));
 }
 
 void freeRGB(void *info, const void *data, size_t size)
@@ -97,18 +71,19 @@ void freeRGB(void *info, const void *data, size_t size)
 
 @implementation Bitmap
 
-+ (Bitmap*) createFromGob:(Gob*)gob name:(NSString*)filename pal:(Pal*)pal;
++ (Bitmap*) createFromGob:(Gob*)gob name:(NSString*)filename pal:(Pal*)pal cmp:(Cmp*)cmp
 {
     auto buffer = [gob readFileToBuffer:filename];
     auto bm = Df::Bm::CreateFromFile(Df::BmFile(std::move(buffer)));
-    return [Bitmap createForBitmap:bm.GetBitmap(0) pal:pal];
+    return [Bitmap createForBitmap:bm.GetBitmap(0) pal:pal cmp:cmp];
 }
 
-+ (Bitmap*) createForBitmap:(std::shared_ptr<Df::Bitmap>) bitmap pal:(Pal*)pal
++ (Bitmap*) createForBitmap:(std::shared_ptr<Df::Bitmap>)bitmap pal:(Pal*)pal cmp:(Cmp*)cmp
 {
     Bitmap* t = [[Bitmap alloc] init];
     t->_bitmap = bitmap;
     t.pal = pal;
+    t.cmp = cmp;
     return t;
 }
 
@@ -141,7 +116,7 @@ void freeRGB(void *info, const void *data, size_t size)
     unsigned height = _bitmap->GetHeight();
     size_t imgDataSize = _bitmap->GetDataSize() * 32;
         
-    RGB* imgData = BmToRgb(*_bitmap, self.pal);
+    RGB* imgData = BmToRgb(*_bitmap, self.pal, self.cmp);
     
     CGImageRef imageRef = [Bitmap createImage:imgData size: imgDataSize width:height height:width];
     NSImage* img = [[NSImage alloc] initWithCGImage:imageRef size:CGSizeZero];
