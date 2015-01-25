@@ -82,6 +82,14 @@
     GobController* window = [[GobController alloc] initWithWindowNibName:@"GobViewWindow"];
     [self addWindow:window];
     [window loadFile:path];
+    
+    [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:path];
+}
+
+- (BOOL) application:(NSApplication *)app openFile:(NSString *)filename
+{
+    [self openGob:[NSURL URLWithString:filename]];
+    return YES;
 }
 
 - (NSOpenPanel*) createFilePicker
