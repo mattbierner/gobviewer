@@ -1,6 +1,7 @@
 #import "PreviewViewController.h"
 
 #import "BmView.h"
+#import "ColorMap.h"
 #import "Cmp.h"
 #import "CmpView.h"
 #import "Gob.h"
@@ -80,20 +81,16 @@
     
     self.cmpView = [[CmpView alloc] initWithFrame:self.view.bounds];
     self.cmpView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.colorMap = [[ColorMap alloc] init];
 }
 
-- (void) setPal:(Pal*)pal
+- (void) setColorMap:(ColorMap *)colorMap
 {
-    _pal = pal;
-    self.bmView.pal = pal;
-    self.tdoView.pal = pal;
-    self.cmpView.pal = pal;
-}
-
-- (void) setCmp:(Cmp*)cmp
-{
-    _cmp = cmp;
-    self.bmView.cmp = cmp;
+    _colorMap = colorMap;
+    self.bmView.colorMap = colorMap;
+    self.tdoView.colorMap = colorMap;
+    self.cmpView.pal = colorMap.pal;
 }
 
 - (void) loadBM:(Gob*)gob named:(NSString*)filename
@@ -130,7 +127,7 @@
 
     auto tdoFile = Df::TdoFile(std::move(buffer)).CreateTdo();
     Tdo* tdo = [Tdo createForTdo:tdoFile];
-    tdo.pal = self.pal;
+    tdo.colorMap = self.colorMap;
     self.tdoView.tdo = tdo;
     self.preview = self.tdoView;
 }
@@ -146,9 +143,7 @@
 - (void) loadCmp:(Gob*)gob named:(NSString*)filename
 {
     auto buffer = [gob readFileToBuffer:filename];
-    auto size = buffer.GetDataSize();
     
-
     Df::CmpFile p(std::move(buffer));
     
     self.cmpView.cmp = [Cmp createForCmp:p];

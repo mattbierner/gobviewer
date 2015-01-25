@@ -4,11 +4,10 @@
 #include <gob/PalFile.h>
 
 @class BmView;
-@class Cmp;
+@class ColorMap;
 @class CmpView;
 @class Gob;
 @class MsgView;
-@class Pal;
 @class PalView;
 @class TdoView;
 
@@ -21,8 +20,7 @@
 @property (nonatomic, strong) MsgView* msgView;
 @property (nonatomic, strong) TdoView* tdoView;
 
-@property (nonatomic, strong) Pal* pal;
-@property (nonatomic, strong) Cmp* cmp;
+@property (nonatomic, strong) ColorMap* colorMap;
 
 - (void) loadBM:(Gob*)gob named:(NSString*)filename;
 - (void) loadFme:(Gob*)gob named:(NSString*)filename;

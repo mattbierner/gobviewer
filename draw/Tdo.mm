@@ -3,6 +3,7 @@
 #import <SceneKit/SceneKit.h>
 
 #import "Bitmap.h"
+#import "ColorMap.h"
 #import "Gob.h"
 #import "Pal.h"
 
@@ -261,7 +262,7 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         NSString* textureName = [NSString stringWithUTF8String:_tdo.GetTexture(obj.texture).c_str()];
         
         Gob* gob = [Gob createFromFile:[NSURL URLWithString:@"TEXTURES.GOB"]];
-        Bitmap* bitmap = [Bitmap createFromGob:gob name:textureName pal:self.pal cmp:nil];
+        Bitmap* bitmap = [Bitmap createFromGob:gob name:textureName colorMap:self.colorMap];
         NSImage* img = [bitmap getImage];//[NSImage imageNamed:@"check.jpg"];
         material.diffuse.contents = img;
     }
@@ -271,13 +272,13 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         if (!geometry.quads.empty())
         {
             auto quad = geometry.quads[0];
-            auto color = [self.pal getColor:quad.color];
+            auto color = [self.colorMap.pal getColor:quad.color];
             material.diffuse.contents = color;
         }
         else if (!geometry.triangles.empty())
         {
             auto triangle = geometry.triangles[0];
-            auto color = [self.pal getColor:triangle.color];
+            auto color = [self.colorMap.pal getColor:triangle.color];
             material.diffuse.contents = color;
         }
     }

@@ -26,10 +26,12 @@
 - (const uint8_t*) getData;
 
 /**
+    Create an image that shows the contents of the CMP applied to a given palette.
 */
 - (CGImageRef) createImageForPal:(Pal*)pal;
 
 /**
+    Create an image that shows the contents of the CMP.
 */
 - (CGImageRef) createImage;
 

@@ -3,7 +3,7 @@
 #include <gob/Tdo.h>
 
 @class SCNGeometry;
-@class Pal;
+@class ColorMap;
 
 /**
     Objective-C 3DO file wrapper.
@@ -13,7 +13,7 @@
     Df::Tdo _tdo;
 }
 
-@property (nonatomic, strong) Pal* pal;
+@property (nonatomic, strong) ColorMap* colorMap;
 
 + (Tdo*) createForTdo:(Df::Tdo)tdo;
 

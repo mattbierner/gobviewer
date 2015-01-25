@@ -1,7 +1,7 @@
 #import <Cocoa/Cocoa.h>
 #import <SceneKit/SceneKit.h>
 
-@class Cmp;
+@class ColorMap;
 @class Pal;
 @class Tdo;
 
@@ -18,11 +18,6 @@
 /**
     Color map used to render images.
 */
-@property (nonatomic, strong) Cmp* cmp;
-
-/**
-    Palette to use for color
-*/
-@property (nonatomic, strong) Pal* pal;
+@property (nonatomic, strong) ColorMap* colorMap;
 
 @end

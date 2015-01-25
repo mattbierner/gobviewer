@@ -1,6 +1,7 @@
 #import "GobController.h"
 
 #import "Cmp.h"
+#import "ColorMap.h"
 #import "LabeledCell.h"
 #import "Pal.h" 
 #import "PreviewViewController.h"
@@ -87,13 +88,13 @@
 - (void) setPal:(Pal *)pal
 {
     _pal = pal;
-    self.previewViewController.pal = pal;
+    self.previewViewController.colorMap.pal = pal;
 }
 
 - (void) setCmp:(Cmp*)cmp
 {
     _cmp = cmp;
-    self.previewViewController.cmp = cmp;
+    self.previewViewController.colorMap.cmp = cmp;
 }
 
 - (Gob*) gob

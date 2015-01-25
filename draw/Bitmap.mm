@@ -1,5 +1,6 @@
 #import "Bitmap.h"
 
+#import "ColorMap.h"
 #import "Cmp.h"
 #import "Gob.h"
 #import "Pal.h"
@@ -71,19 +72,18 @@ void freeRGB(void *info, const void *data, size_t size)
 
 @implementation Bitmap
 
-+ (Bitmap*) createFromGob:(Gob*)gob name:(NSString*)filename pal:(Pal*)pal cmp:(Cmp*)cmp
++ (Bitmap*) createFromGob:(Gob*)gob name:(NSString*)filename colorMap:(ColorMap*)colorMap
 {
     auto buffer = [gob readFileToBuffer:filename];
     auto bm = Df::Bm::CreateFromFile(Df::BmFile(std::move(buffer)));
-    return [Bitmap createForBitmap:bm.GetBitmap(0) pal:pal cmp:cmp];
+    return [Bitmap createForBitmap:bm.GetBitmap(0) colorMap:colorMap];
 }
 
-+ (Bitmap*) createForBitmap:(std::shared_ptr<Df::Bitmap>)bitmap pal:(Pal*)pal cmp:(Cmp*)cmp
++ (Bitmap*) createForBitmap:(std::shared_ptr<Df::Bitmap>)bitmap colorMap:(ColorMap*)colorMap
 {
     Bitmap* t = [[Bitmap alloc] init];
     t->_bitmap = bitmap;
-    t.pal = pal;
-    t.cmp = cmp;
+    t.colorMap = colorMap;
     return t;
 }
 
@@ -116,7 +116,7 @@ void freeRGB(void *info, const void *data, size_t size)
     unsigned height = _bitmap->GetHeight();
     size_t imgDataSize = _bitmap->GetDataSize() * 32;
         
-    RGB* imgData = BmToRgb(*_bitmap, self.pal, self.cmp);
+    RGB* imgData = BmToRgb(*_bitmap, self.colorMap.pal, self.colorMap.cmp);
     
     CGImageRef imageRef = [Bitmap createImage:imgData size: imgDataSize width:height height:width];
     NSImage* img = [[NSImage alloc] initWithCGImage:imageRef size:CGSizeZero];

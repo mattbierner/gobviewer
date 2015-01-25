@@ -4,9 +4,8 @@
 
 #include <gob/GobFile.h>
 
-@class Cmp;
+@class ColorMap;
 @class Gob;
-@class Pal;
 
 /**
 */
@@ -48,12 +47,7 @@
 /**
     Color map used to render images.
 */
-@property (nonatomic, strong) Cmp* cmp;
-
-/**
-    Palette used to render images.
-*/
-@property (nonatomic, strong) Pal* pal;
+@property (nonatomic, strong) ColorMap* colorMap;
 
 - (void) loadBM:(Gob*)gob named:(NSString*)filename;
 - (void) loadFme:(Gob*)gob named:(NSString*)filename;
