@@ -26,7 +26,7 @@
 
 - (Df::FileType) getFileType:(NSString*)file
 {
-    return _gob->GetFileType([file UTF8String]);
+    return Df::GobFile::GetFileType([file UTF8String]);
 }
 
 - (NSString*) getFilename:(NSUInteger)index

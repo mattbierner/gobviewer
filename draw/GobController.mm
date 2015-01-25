@@ -85,7 +85,7 @@
     self.cmp = [Cmp createFromGob:gobFile named:name];
 }
 
-- (void) setPal:(Pal *)pal
+- (void) setPal:(Pal*)pal
 {
     _pal = pal;
     self.previewViewController.colorMap.pal = pal;
@@ -95,11 +95,6 @@
 {
     _cmp = cmp;
     self.previewViewController.colorMap.cmp = cmp;
-}
-
-- (Gob*) gob
-{
-    return _gob;
 }
 
 - (void) loadFile:(NSURL*)path
@@ -215,10 +210,37 @@
     }
 }
 
+- (IBAction) saveGob:(id)sender
+{
+    NSOpenPanel* panel = [NSOpenPanel openPanel];
+    panel.canCreateDirectories = YES;
+    panel.delegate = self;
+    panel.treatsFilePackagesAsDirectories = YES;
+    panel.canChooseDirectories = YES;
+    panel.canChooseFiles = NO;
+    
+    NSInteger clicked = [panel runModal];
+    if (clicked == NSFileHandlingPanelOKButton)
+    {
+        [self saveGobTo:panel.URL];
+    }
+}
+
 - (void) saveFile:(NSString*)file to:(NSURL*)path
 {
     NSData* data = [self.gob readFile:file];
     [data writeToURL:path atomically:NO];
+}
+
+- (void) saveGobTo:(NSURL*)root
+{
+    for (unsigned i = 0; i < [self.gob getNumberOfFiles]; ++i)
+    {
+        NSString* filename = [self.gob getFilename:i];
+        NSURL* path = [NSURL URLWithString:filename relativeToURL:root];
+        NSData* data = [self.gob readFile:filename];
+        [data writeToURL:path atomically:NO];
+    }
 }
 
 - (void) printFile:(NSString*)file

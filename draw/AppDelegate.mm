@@ -51,30 +51,9 @@
     }
 }
 
-- (void) applicationWillTerminate:(NSNotification *)aNotification
-{
-}
-
 - (IBAction) openDocument:(id)sender
 {
     [self launchFilePicker];
-}
-
-- (IBAction) saveToFile:(id)sender
-{
-    GobController* controller = [[NSApplication sharedApplication] mainWindow].windowController;
-    if (controller)
-    {
-        NSSavePanel* panel = [NSSavePanel savePanel];
-        [panel setCanCreateDirectories:YES];
-        [panel setTreatsFilePackagesAsDirectories:YES];
-        
-        NSInteger clicked = [panel runModal];
-        if (clicked == NSFileHandlingPanelOKButton)
-        {
-            //[controller saveCurrentItemToFile];
-        }
-    }
 }
 
 - (void) openGob:(NSURL*)path
@@ -86,7 +65,7 @@
     [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:path];
 }
 
-- (BOOL) application:(NSApplication *)app openFile:(NSString *)filename
+- (BOOL) application:(NSApplication*)app openFile:(NSString *)filename
 {
     [self openGob:[NSURL URLWithString:filename]];
     return YES;
@@ -96,10 +75,10 @@
 {
     NSOpenPanel* panel = [NSOpenPanel openPanel];
     panel.delegate = self;
-    [panel setCanChooseFiles:YES];
-    [panel setCanChooseDirectories:NO];
-    [panel setAllowsMultipleSelection:NO];
-    [panel setTreatsFilePackagesAsDirectories:YES];
+    panel.canChooseFiles = YES;
+    panel.canChooseDirectories = NO;
+    panel.allowsMultipleSelection = NO;
+    panel.treatsFilePackagesAsDirectories = YES;
     return panel;
 }
 

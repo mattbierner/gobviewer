@@ -15,10 +15,12 @@
 */
 - (IBAction) openDocument:(id)sender;
 
-
 // NSOpenSavePanelDelegate
 - (BOOL) panel:(id)sender
     shouldShowFilename:(NSString*)filename;
 
 @end
 
+@interface NSApplication(a)
+- (IBAction)saveGob:(id)sender;
+@end

@@ -82,10 +82,16 @@
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
-                            <menuItem title="Save to File" id="NwF-bI-ONg" userLabel="Save to File">
+                            <menuItem title="Export File" id="NwF-bI-ONg" userLabel="Export File">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="saveToFile:" target="-1" id="Ug6-vv-M6f"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export Gob" id="Lpe-Kp-RdY" userLabel="Export Gob">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                 <connections>
+                                    <action selector="saveGob:" target="-1" id="Ug6-vv-M6g"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VxR-xW-gaQ"/>

@@ -16,16 +16,16 @@
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>49BE4EDBAFE2828D6AEC163533CB67F358BB7219</key>
-		<string></string>
+		<string>gob/</string>
 		<key>AB9B22491082EBC978905042F6D43AC1E2F2D27D</key>
-		<string>libgob/</string>
+		<string>gob/libgob/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/mattbierner/libgob.git</string>
+	<string>https://github.com/mattbierner/gobviewer.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>AB9B22491082EBC978905042F6D43AC1E2F2D27D</string>
+	<string>49BE4EDBAFE2828D6AEC163533CB67F358BB7219</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -34,7 +34,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>49BE4EDBAFE2828D6AEC163533CB67F358BB7219</string>
 			<key>IDESourceControlWCCName</key>
-			<string></string>
+			<string>gob</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>

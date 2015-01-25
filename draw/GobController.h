@@ -15,9 +15,6 @@
     NSUserInterfaceValidations,
     NSApplicationDelegate,
     NSOpenSavePanelDelegate>
-{
-    Gob* _gob;
-}
 
 @property (nonatomic, strong) NSTableView* contentsTable;
 @property (nonatomic, strong) NSScrollView* tableContainer;
@@ -39,8 +36,15 @@
 @property (nonatomic, strong) Pal* pal;
 
 /**
+    Save the selected file as an individual file.
 */
 - (IBAction) saveToFile:(id)sender;
+
+/**
+    Save the entire gob to a directory.
+*/
+- (IBAction) saveGob:(id)sender;
+
 
 - (void) loadPal:(NSString*)name fromGob:(NSString*)file;
 
