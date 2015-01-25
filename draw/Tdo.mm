@@ -272,13 +272,13 @@ SCNVector3 getNormal(SCNVector3 a, SCNVector3 b, SCNVector3 c)
         if (!geometry.quads.empty())
         {
             auto quad = geometry.quads[0];
-            auto color = [self.colorMap.pal getColor:quad.color];
+            auto color = [self.colorMap getColor:quad.color];
             material.diffuse.contents = color;
         }
         else if (!geometry.triangles.empty())
         {
             auto triangle = geometry.triangles[0];
-            auto color = [self.colorMap.pal getColor:triangle.color];
+            auto color = [self.colorMap getColor:triangle.color];
             material.diffuse.contents = color;
         }
     }

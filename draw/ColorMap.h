@@ -1,4 +1,6 @@
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
+
+#import "DfColor.h"
 
 @class Cmp;
 @class Pal;
@@ -21,5 +23,12 @@
     Create a color map from a given pal and cmp.
 */
 + (ColorMap*) colorMapWithPal:(Pal*)pal cmp:(Cmp*)cmp;
+
+/**
+    Lookup a color in the palette by index.
+*/
+- (NSColor*) getColor:(NSUInteger)index;
+
+- (RGB) getRgb:(NSUInteger)index;
 
 @end

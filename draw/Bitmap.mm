@@ -8,42 +8,34 @@
 #include <gob/Bm.h>
 #include <gob/BmFile.h>
 
-RGB* BmDataToRgb(const Df::IReadableBuffer& buffer, Pal* pal, Cmp* cmp, bool trans)
+RGB* BmDataToRgb(const Df::IReadableBuffer& buffer, ColorMap* colorMap, bool trans)
 {
     size_t size = buffer.GetDataSize();
+    if (size == 0)
+        return nullptr;
+    
     RGB* imgData = new RGB[size];
     RGB* dataWriter = imgData;
-    
-    auto palData = [pal getData];
-    auto cmpData = [cmp getData];
-    
-    const uint8_t* bmData = buffer.GetR(0);
-    const uint8_t* bmDataEnd = bmData + size;
-    while (bmData < bmDataEnd)
+    for (auto entry : buffer)
     {
-        uint8_t entry = *(bmData++);
         if (trans && entry == 0)
         {
             (*(dataWriter++)).a = 0;
         }
         else
         {
-            auto index = entry;
-            if (cmp)
-            {
-                // TODO: placeholder fullbright
-                //index = cmpData.colorMaps[31].colors[entry];
-            }
-            auto finalColor = palData[index];
-            (*(dataWriter++)) = {finalColor.r, finalColor.g, finalColor.b, 255};
+            (*(dataWriter++)) = [colorMap getRgb:entry];
         }
     }
     return imgData;
 }
 
-RGB* BmToRgb(const Df::Bitmap& bm, Pal* pal, Cmp* cmp)
+RGB* BmToRgb(const Df::Bitmap& bm, ColorMap* colorMap)
 {
-    return BmDataToRgb(bm, pal, cmp, (bm.GetTransparency() != Df::BmFileTransparency::Normal));
+    return BmDataToRgb(
+        bm,
+        colorMap,
+        (bm.GetTransparency() != Df::BmFileTransparency::Normal));
 }
 
 void freeRGB(void *info, const void *data, size_t size)
@@ -112,11 +104,13 @@ void freeRGB(void *info, const void *data, size_t size)
 
 - (NSImage*) createImage
 {
+    RGB* imgData = BmToRgb(*_bitmap, self.colorMap);
+    if (!imgData)
+        return nullptr;
+    
     unsigned width = _bitmap->GetWidth();
     unsigned height = _bitmap->GetHeight();
     size_t imgDataSize = _bitmap->GetDataSize() * 32;
-        
-    RGB* imgData = BmToRgb(*_bitmap, self.colorMap.pal, self.colorMap.cmp);
     
     CGImageRef imageRef = [Bitmap createImage:imgData size: imgDataSize width:height height:width];
     NSImage* img = [[NSImage alloc] initWithCGImage:imageRef size:CGSizeZero];
