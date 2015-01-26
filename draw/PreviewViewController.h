@@ -27,6 +27,8 @@
 - (void) loadWax:(Gob*)gob named:(NSString*)filename;
 
 - (void) loadMsg:(Gob*)gob named:(NSString*)filename;
+- (void) loadGol:(Gob*)gob named:(NSString*)filename;
+
 - (void) loadTdo:(Gob*)gob named:(NSString*)filename;
 
 - (void) loadPal:(Gob*)gob named:(NSString*)filename;

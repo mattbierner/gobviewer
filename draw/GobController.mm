@@ -17,6 +17,7 @@
 
 @end
 
+
 @implementation GobController
 
 - (void) windowDidLoad
@@ -141,7 +142,12 @@
         [self printFile:file];
         [self.previewViewController loadTdo:self.gob named:file];
         break;
-        
+    
+    case Df::FileType::Gol:
+        [self printFile:file];
+        [self.previewViewController loadGol:self.gob named:file];
+        break;
+    
     default:
         [self printFile:file];
         break;

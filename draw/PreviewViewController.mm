@@ -13,6 +13,7 @@
 #import "TdoView.h"
 
 #include <gob/CmpFile.h>
+#include <gob/GolFile.h>
 #include <gob/Msg.h>
 #include <gob/MsgFile.h>
 #include <gob/Pal.h>
@@ -148,8 +149,16 @@
     
     self.cmpView.cmp = [Cmp createForCmp:p];
     self.preview = self.cmpView;
-
 }
+
+- (void) loadGol:(Gob*)gob named:(NSString*)filename
+{
+    auto buffer = [gob readFileToBuffer:filename];
+    
+    Df::Gol gol = Df::GolFile(std::move(buffer)).CreateGol();
+    (void)gol;
+}
+
 
 
 @end
