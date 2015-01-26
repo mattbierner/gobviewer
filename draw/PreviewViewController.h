@@ -7,6 +7,7 @@
 @class ColorMap;
 @class CmpView;
 @class Gob;
+@class GolView;
 @class MsgView;
 @class PalView;
 @class TdoView;
@@ -16,6 +17,7 @@
 @property (nonatomic, strong) NSView* preview;
 @property (nonatomic, strong) BmView* bmView;
 @property (nonatomic, strong) CmpView* cmpView;
+@property (nonatomic, strong) GolView* golView;
 @property (nonatomic, strong) PalView* palView;
 @property (nonatomic, strong) MsgView* msgView;
 @property (nonatomic, strong) TdoView* tdoView;

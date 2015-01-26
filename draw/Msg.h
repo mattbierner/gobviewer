@@ -14,12 +14,12 @@
 
 + (Msg*) createForMsg:(Df::Msg)msg;
 
-- (unsigned) count;
+- (NSUInteger) count;
 
-- (unsigned) hasMessage:(unsigned)index;
+- (NSUInteger) hasMessage:(NSUInteger)index;
 
-- (NSString*) getMessage:(unsigned)index;
+- (NSString*) getMessage:(NSUInteger)index;
 
-- (NSString*) getMessageAt:(unsigned)index;
+- (NSString*) getMessageAt:(NSUInteger)index;
 
 @end

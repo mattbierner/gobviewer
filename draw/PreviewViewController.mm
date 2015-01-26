@@ -5,6 +5,8 @@
 #import "Cmp.h"
 #import "CmpView.h"
 #import "Gob.h"
+#import "Gol.h"
+#import "GolView.h"
 #import "Msg.h"
 #import "MsgView.h"
 #import "Pal.h"
@@ -83,6 +85,9 @@
     self.cmpView = [[CmpView alloc] initWithFrame:self.view.bounds];
     self.cmpView.translatesAutoresizingMaskIntoConstraints = NO;
     
+    self.golView = [[GolView alloc] initWithFrame:self.view.bounds];
+    self.golView.translatesAutoresizingMaskIntoConstraints = NO;
+    
     self.colorMap = [[ColorMap alloc] init];
 }
 
@@ -156,7 +161,9 @@
     auto buffer = [gob readFileToBuffer:filename];
     
     Df::Gol gol = Df::GolFile(std::move(buffer)).CreateGol();
-    (void)gol;
+    
+    self.golView.gol = [Gol createForGol:gol];
+    self.preview = self.golView;
 }
 
 

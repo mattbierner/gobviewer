@@ -10,25 +10,24 @@
     return msgObj;
 }
 
-- (unsigned) count
+- (NSUInteger) count
 {
     return _msg.GetNumberMessages();
 }
 
-- (unsigned) hasMessage:(unsigned)index
+- (unsigned) hasMessage:(NSUInteger)index
 {
     return _msg.HasMessage(index);
 }
 
-- (NSString*) getMessage:(unsigned)index
+- (NSString*) getMessage:(NSUInteger)index
 {
     return [NSString stringWithUTF8String:_msg.GetMessage(index).c_str()];
 }
 
-- (NSString*) getMessageAt:(unsigned)index
+- (NSString*) getMessageAt:(NSUInteger)index
 {
     return [self getMessage:_keys[index]];
 }
-
 
 @end
