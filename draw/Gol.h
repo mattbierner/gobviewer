@@ -11,4 +11,6 @@
 
 - (NSUInteger) count;
 
+- (NSString*) getGoalAt:(NSUInteger)index;
+
 @end

@@ -16,7 +16,7 @@
 {
     if (self.gol && index < [self.gol count])
     {
-        return @"asd";//[self.gol getGoalAt:index];
+        return [self.gol getGoalAt:index];
     }
     else
     {
