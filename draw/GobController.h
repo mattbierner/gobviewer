@@ -45,7 +45,6 @@
 */
 - (IBAction) saveGob:(id)sender;
 
-
 - (void) loadPal:(NSString*)name fromGob:(NSString*)file;
 
 - (void) loadFile:(NSURL*)file;

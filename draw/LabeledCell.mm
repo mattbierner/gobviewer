@@ -10,6 +10,7 @@
         self.textField.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
         self.textField.bordered = false;
         self.textField.drawsBackground = NO;
+        self.textField.editable = NO;
         [self addSubview:self.textField];
     }
     

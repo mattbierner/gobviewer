@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #include "GobController.h"
+#include "Pal.h"
 
 @interface AppDelegate ()
 
@@ -13,10 +14,23 @@
 
 - (void) addWindow:(GobController*)window;
 
+- (void) loadInitialPal;
+
+- (NSString*) promptForPal:(NSURL*)gobPath;
+
 @end
 
 
 @implementation AppDelegate
+
+- (void) setPal:(Pal *)pal
+{
+    _pal = pal;
+    for (GobController* window in self.windows)
+    {
+        window.pal = pal;
+    }
+}
 
 - (NSArray*) getFilesToOpenAtLaunch
 {
@@ -41,9 +55,27 @@
     return files;
 }
 
+- (void) loadInitialPal
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* palPath = [defaults objectForKey:@"palPath"];
+    NSString* palName = [defaults objectForKey:@"palName"];
+    
+    if (palPath && palName)
+        self.pal = [Pal createFromGob:palPath named:palName];
+    
+    while (self.pal == nil)
+        [self loadPal:nil];
+}
+
 - (void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    // NSString* appDomain = [[NSBundle mainBundle] bundleIdentifier];
+    // [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+
     self.windows = [[NSMutableArray alloc] init];
+    
+    [self loadInitialPal];
     
     for (NSString* file in [self getFilesToOpenAtLaunch])
     {
@@ -59,13 +91,15 @@
 - (void) openGob:(NSURL*)path
 {
     GobController* window = [[GobController alloc] initWithWindowNibName:@"GobViewWindow"];
+    window.pal = self.pal;
+    
     [self addWindow:window];
     [window loadFile:path];
-    
+
     [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:path];
 }
 
-- (BOOL) application:(NSApplication*)app openFile:(NSString *)filename
+- (BOOL) application:(NSApplication*)app openFile:(NSString*)filename
 {
     [self openGob:[NSURL URLWithString:filename]];
     return YES;
@@ -107,6 +141,43 @@
 {
     [window showWindow:NSApp];
     [self.windows addObject:window];
+}
+
+- (NSString*) promptForPal:(NSURL*)gobPath
+{
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert setMessageText:[NSString stringWithFormat:@"Select PAL in %@", gobPath.lastPathComponent]];
+    [alert addButtonWithTitle:@"Ok"];
+    [alert addButtonWithTitle:@"Cancel"];
+
+    NSTextField *input = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 20)];
+    [input setStringValue:@""];
+
+    [alert setAccessoryView:input];
+    NSInteger clicked = [alert runModal];
+    if (clicked == NSAlertFirstButtonReturn)
+        return input.stringValue;
+    return [NSString string];
+}
+
+- (IBAction) loadPal:(id)sender
+{
+    NSOpenPanel* panel = [self createFilePicker];
+    panel.title = @"Select GOB for PAL";
+    
+    NSInteger clicked = [panel runModal];
+    if (clicked == NSFileHandlingPanelOKButton)
+    {
+        NSURL* path = [panel URL];
+        NSString* palName = [self promptForPal:path];
+        if (palName.length > 0)
+        {
+            self.pal = [Pal createFromGob:path.path named:palName];
+            NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:path.path forKey:@"palPath"];
+            [defaults setObject:palName forKey:@"palName"];
+        }
+    }
 }
 
 @end

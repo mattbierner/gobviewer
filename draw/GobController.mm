@@ -45,6 +45,8 @@
 
     self.previewViewController = [[PreviewViewController alloc] init];
     [contentView addSubview:self.previewViewController.view];
+    self.previewViewController.colorMap = [[ColorMap alloc] init];
+    self.previewViewController.colorMap.pal = self.pal;
     
     [self.previewViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.tableContainer setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -89,6 +91,8 @@
 - (void) setPal:(Pal*)pal
 {
     _pal = pal;
+    if (!self.previewViewController.colorMap)
+        self.previewViewController.colorMap = [[ColorMap alloc] init];
     self.previewViewController.colorMap.pal = pal;
 }
 
@@ -101,7 +105,6 @@
 - (void) loadFile:(NSURL*)path
 {
     // TODO: move to settings
-    [self loadPal:@"SECBASE.PAL" fromGob:@"DARK.GOB"];
     [self loadCmp:@"SECBASE.CMP" fromGob:@"DARK.GOB"];
     
     _gob = [Gob createFromFile:path];
@@ -139,12 +142,10 @@
         break;
         
     case Df::FileType::Tdo:
-        [self printFile:file];
         [self.previewViewController loadTdo:self.gob named:file];
         break;
     
     case Df::FileType::Gol:
-        [self printFile:file];
         [self.previewViewController loadGol:self.gob named:file];
         break;
     

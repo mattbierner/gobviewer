@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-@class GobController;
+@class Pal;
 
 /**
     GobViewer main application delegate.
@@ -9,10 +9,18 @@
     NSApplicationDelegate,
     NSOpenSavePanelDelegate>
 
-@property(strong) NSMutableArray* windows;
+@property (nonatomic, strong) NSMutableArray* windows;
+
+@property (nonatomic, strong) Pal* pal;
 
 /**
+    Action to open a new Gob file.
 */
 - (IBAction) openDocument:(id)sender;
+
+/**
+    Action to select the Pal used to render images.
+*/
+- (IBAction) loadPal:(id)sender;
 
 @end

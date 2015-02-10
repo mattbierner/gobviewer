@@ -153,6 +153,7 @@
     Df::CmpFile p(std::move(buffer));
     
     self.cmpView.cmp = [Cmp createForCmp:p];
+    self.cmpView.pal = self.colorMap.pal;
     self.preview = self.cmpView;
 }
 
